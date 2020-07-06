@@ -1,0 +1,28 @@
+
+-c ../GLFW/src/init.c			-o obj/{_sPlatform}/init.o				-D_GLFW_WIN32 |
+-c ../GLFW/src/win32_thread.c 	-o obj/{_sPlatform}/win32_thread.o		-D_GLFW_WIN32 |
+-c ../GLFW/src/win32_init.c 	-o obj/{_sPlatform}/win32_init.o		-D_GLFW_WIN32 |
+-c ../GLFW/src/win32_time.c 	-o obj/{_sPlatform}/win32_time.o 		-D_GLFW_WIN32 |
+-c ../GLFW/src/win32_window.c 	-o obj/{_sPlatform}/win32_window.o 		-D_GLFW_WIN32 |
+-c ../GLFW/src/wgl_context.c 	-o obj/{_sPlatform}/wgl_context.o 		-D_GLFW_WIN32 |
+<<<<<<< HEAD
+-c ../GLFW/src/win32_joystick.c -o obj/{_sPlatform}/win32_joystick.o	 -D_GLFW_WIN32 |
+=======
+-c ../GLFW/src/win32_joystick.c -o obj/{_sPlatform}/win32_joystick.o 	-D_GLFW_WIN32 |
+>>>>>>> fa8435c2fa0f46e1324a71501fdf646326936148
+-c ../GLFW/src/window.c 		-o obj/{_sPlatform}/window.o 			-D_GLFW_WIN32 |
+-c ../GLFW/src/input.c 			-o obj/{_sPlatform}/input.o 			-D_GLFW_WIN32 |
+-c ../GLFW/src/win32_monitor.c 	-o obj/{_sPlatform}/win32_monitor.o 	-D_GLFW_WIN32 |
+-c ../GLFW/src/monitor.c		-o obj/{_sPlatform}/monitor.o 			-D_GLFW_WIN32 |
+-c ../GLFW/src/vulkan.c 		-o obj/{_sPlatform}/vulkan.o			-D_GLFW_WIN32 |
+-c ../GLFW/src/context.c 		-o obj/{_sPlatform}/context.o 			-D_GLFW_WIN32 |
+-c ../GLFW/src/egl_context.c 	-o obj/{_sPlatform}/egl_context.o		-D_GLFW_WIN32 |
+-c ../GLFW/src/osmesa_context.c -o obj/{_sPlatform}/osmesa_context.o 	-D_GLFW_WIN32 |
+>
+-c src/glfw/flextgl/flextGL.c -o obj/{_sPlatform}/flextGL.o -D_GLFW_WIN32 |
+>
+<<<<<<< HEAD
+-o obj/{_sPlatform}/ -#To _out/{_sPlatform}/App.* -std=c++11 -lgdi32 -lopengl32
+=======
+-o obj/{_sPlatform}/ -#To _out/{_sPlatform}/App.* -std=c++11 -lgdi32 -lopengl32 
+>>>>>>> fa8435c2fa0f46e1324a71501fdf646326936148

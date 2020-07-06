@@ -1,0 +1,12 @@
+;Register Cwc before using a .cwmake
+-{_wToolchain}= VLianceTool/LibRT 
+>
+-c src/glfw/instancing-glfw.c -o obj/{_sPlatform}/main.o
+-I src/glfw/
+-I ../GLFW/include/
+-I src/
+-D ORYOL_WINDOWS -D _WIN32 -D ORYOL_FORCE_NO_THREADS -D ORYOL_OPENGL -D ORYOL_OPENGL_CORE_PROFILE 
+>
+-#Run Build.cwc
+>
+-#Run
