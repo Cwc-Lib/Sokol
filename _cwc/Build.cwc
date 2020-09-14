@@ -1,0 +1,3 @@
+-c ../sokol-samples/wgpu/wgpu_entry_wasm.c -o obj/{_sPlatform}/wgpu_entry_wasm.o
+>
+-o obj/{_sPlatform}/ -#To _out/{_sPlatform}/App.*

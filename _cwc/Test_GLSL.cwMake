@@ -1,0 +1,6 @@
+;Register Cwc before using a .cwmake
+-{_wToolchain}= VLianceTool/LibRT 
+>
+;Build Shader
+shdc --input ../wgpu/cube-wgpu.glsl --output cube-wgpu.glsl.h --slang glsl330:glsl100:glsl300es
+>

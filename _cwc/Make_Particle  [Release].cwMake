@@ -1,0 +1,12 @@
+;Register Cwc before using a .cwmake
+-{_wToolchain}= VLianceTool/WebRT 
+>
+-{_sOpt}="O3"
+>
+-c ../sokol-samples/wgpu/ -o obj/{_sPlatform}/
+-I ../sokol/
+-DSOKOL_WGPU
+>
+-#Run Build.cwc
+>
+-#Run
