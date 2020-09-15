@@ -1,0 +1,11 @@
+---
+options:
+    src_dir: gltf/DamagedHelmet
+files:
+    - DamagedHelmet.bin
+    - DamagedHelmet.gltf
+    - Default_albedo.basis
+    - Default_AO.basis
+    - Default_emissive.basis
+    - Default_metalRoughness.basis
+    - Default_normal.basis

@@ -1,7 +1,7 @@
 ;Register Cwc before using a .cwmake
 -{_wToolchain}= VLianceTool/WebRT 
 >
-;-{_sOpt}="O3"
+-{_sOpt}="O3"
 >
 -c ../sokol-samples/wgpu/cube-wgpu.c -o obj/{_sPlatform}/cube-wgpu.o
 -I ../sokol/

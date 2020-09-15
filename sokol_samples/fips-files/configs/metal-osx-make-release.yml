@@ -1,0 +1,9 @@
+---
+platform: osx
+generator: Unix Makefiles
+build_tool: make
+build_type: Release
+defines:
+    SOKOL_USE_METAL: ON
+
+
