@@ -1,3 +1,7 @@
+>
+;If not defined
+-{sToolChainType}:=Default
+>
 -{_wToolchain}= VLianceTool/WebRT[{sToolChainType}]
 >
 -{pSokol}=../../sokol/

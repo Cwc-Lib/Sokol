@@ -2,5 +2,5 @@
 >
 -{_sOpt}="O3"
 >
--#Run "Make_Cube [Debug].cwMake"
+-#Run "Make_Cube.cwMake"
 >
