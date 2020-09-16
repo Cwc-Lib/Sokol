@@ -1,0 +1,6 @@
+;Register Cwc before using a .cwmake
+>
+-{_sOpt}="O3"
+>
+-#Run "Make_Cube [Debug].cwMake"
+>

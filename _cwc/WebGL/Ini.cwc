@@ -1,0 +1,10 @@
+-{_wToolchain}= VLianceTool/WebRT[{sToolChainType}]
+>
+-{pSokol}=../../sokol/
+-{pSamples}=../../sokol-samples/
+>
+-{sFolder}={_sPlatform}_{_sOpt}_{sToolChainType}
+>
+-{vIncl}=-I {pSokol}
+;-DSOKOL_WGPU //Already defined
+>

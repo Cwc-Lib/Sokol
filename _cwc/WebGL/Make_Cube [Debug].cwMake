@@ -1,0 +1,9 @@
+;Register Cwc before using a .cwmake
+>
+-#Run Ini.cwc
+>
+-c {pSamples}html5/cube-emsc.c -o obj/{sFolder}/cube-emsc.o
+-{vIncl}
+>
+-#Run Build.cwc
+>

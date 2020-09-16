@@ -1,0 +1,8 @@
+;Register Cwc before using a .cwmake
+>
+-{sToolChainType}=wasm
+>
+-{_sOpt}="O3"
+>
+-#Run "Make_Cube [Debug].cwMake"
+>

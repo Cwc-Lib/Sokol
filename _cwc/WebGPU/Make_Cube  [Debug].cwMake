@@ -1,9 +1,9 @@
 ;Register Cwc before using a .cwmake
 -{sToolChainType}=Default
 >
--#Run Ini.cwc
+-{_sOpt}="Debug"
 >
-;-{_sOpt}="O3"
+-#Run Ini.cwc
 >
 -c {pSamples}wgpu/cube-wgpu.c -o obj/{_sPlatform}_{_sOpt}/cube-wgpu.o
 -{vIncl}
