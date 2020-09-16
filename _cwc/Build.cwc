@@ -1,7 +1,0 @@
--c ../sokol-samples/wgpu/wgpu_entry.c -o obj/{_sPlatform}_{_sOpt}/wgpu_entry.o
--I ../sokol/
->
--c ../sokol-samples/wgpu/wgpu_entry_wasm.c -o obj/{_sPlatform}_{_sOpt}/wgpu_entry_wasm.o
--I ../sokol/
->
--o obj/{_sPlatform}_{_sOpt}/ -#To _out/{_sPlatform}_{_sOpt}/App.* -s USE_WEBGPU=1

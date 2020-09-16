@@ -1,0 +1,8 @@
+-c {pSamples}wgpu/wgpu_entry.c -o obj/{sFolder}/wgpu_entry.o
+-{vIncl}
+>
+-c {pSamples}wgpu/wgpu_entry_wasm.c -o obj/{sFolder}/wgpu_entry_wasm.o
+-{vIncl}
+>
+-o obj/{sFolder}/ -#To _out/{sFolder}/App.* -s USE_WEBGPU=1
+>
