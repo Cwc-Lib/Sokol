@@ -46,7 +46,7 @@ EM_JS(void, emsc_async_js_setup, (), {
         console.log("adapter extensions: " + adapter.extensions);
         adapter.requestDevice().then(function(device) {
             console.log("device extensions: " + device.extensions);
-            var gpuContext = document.getElementById("gze_canvas").getContext("gpupresent");
+            var gpuContext = document.getElementById("canvas").getContext("gpupresent");
             gpuContext.getSwapChainPreferredFormat(device).then(function(fmt) {
                 var swapChainDescriptor = { device: device, format: fmt };
                 var swapChain = gpuContext.configureSwapChain(swapChainDescriptor);

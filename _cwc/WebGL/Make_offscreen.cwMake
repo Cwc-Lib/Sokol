@@ -1,0 +1,6 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=offscreen-emsc
+>
+-#Run _Sample.cwc
+>
