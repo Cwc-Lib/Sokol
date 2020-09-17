@@ -1,0 +1,11 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=imgui-emsc
+>
+-#Run _Ini.cwc
+>
+-c {pSamples}html5/imgui-emsc.c -o {pObj}{sSample}.o
+-{vIncl}
+>
+-#Run _Build.cwc
+>

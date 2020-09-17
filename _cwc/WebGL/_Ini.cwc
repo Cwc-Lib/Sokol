@@ -1,6 +1,9 @@
 >
-;If not defined
+;Default values (Can be predefined)
 -{sToolChainType}:=Default
+-{sOpt}:=O2
+>
+-{_sOpt}={sOpt}
 >
 -{_wToolchain}= VLianceTool/WebRT[{sToolChainType}]
 >
