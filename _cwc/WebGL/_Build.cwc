@@ -1,0 +1,5 @@
+>
+-o {pObj} -#To {pOut}{sSample}.*
+>
+-#Run
+>

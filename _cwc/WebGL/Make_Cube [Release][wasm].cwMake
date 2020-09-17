@@ -4,5 +4,5 @@
 >
 -{_sOpt}="O3"
 >
--#Run "Make_Cube.cwMake"
+-#Run "Make_cube.cwMake"
 >

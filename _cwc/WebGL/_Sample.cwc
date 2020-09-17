@@ -1,0 +1,8 @@
+>
+-#Run _Ini.cwc
+>
+-c {pSamples}html5/{sSample}.c -o {pObj}{sSample}.o
+-{vIncl}
+>
+-#Run _Build.cwc
+>

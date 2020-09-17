@@ -43,7 +43,7 @@ static void init(void) {
         and WebGL2 / GLES2 don't support integer vertex shader inputs.
     */
     vertex_t vertices[] = {
-        /* pos                  color       uvs */
+        /* pos                  	color       		uvs 		*/
         { -1.0f, -1.0f, -1.0f,  0xFF0000FF,     0,     0 },
         {  1.0f, -1.0f, -1.0f,  0xFF0000FF, 32767,     0 },
         {  1.0f,  1.0f, -1.0f,  0xFF0000FF, 32767, 32767 },
@@ -146,15 +146,15 @@ static void init(void) {
 
 static void frame(void) {
     /* compute model-view-projection matrix for vertex shader */
-    hmm_mat4 proj = HMM_Perspective(60.0f, (float)wgpu_width()/(float)wgpu_height(), 0.01f, 10.0f);
-    hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
-    hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
+    hmm_mat4 proj 		= HMM_Perspective(60.0f, (float)wgpu_width()/(float)wgpu_height(), 0.01f, 10.0f);
+    hmm_mat4 view 		= HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
+    hmm_mat4 view_proj 	= HMM_MultiplyMat4(proj, view);
     vs_params_t vs_params;
     state.rx += 1.0f; state.ry += 2.0f;
-    hmm_mat4 rxm = HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
-    hmm_mat4 rym = HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
-    hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
-    vs_params.mvp = HMM_MultiplyMat4(view_proj, model);
+    hmm_mat4 rxm 	= HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
+    hmm_mat4 rym 	= HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
+    hmm_mat4 model 	= HMM_MultiplyMat4(rxm, rym);
+    vs_params.mvp 	= HMM_MultiplyMat4(view_proj, model);
 
     sg_begin_default_pass(&state.pass_action, wgpu_width(), wgpu_height());
     sg_apply_pipeline(state.pip);
@@ -175,9 +175,9 @@ int main() {
         .frame_cb = frame,
         .shutdown_cb = shutdown,
         .sample_count = SAMPLE_COUNT,
-        .width = 640,
+        .width 	= 640,
         .height = 480,
-        .title = "texcube-wgpu"
+        .title 	= "texcube-wgpu"
     });
     return 0;
 }
