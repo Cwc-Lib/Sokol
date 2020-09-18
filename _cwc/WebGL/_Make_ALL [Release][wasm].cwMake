@@ -1,0 +1,11 @@
+;Register Cwc before using a .cwmake
+>
+-{sToolChainType}=wasm
+>
+-{sOpt}=OZ
+-{pOut}=_out/All/
+>
+-#Lauch "Make_arraytex.cwMake"
+>
+-#Lauch "Make_cube.cwMake"
+>
