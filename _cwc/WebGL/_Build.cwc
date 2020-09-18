@@ -1,5 +1,6 @@
 >
--o {pObj} -#To {pOut}{sSample}.* -s OFFSCREEN_FRAMEBUFFER=1  
+-o {pObj} -#To {pOut}{sSample}.* -s TOTAL_MEMORY=33554432 -s USE_WEBGL2=1
+;-s OFFSCREEN_FRAMEBUFFER=1  
 ;-s USE_WEBGL2=1 
 >
 -#Run
