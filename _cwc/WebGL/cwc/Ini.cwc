@@ -1,0 +1,22 @@
+>
+;Default values (Can be predefined)
+-{sToolChainType}:=Default
+>
+-{sOpt}:=Debug
+>
+-{_sOpt}={sOpt}
+>
+-{_wToolchain}= VLianceTool/WebRT[{sToolChainType}]
+>
+-{pSokol}=../../sokol/
+-{pSamples}=../../sokol-samples/
+-{pLib}=../../Lib/
+>
+-{sFolder}={_sPlatform}_{_sOpt}_{sToolChainType}
+>
+-{pObj}=obj/{sSample}/{sFolder}/
+-{pOut}=_out/{sSample}/{sFolder}/
+>
+-{vIncl}=-I {pSokol} -I {pSamples}html5/
+;-DSOKOL_WGPU //Already defined
+>

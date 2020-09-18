@@ -1,0 +1,9 @@
+;Register Cwc before using a .cwmake
+;This show how to make an optimised wasm version of a sample
+>
+-{sToolChainType}=wasm
+>
+-{_sOpt}="O3"
+>
+-#Run "Make_cube.cwMake"
+>
