@@ -2,5 +2,5 @@
 >
 -{sSample}=clear-emsc
 >
--#Run _Sample.cwc
+-#Run cwc/Sample.cwc
 >

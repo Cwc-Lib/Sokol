@@ -2,5 +2,5 @@
 >
 -{sSample}=blend-emsc
 >
--#Run _Sample.cwc
+-#Run cwc/Sample.cwc
 >

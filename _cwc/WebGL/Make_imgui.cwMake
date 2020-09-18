@@ -4,7 +4,7 @@
 >
 ;-{sOpt}=OZ
 >
--#Run _Ini.cwc
+-#Run cwc/Ini.cwc
 >
 -c {pSamples}html5/imgui-emsc.cc -o {pObj}{sSample}.o
 -{vIncl}

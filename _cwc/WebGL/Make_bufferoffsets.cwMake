@@ -2,5 +2,5 @@
 >
 -{sSample}=bufferoffsets-emsc
 >
--#Run _Sample.cwc
+-#Run cwc/Sample.cwc
 >

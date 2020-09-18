@@ -2,5 +2,5 @@
 >
 -{sSample}=mrt-emsc
 >
--#Run _Sample.cwc
+-#Run cwc/Sample.cwc
 >

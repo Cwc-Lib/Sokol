@@ -2,5 +2,5 @@
 >
 -{sSample}=instancing-emsc
 >
--#Run _Sample.cwc
+-#Run cwc/Sample.cwc
 >
