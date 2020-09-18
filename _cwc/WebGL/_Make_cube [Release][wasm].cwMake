@@ -3,7 +3,7 @@
 >
 -{sToolChainType}=wasm
 >
--{_sOpt}="O3"
+-{sOpt}="O3"
 >
 -#Run "Make_cube.cwMake"
 >
