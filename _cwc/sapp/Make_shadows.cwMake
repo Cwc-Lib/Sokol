@@ -1,6 +1,8 @@
 ;Register Cwc before using a .cwmake
 >
--{sSample}=cube-emsc
+-{sOpt}=OZ
+>
+-{sSample}=shadows-sapp
 >
 -#Run cwc/Sample.cwc
 >

@@ -1,0 +1,8 @@
+;Register Cwc before using a .cwmake
+>
+-{sOpt}=OZ
+>
+-{sSample}=cube-sapp
+>
+-#Run cwc/Sample.cwc
+>

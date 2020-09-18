@@ -4,8 +4,8 @@
 #define HANDMADE_MATH_IMPLEMENTATION
 #define HANDMADE_MATH_NO_SSE
 #include "HandmadeMath.h"
-#include "sokol_gfx.h"
 #include "sokol_app.h"
+#include "sokol_gfx.h"
 #include "sokol_glue.h"
 #include "dbgui/dbgui.h"
 #include "cube-sapp.glsl.h"
@@ -137,8 +137,9 @@ void cleanup(void) {
     __dbgui_shutdown();
     sg_shutdown();
 }
-
+#include <stdio.h>
 sapp_desc sokol_main(int argc, char* argv[]) {
+	printf("\nMain\n");
     (void)argc;
     (void)argv;
     return (sapp_desc){
