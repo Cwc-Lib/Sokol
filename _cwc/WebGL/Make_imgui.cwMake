@@ -2,10 +2,17 @@
 >
 -{sSample}=imgui-emsc
 >
+;-{sOpt}=OZ
+>
 -#Run _Ini.cwc
 >
--c {pSamples}html5/imgui-emsc.c -o {pObj}{sSample}.o
+-c {pSamples}html5/imgui-emsc.cc -o {pObj}{sSample}.o
 -{vIncl}
+-I {pLib}imgui/
+>
+-c {pLib}imgui_build/ -o {pObj}imgui/
+-I {pLib}imgui_build/
+-I {pLib}Freetype/
 >
 -#Run _Build.cwc
 >
