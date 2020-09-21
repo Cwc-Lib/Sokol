@@ -1,0 +1,14 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=loadpng-sapp
+>
+-#Run cwc/Sample.cwc
+>
+-c {pSamples}libs/stb/ -o {pObj}{sSample}/stb/
+>
+-#Run cwc/Link.cwc
+>
+-#Copy {pData}baboon.png {pOut}baboon.png
+>
+-#Run
+>

@@ -12,6 +12,7 @@
 -{pSamples}=../../sokol-samples/
 -{p_sapp}={pSamples}sapp/
 -{pLib}=../../Lib/
+-{pData}={p_sapp}data/
 >
 -{sFolder}={_sPlatform}_{_sOpt}_{sToolChainType}
 >

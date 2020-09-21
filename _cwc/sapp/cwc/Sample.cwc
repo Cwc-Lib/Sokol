@@ -13,5 +13,3 @@ shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:g
 >
 
 >
--#Run cwc/Build.cwc
->

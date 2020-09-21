@@ -18,5 +18,9 @@ shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:g
 -{vIncl}
 -{vFlag}
 >
--#Run cwc/Build.cwc
+-#Run cwc/Link.cwc
+>
+-#Copy {pData}gltf/DamagedHelmet/ {pOut}
+>
+-#Run
 >
