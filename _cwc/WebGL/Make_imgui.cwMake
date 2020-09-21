@@ -14,5 +14,5 @@
 -I {pLib}imgui_build/
 -I {pLib}Freetype/
 >
--#Run _Build.cwc
+-#Run cwc/Build.cwc
 >

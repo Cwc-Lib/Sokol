@@ -1,3 +1,6 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=cgltf-sapp
 >
 -#Run cwc/Ini.cwc
 >
@@ -11,7 +14,9 @@ shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:g
 -{vIncl}
 -{vFlag}
 >
-
+-c {pSamples}libs/basisu/ -o {pObj}basisu/
+-{vIncl}
+-{vFlag}
 >
 -#Run cwc/Build.cwc
 >

@@ -3,3 +3,4 @@ imgui.ini
 obj/
 *.wdat
 _out/
+*.glsl.h

@@ -1,6 +1,6 @@
 ;Register Cwc before using a .cwmake
 >
--{sSample}=cube-sapp
+-{sSample}=imgui-highdpi-sapp
 >
 -#Run cwc/Sample.cwc
 >

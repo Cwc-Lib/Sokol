@@ -1,7 +1,5 @@
 ;Register Cwc before using a .cwmake
 >
--{sOpt}=OZ
->
 -{sSample}=shadows-sapp
 >
 -#Run cwc/Sample.cwc

@@ -19,7 +19,7 @@
 >
 -{pOut}:=_out/{sSample}/{sFolder}/
 >
--{vIncl}=-I {pSokol} -I {p_sapp} -I {pSamples}libs/
+-{vIncl}=-I {pSokol} -I {p_sapp} -I {pSamples}libs/ -I {pSokol}util/
 ;-DSOKOL_WGPU //Already defined
 >
 -{vFlag}=-DSOKOL_GLES3

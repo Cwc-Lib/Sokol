@@ -1,0 +1,6 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=sgl-lines-sapp
+>
+-#Run cwc/Sample_NoShdc.cwc
+>

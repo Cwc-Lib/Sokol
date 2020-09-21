@@ -1,17 +1,12 @@
 >
 -#Run cwc/Ini.cwc
 >
-;Build Shader
-shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:glsl100:glsl300es
->
 -c {pSamples}sapp/{sSample}.c -o {pObj}{sSample}.o
 -DSOKOL_IMPL
 -DSOKOL_GLES3
 -DSOKOL_GLES2
 -{vIncl}
 -{vFlag}
->
-
 >
 -#Run cwc/Build.cwc
 >
