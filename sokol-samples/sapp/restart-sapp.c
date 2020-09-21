@@ -16,9 +16,12 @@
 #include "sokol_gfx.h"
 #include "sokol_audio.h"
 #include "sokol_fetch.h"
+#define SOKOL_GL_IMPL
 #include "sokol_gl.h"
+#define SOKOL_DEBUGTEXT_IMPL
 #include "sokol_debugtext.h"
 #include "sokol_glue.h"
+#define SOKOL_DEBUGTEXT_IMPL
 #include "stb/stb_image.h"
 
 #include "modplug.h"

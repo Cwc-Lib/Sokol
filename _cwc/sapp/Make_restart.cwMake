@@ -2,11 +2,20 @@
 >
 -{sSample}=restart-sapp
 >
--{vExIncl}=-I {pExtLib}libmodplug/src/
+-{vExIncl}=
+-I {pExtLib}libmodplug/src/
+-I {pExtLib}libmodplug/src/libmodplug/
 >
 -#Run cwc/Sample.cwc
 >
--c {pExtLib}libmodplug/ -o {pObj}libmodplug/
+;Build libmodplug
+-c {pExtLib}libmodplug/ -o {pObj}libmodplug/ 
+-{vExIncl}
+-DHAVE_SETENV
+-DHAVE_SINF
+>
+;Build Stb
+-c {pSamples}libs/stb/ -o {pObj}{sSample}/stb/
 >
 -#Run cwc/Link.cwc
 >
