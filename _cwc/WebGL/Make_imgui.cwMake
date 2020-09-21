@@ -8,11 +8,11 @@
 >
 -c {pSamples}html5/imgui-emsc.cc -o {pObj}{sSample}.o
 -{vIncl}
--I {pLib}imgui/
+-I {pExtLib}imgui/
 >
--c {pLib}imgui_build/ -o {pObj}imgui/
--I {pLib}imgui_build/
--I {pLib}Freetype/
+-c {pExtLib}imgui_build/ -o {pObj}imgui/
+-I {pExtLib}imgui_build/
+-I {pExtLib}Freetype/
 >
 -#Run cwc/Build.cwc
 >

@@ -1,0 +1,15 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=restart-sapp
+>
+-{vExIncl}=-I {pExtLib}libmodplug/src/
+>
+-#Run cwc/Sample.cwc
+>
+-c {pExtLib}libmodplug/ -o {pObj}libmodplug/
+>
+-#Run cwc/Link.cwc
+>
+-#Run
+>
+
