@@ -19,6 +19,9 @@
 >
 -#Run cwc/Link.cwc
 >
+-#Copy {pData}baboon.png {pOut}baboon.png
+-#Copy {pData}comsi.s3m {pOut}comsi.s3m
+>
 -#Run
 >
 

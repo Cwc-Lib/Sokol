@@ -1,0 +1,10 @@
+;Default values (Can be predefined)
+;Uncomment to select
+>
+-{sToolChainType}:=Default
+;-{sToolChainType}:=wasm
+>
+;-{sOpt}:=Debug
+;-{sOpt}:=O2
+-{sOpt}:=OZ
+>
