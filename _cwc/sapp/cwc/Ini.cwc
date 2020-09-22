@@ -2,9 +2,10 @@
 >
 -#Run _Default_Config.cwc
 >
--{_sOpt}={sOpt}
+-{sToolChainName}:=WebRT
+;-{sToolChainName}:=LibRT
 >
--{_wToolchain}= VLianceTool/WebRT[{sToolChainType}]
+-{_sOpt}={sOpt}
 >
 -{pSokol}=../../sokol/
 -{pSamples}=../../sokol-samples/

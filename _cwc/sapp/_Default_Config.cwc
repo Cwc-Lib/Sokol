@@ -1,10 +1,15 @@
 ;Default values (Can be predefined)
 ;Uncomment to select
 >
--{sToolChainType}:=Default
-;-{sToolChainType}:=wasm
+-{sToolChainName}=WebRT
+;-{sToolChainName}=LibRT
+>
+;-{sToolChainType}:=Default
+-{sToolChainType}:=wasm
 >
 ;-{sOpt}:=Debug
 ;-{sOpt}:=O2
 -{sOpt}:=OZ
+>
+-{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
 >
