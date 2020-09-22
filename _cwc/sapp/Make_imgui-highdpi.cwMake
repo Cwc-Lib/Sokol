@@ -2,7 +2,16 @@
 >
 -{sSample}=imgui-highdpi-sapp
 >
--#Run cwc/Sample.cwc
+-{sFileExt}=cc
+>
+-{vExIncl}=
+-I {pExtLib}imgui/
+>
+-#Run cwc/Sample_NoShdc.cwc
+>
+-c {pExtLib}imgui_build/ -o {pObj}imgui/
+-I {pExtLib}imgui_build/
+-I {pExtLib}Freetype/
 >
 -#Run cwc/Link.cwc
 >

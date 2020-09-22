@@ -10,7 +10,7 @@
 >
 -{pSokol}=../../sokol/
 -{pSamples}=../../sokol-samples/
--{pExtLib}=../../Lib/
+-{pExtLib}=../../ExtLib/
 >
 -{sFolder}={_sPlatform}_{_sOpt}_{sToolChainType}
 >

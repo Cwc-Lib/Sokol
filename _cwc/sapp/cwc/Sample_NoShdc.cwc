@@ -1,12 +1,13 @@
 >
 -#Run cwc/Ini.cwc
 >
--c {pSamples}sapp/{sSample}.c -o {pObj}{sSample}.o
+-{sFileExt}:=c
+>
+-c {pSamples}sapp/{sSample}.{sFileExt} -o {pObj}{sSample}.o
 -DSOKOL_IMPL
 -DSOKOL_GLES3
 -DSOKOL_GLES2
 -{vIncl}
+-{vExIncl}
 -{vFlag}
->
--#Run cwc/Build.cwc
 >
