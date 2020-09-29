@@ -1,8 +1,8 @@
 ;Default values (Can be predefined)
 ;Uncomment to select
 >
--{sToolChainName}=WebRT
-;-{sToolChainName}=LibRT
+;-{sToolChainName}=WebRT
+-{sToolChainName}=LibRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
@@ -10,6 +10,19 @@
 ;-{sOpt}:=Debug
 ;-{sOpt}:=O2
 -{sOpt}:=OZ
+>
+-{vLink_WebRT}= -s TOTAL_MEMORY=33554432 -s USE_WEBGL2=1
+>
+-{vSokolFlag_LibRT}= 
+-DSOKOL_GLCORE33
+>
+-{vSokolFlag_WebRT}= 
+-DSOKOL_GLES3 
+-DSOKOL_GLES2
+>
+-{vSokolFlag}= -{vSokolFlag_{sToolChainName}}
+>
+-{vLink}= -{vLink_{sToolChainName}}
 >
 -{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
 >

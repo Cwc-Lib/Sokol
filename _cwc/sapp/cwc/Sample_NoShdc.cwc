@@ -5,8 +5,7 @@
 >
 -c {pSamples}sapp/{sSample}.{sFileExt} -o {pObj}{sSample}.o
 -DSOKOL_IMPL
--DSOKOL_GLES3
--DSOKOL_GLES2
+-{vSokolFlag}
 -{vIncl}
 -{vExIncl}
 -{vFlag}
