@@ -1,8 +1,8 @@
 ;Default values (Can be predefined)
 ;Uncomment to select
 >
-;-{sToolChainName}=WebRT
--{sToolChainName}=LibRT
+-{sToolChainName}=WebRT
+;-{sToolChainName}=LibRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
@@ -12,6 +12,8 @@
 -{sOpt}:=OZ
 >
 -{vLink_WebRT}= -s TOTAL_MEMORY=33554432 -s USE_WEBGL2=1
+>
+-{vLink_LibRT}= -lgdi32 -lopengl32
 >
 -{vSokolFlag_LibRT}= 
 -DSOKOL_GLCORE33
