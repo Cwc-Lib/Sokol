@@ -1,8 +1,8 @@
 ;Default values (Can be predefined)
 ;Uncomment to select
 >
-;-{sToolChainName}=WebRT
--{sToolChainName}=LibRT
+-{sToolChainName}=WebRT
+;-{sToolChainName}=LibRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
