@@ -1,5 +1,5 @@
 >
--o {pObj} -#To {pOut}{sSample}.* -{vLink}
+-o {pObj} -#To {pOut}{sSample}.* -{vLink} 
 ;-s OFFSCREEN_FRAMEBUFFER=1  
 ;-s USE_WEBGL2=1 
 >
