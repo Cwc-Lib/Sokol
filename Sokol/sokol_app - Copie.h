@@ -157,7 +157,7 @@
         from another thread (this depends on the platform):
 
             sapp_desc sokol_main(int argc, char* argv[]) {
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (sapp_desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                return (sapp_desc) {
                     .width = 640,
                     .height = 480,
                     .init_cb = my_init_func,
@@ -187,7 +187,7 @@
         .init_cb (void (*)(void))
             This function is called once after the application window,
             3D rendering context and swap chain have been created. The
-            function takes no arguments and has no printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return value.
+            function takes no arguments and has no return value.
         .frame_cb (void (*)(void))
             This is the per-frame callback, which is usually called 60
             times per second. This is where your application would update
@@ -257,7 +257,7 @@
                 42 == SG_PIXELFORMAT_DEPTH_STENCIL
 
         int sapp_sample_count(void)
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return the MSAA sample count of the default framebuffer.
+            Return the MSAA sample count of the default framebuffer.
 
         bool sapp_gles2(void)
             Returns true if a GLES2 or WebGL context has been created. This
@@ -267,9 +267,9 @@
         const void* sapp_metal_get_device(void)
         const void* sapp_metal_get_renderpass_descriptor(void)
         const void* sapp_metal_get_drawable(void)
-            If the Metal backend has been selected, these functions printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return pointers
+            If the Metal backend has been selected, these functions return pointers
             to various Metal API objects required for rendering, otherwise
-            they printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return a null pointer. These void pointers are actually
+            they return a null pointer. These void pointers are actually
             Objective-C ids converted with a (ARC) __bridge cast so that
             the ids can be tunnel through C code. Also note that the returned
             pointers to the renderpass-descriptor and drawable may change from one
@@ -296,9 +296,9 @@
         const void* sapp_d3d11_get_render_target_view(void)
         const void* sapp_d3d11_get_depth_stencil_view(void)
             Similar to the sapp_metal_* functions, the sapp_d3d11_* functions
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return pointers to D3D11 API objects required for rendering,
+            return pointers to D3D11 API objects required for rendering,
             only if the D3D11 backend has been selected. Otherwise they
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return a null pointer. Note that the returned pointers to the
+            return a null pointer. Note that the returned pointers to the
             render-target-view and depth-stencil-view may change from one
             frame to the next!
 
@@ -308,7 +308,7 @@
         const void* sapp_wgpu_get_depth_stencil_view(void)
             These are the WebGPU-specific functions to get the WebGPU
             objects and values required for rendering. If sokol_app.h
-            is not compiled with SOKOL_WGPU, these functions printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return null.
+            is not compiled with SOKOL_WGPU, these functions return null.
 
         const void* sapp_android_get_native_activity(void);
             On Android, get the native activity ANativeActivity pointer, otherwise
@@ -379,7 +379,7 @@
     uses "raw mouse input" (what "raw mouse input" exactly means also
     differs by platform).
 
-    To deactivate mouse lock and printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return to normal mouse mode, call
+    To deactivate mouse lock and return to normal mouse mode, call
 
         sapp_lock_mouse(false)
 
@@ -405,7 +405,7 @@
             - SAPP_EVENTYTPE_KEY_UP
             - SAPP_EVENTTYPE_KEY_DOWN
         - The mouse lock/unlock action on the web platform is asynchronous,
-          this means that sapp_mouse_locked() won't immediately printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return
+          this means that sapp_mouse_locked() won't immediately return
           the new status after calling sapp_lock_mouse(), instead the
           reported status will only change when the pointer lock has actually
           been activated or deactivated in the browser.
@@ -421,16 +421,16 @@
     cgltf-sapp.c sample in the sokol-samples repository
     at https://github.com/floooh/sokol-samples):
 
-        static void input(const sapp_event* ev) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            switch (ev->type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        static void input(const sapp_event* ev) {
+            switch (ev->type) {
                 case SAPP_EVENTTYPE_MOUSE_DOWN:
-                    if (ev->mouse_button == SAPP_MOUSEBUTTON_LEFT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (ev->mouse_button == SAPP_MOUSEBUTTON_LEFT) {
                         sapp_lock_mouse(true);
                     }
                     break;
 
                 case SAPP_EVENTTYPE_MOUSE_UP:
-                    if (ev->mouse_button == SAPP_MOUSEBUTTON_LEFT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (ev->mouse_button == SAPP_MOUSEBUTTON_LEFT) {
                         sapp_lock_mouse(false);
                     }
                     break;
@@ -482,7 +482,7 @@
 
         - on the HTML5 platform, the internal clipboard buffer will only be updated
           right before the SAPP_EVENTTYPE_CLIPBOARD_PASTED event is sent,
-          and sapp_get_clipboard_string() will simply printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return the current content
+          and sapp_get_clipboard_string() will simply return the current content
           of the clipboard buffer
         - on 'native' platforms, the call to sapp_get_clipboard_string() will
           update the internal clipboard buffer with the most recent data
@@ -515,7 +515,7 @@
     Here's an example on a Mac with Retina display:
 
     sapp_desc sokol_main() {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (sapp_desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        return (sapp_desc) {
             .width = 640,
             .height = 480,
             .high_dpi = true,
@@ -524,7 +524,7 @@
     }
 
     The functions sapp_width(), sapp_height() and sapp_dpi_scale() will
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return the following values:
+    return the following values:
 
     sapp_width      -> 1280
     sapp_height     -> 960
@@ -626,7 +626,7 @@
 
     The most important effect of fullscreen mode to keep in mind is that
     the requested canvas width and height will be ignored for the initial
-    window size, calling sapp_width() and sapp_height() will instead printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return
+    window size, calling sapp_width() and sapp_height() will instead return
     the resolution of the fullscreen canvas (however the provided size
     might still be used for the non-fullscreen window, in case the user can
     switch back from fullscreen- to windowed-mode).
@@ -674,7 +674,7 @@
       takes a pointer to an ```sapp_desc``` structure.
     - ```sapp_run()``` takes over control and calls the provided init-, frame-,
       shutdown- and event-callbacks just like in the default model, it
-      will only printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return when the application quits (or not at all on some
+      will only return when the application quits (or not at all on some
       platforms, like emscripten)
 
     NOTE: SOKOL_NO_ENTRY is currently not supported on Android.
@@ -994,7 +994,7 @@ SOKOL_API_DECL bool sapp_high_dpi(void);
 SOKOL_API_DECL float sapp_dpi_scale(void);
 /* show or hide the mobile device onscreen keyboard */
 SOKOL_API_DECL void sapp_show_keyboard(bool show);
-/* printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true if the mobile device onscreen keyboard is currently shown */
+/* return true if the mobile device onscreen keyboard is currently shown */
 SOKOL_API_DECL bool sapp_keyboard_shown(void);
 /* query fullscreen mode */
 SOKOL_API_DECL bool sapp_is_fullscreen(void);
@@ -1006,11 +1006,11 @@ SOKOL_API_DECL void sapp_show_mouse(bool show);
 SOKOL_API_DECL bool sapp_mouse_shown();
 /* enable/disable mouse-pointer-lock mode */
 SOKOL_API_DECL void sapp_lock_mouse(bool lock);
-/* printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true if in mouse-pointer-lock mode (this may toggle a few frames later) */
+/* return true if in mouse-pointer-lock mode (this may toggle a few frames later) */
 SOKOL_API_DECL bool sapp_mouse_locked(void);
-/* printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return the userdata pointer optionally provided in sapp_desc */
+/* return the userdata pointer optionally provided in sapp_desc */
 SOKOL_API_DECL void* sapp_userdata(void);
-/* printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return a copy of the sapp_desc structure */
+/* return a copy of the sapp_desc structure */
 SOKOL_API_DECL sapp_desc sapp_query_desc(void);
 /* initiate a "soft quit" (sends SAPP_EVENTTYPE_QUIT_REQUESTED) */
 SOKOL_API_DECL void sapp_request_quit(void);
@@ -1032,7 +1032,7 @@ SOKOL_API_DECL void sapp_set_window_title(const char* str);
 /* special run-function for SOKOL_NO_ENTRY (in standard mode this is an empty stub) */
 SOKOL_API_DECL int sapp_run(const sapp_desc* desc);
 
-/* GL: printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true when GLES2 fallback is active (to detect fallback from GLES3) */
+/* GL: return true when GLES2 fallback is active (to detect fallback from GLES3) */
 SOKOL_API_DECL bool sapp_gles2(void);
 
 /* HTML5: enable or disable the hardwired "Leave Site?" dialog box */
@@ -1064,7 +1064,7 @@ SOKOL_API_DECL const void* sapp_win32_get_hwnd(void);
 SOKOL_API_DECL const void* sapp_wgpu_get_device(void);
 /* WebGPU: get swapchain's WGPUTextureView handle for rendering */
 SOKOL_API_DECL const void* sapp_wgpu_get_render_view(void);
-/* WebGPU: get swapchain's MSAA-resolve WGPUTextureView (may printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return null) */
+/* WebGPU: get swapchain's MSAA-resolve WGPUTextureView (may return null) */
 SOKOL_API_DECL const void* sapp_wgpu_get_resolve_view(void);
 /* WebGPU: get swapchain's WGPUTextureView for the depth-stencil surface */
 SOKOL_API_DECL const void* sapp_wgpu_get_depth_stencil_view(void);
@@ -1076,7 +1076,7 @@ SOKOL_API_DECL const void* sapp_android_get_native_activity(void);
 } /* extern "C" */
 
 /* reference-based equivalents for C++ */
-inline int sapp_run(const sapp_desc& desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return sapp_run(&desc); }
+inline int sapp_run(const sapp_desc& desc) { return sapp_run(&desc); }
 
 #endif
 
@@ -1189,10 +1189,10 @@ inline int sapp_run(const sapp_desc& desc) {printf("\n --: %s:: %s:%d ", __func_
     #ifdef SOKOL_DEBUG
         #if defined(__ANDROID__)
             #include <android/log.h>
-            #define SOKOL_LOG(s) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); SOKOL_ASSERT(s); __android_log_write(ANDROID_LOG_INFO, "SOKOL_APP", s); }
+            #define SOKOL_LOG(s) { SOKOL_ASSERT(s); __android_log_write(ANDROID_LOG_INFO, "SOKOL_APP", s); }
         #else
             #include <stdio.h>
-            #define SOKOL_LOG(s) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); SOKOL_ASSERT(s); puts(s); }
+            #define SOKOL_LOG(s) { SOKOL_ASSERT(s); puts(s); }
         #endif
     #else
         #define SOKOL_LOG(s)
@@ -1763,12 +1763,12 @@ typedef struct {
 #if defined(_SAPP_MACOS) || defined(_SAPP_IOS)
     // this is ARC compatible
     #if defined(__cplusplus)
-        #define _SAPP_CLEAR(type, item) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); item = { }; }
+        #define _SAPP_CLEAR(type, item) { item = { }; }
     #else
-        #define _SAPP_CLEAR(type, item) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); item = (type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); 0 }; }
+        #define _SAPP_CLEAR(type, item) { item = (type) { 0 }; }
     #endif
 #else
-    #define _SAPP_CLEAR(type, item) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); memset(&item, 0, sizeof(item)); }
+    #define _SAPP_CLEAR(type, item) { memset(&item, 0, sizeof(item)); }
 #endif
 
 typedef struct {
@@ -2182,17 +2182,17 @@ _SAPP_GL_FUNCS
 #undef _SAPP_XMACRO
 
 // helper function to lookup GL functions in GL DLL
-_SOKOL_PRIVATE void* _sapp_win32_glgetprocaddr(const char* name) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void* _sapp_win32_glgetprocaddr(const char* name) {
     void* proc_addr = (void*) _sapp.wgl.GetProcAddress(name);
-    if (0 == proc_addr) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (0 == proc_addr) {
         proc_addr = (void*) GetProcAddress(_sapp.wgl.opengl32, name);
     }
     SOKOL_ASSERT(proc_addr);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return proc_addr;
+    return proc_addr;
 }
 
 // populate GL function pointers
-_SOKOL_PRIVATE  void _sapp_win32_gl_loadfuncs(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE  void _sapp_win32_gl_loadfuncs(void) {
     SOKOL_ASSERT(_sapp.wgl.GetProcAddress);
     SOKOL_ASSERT(_sapp.wgl.opengl32);
     #define _SAPP_XMACRO(name, ret, args) name = (PFN_ ## name) _sapp_win32_glgetprocaddr(#name);
@@ -2203,11 +2203,11 @@ _SOKOL_PRIVATE  void _sapp_win32_gl_loadfuncs(void) {printf("\n --: %s:: %s:%d "
 #endif // _SAPP_WIN32 && SOKOL_GLCORE33 && !SOKOL_WIN32_NO_GL_LOADER
 
 /*=== PRIVATE HELPER FUNCTIONS ===============================================*/
-_SOKOL_PRIVATE void _sapp_fail(const char* msg) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.desc.fail_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_fail(const char* msg) {
+    if (_sapp.desc.fail_cb) {
         _sapp.desc.fail_cb(msg);
     }
-    else if (_sapp.desc.fail_userdata_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    else if (_sapp.desc.fail_userdata_cb) {
         _sapp.desc.fail_userdata_cb(msg, _sapp.desc.user_data);
     }
     else {
@@ -2216,75 +2216,75 @@ _SOKOL_PRIVATE void _sapp_fail(const char* msg) {printf("\n --: %s:: %s:%d ", __
     SOKOL_ABORT();
 }
 
-_SOKOL_PRIVATE void _sapp_call_init(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.desc.init_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_call_init(void) {
+    if (_sapp.desc.init_cb) {
         _sapp.desc.init_cb();
     }
-    else if (_sapp.desc.init_userdata_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    else if (_sapp.desc.init_userdata_cb) {
         _sapp.desc.init_userdata_cb(_sapp.desc.user_data);
     }
     _sapp.init_called = true;
 }
 
-_SOKOL_PRIVATE void _sapp_call_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.init_called && !_sapp.cleanup_called) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (_sapp.desc.frame_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_call_frame(void) {
+    if (_sapp.init_called && !_sapp.cleanup_called) {
+        if (_sapp.desc.frame_cb) {
             _sapp.desc.frame_cb();
         }
-        else if (_sapp.desc.frame_userdata_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        else if (_sapp.desc.frame_userdata_cb) {
             _sapp.desc.frame_userdata_cb(_sapp.desc.user_data);
         }
     }
 }
 
-_SOKOL_PRIVATE void _sapp_call_cleanup(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (!_sapp.cleanup_called) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (_sapp.desc.cleanup_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_call_cleanup(void) {
+    if (!_sapp.cleanup_called) {
+        if (_sapp.desc.cleanup_cb) {
             _sapp.desc.cleanup_cb();
         }
-        else if (_sapp.desc.cleanup_userdata_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        else if (_sapp.desc.cleanup_userdata_cb) {
             _sapp.desc.cleanup_userdata_cb(_sapp.desc.user_data);
         }
         _sapp.cleanup_called = true;
     }
 }
 
-_SOKOL_PRIVATE bool _sapp_call_event(const sapp_event* e) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (!_sapp.cleanup_called) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (_sapp.desc.event_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_call_event(const sapp_event* e) {
+    if (!_sapp.cleanup_called) {
+        if (_sapp.desc.event_cb) {
             _sapp.desc.event_cb(e);
         }
-        else if (_sapp.desc.event_userdata_cb) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        else if (_sapp.desc.event_userdata_cb) {
             _sapp.desc.event_userdata_cb(e, _sapp.desc.user_data);
         }
     }
-    if (_sapp.event_consumed) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.event_consumed) {
         _sapp.event_consumed = false;
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+        return true;
     }
     else {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        return false;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_strcpy(const char* src, char* dst, int max_len) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_strcpy(const char* src, char* dst, int max_len) {
     SOKOL_ASSERT(src && dst && (max_len > 0));
     char* const end = &(dst[max_len-1]);
     char c = 0;
     for (int i = 0; i < max_len; i++) {
         c = *src;
-        if (c != 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (c != 0) {
             src++;
         }
         *dst++ = c;
     }
     /* truncated? */
-    if (c != 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (c != 0) {
         *end = 0;
     }
 }
 
-_SOKOL_PRIVATE sapp_desc _sapp_desc_defaults(const sapp_desc* in_desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE sapp_desc _sapp_desc_defaults(const sapp_desc* in_desc) {
     sapp_desc desc = *in_desc;
     desc.width = _sapp_def(desc.width, 640);
     desc.height = _sapp_def(desc.height, 480);
@@ -2293,10 +2293,10 @@ _SOKOL_PRIVATE sapp_desc _sapp_desc_defaults(const sapp_desc* in_desc) {printf("
     desc.html5_canvas_name = _sapp_def(desc.html5_canvas_name, "canvas");
     desc.clipboard_size = _sapp_def(desc.clipboard_size, 8192);
     desc.window_title = _sapp_def(desc.window_title, "sokol_app");
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return desc;
+    return desc;
 }
 
-_SOKOL_PRIVATE void _sapp_init_state(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_init_state(const sapp_desc* desc) {
     _SAPP_CLEAR(_sapp_t, _sapp);
     _sapp.desc = _sapp_desc_defaults(desc);
     _sapp.first_frame = true;
@@ -2310,7 +2310,7 @@ _SOKOL_PRIVATE void _sapp_init_state(const sapp_desc* desc) {printf("\n --: %s::
     _sapp.desc.html5_canvas_name = _sapp.html5_canvas_name;
     _sapp.html5_ask_leave_site = _sapp.desc.html5_ask_leave_site;
     _sapp.clipboard.enabled = _sapp.desc.enable_clipboard;
-    if (_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.clipboard.enabled) {
         _sapp.clipboard.buf_size = _sapp.desc.clipboard_size;
         _sapp.clipboard.buffer = (char*) SOKOL_CALLOC(1, _sapp.clipboard.buf_size);
     }
@@ -2321,15 +2321,15 @@ _SOKOL_PRIVATE void _sapp_init_state(const sapp_desc* desc) {printf("\n --: %s::
     _sapp.mouse.shown = true;
 }
 
-_SOKOL_PRIVATE void _sapp_discard_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_discard_state(void) {
+    if (_sapp.clipboard.enabled) {
         SOKOL_ASSERT(_sapp.clipboard.buffer);
         SOKOL_FREE((void*)_sapp.clipboard.buffer);
     }
     _SAPP_CLEAR(_sapp_t, _sapp);
 }
 
-_SOKOL_PRIVATE void _sapp_init_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_init_event(sapp_event_type type) {
     memset(&_sapp.event, 0, sizeof(_sapp.event));
     _sapp.event.type = type;
     _sapp.event.frame_count = _sapp.frame_count;
@@ -2344,22 +2344,22 @@ _SOKOL_PRIVATE void _sapp_init_event(sapp_event_type type) {printf("\n --: %s:: 
     _sapp.event.mouse_dy = _sapp.mouse.dy;
 }
 
-_SOKOL_PRIVATE bool _sapp_events_enabled(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_events_enabled(void) {
     /* only send events when an event callback is set, and the init function was called */
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (_sapp.desc.event_cb || _sapp.desc.event_userdata_cb) && _sapp.init_called;
+    return (_sapp.desc.event_cb || _sapp.desc.event_userdata_cb) && _sapp.init_called;
 }
 
-_SOKOL_PRIVATE sapp_keycode _sapp_translate_key(int scan_code) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE sapp_keycode _sapp_translate_key(int scan_code) {
     if ((scan_code >= 0) && (scan_code < SAPP_MAX_KEYCODES)) {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.keycodes[scan_code];
+        return _sapp.keycodes[scan_code];
     }
     else {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_INVALID;
+        return SAPP_KEYCODE_INVALID;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.first_frame) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_frame(void) {
+    if (_sapp.first_frame) {
         _sapp.first_frame = false;
         _sapp_call_init();
     }
@@ -2371,15 +2371,15 @@ _SOKOL_PRIVATE void _sapp_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __
 #if defined(_SAPP_APPLE)
 
 #if __has_feature(objc_arc)
-#define _SAPP_OBJC_RELEASE(obj) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); obj = nil; }
+#define _SAPP_OBJC_RELEASE(obj) { obj = nil; }
 #else
-#define _SAPP_OBJC_RELEASE(obj) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); [obj release]; obj = nil; }
+#define _SAPP_OBJC_RELEASE(obj) { [obj release]; obj = nil; }
 #endif
 
 /*== MacOS ===================================================================*/
 #if defined(_SAPP_MACOS)
 
-_SOKOL_PRIVATE void _sapp_macos_init_keytable(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_init_keytable(void) {
     _sapp.keycodes[0x1D] = SAPP_KEYCODE_0;
     _sapp.keycodes[0x12] = SAPP_KEYCODE_1;
     _sapp.keycodes[0x13] = SAPP_KEYCODE_2;
@@ -2493,7 +2493,7 @@ _SOKOL_PRIVATE void _sapp_macos_init_keytable(void) {printf("\n --: %s:: %s:%d "
     _sapp.keycodes[0x4E] = SAPP_KEYCODE_KP_SUBTRACT;
 }
 
-_SOKOL_PRIVATE void _sapp_macos_discard_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_discard_state(void) {
     // NOTE: it's safe to call [release] on a nil object
     _SAPP_OBJC_RELEASE(_sapp.macos.tracking_area);
     _SAPP_OBJC_RELEASE(_sapp.macos.app_dlg);
@@ -2505,7 +2505,7 @@ _SOKOL_PRIVATE void _sapp_macos_discard_state(void) {printf("\n --: %s:: %s:%d "
     _SAPP_OBJC_RELEASE(_sapp.macos.window);
 }
 
-_SOKOL_PRIVATE void _sapp_macos_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     _sapp_macos_init_keytable();
     [NSApplication sharedApplication];
@@ -2523,28 +2523,28 @@ _SOKOL_PRIVATE void _sapp_macos_run(const sapp_desc* desc) {printf("\n --: %s:: 
 int main(int argc, char* argv[]) {
     sapp_desc desc = sokol_main(argc, argv);
     _sapp_macos_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_NO_ENTRY */
 
-_SOKOL_PRIVATE uint32_t _sapp_macos_mod(NSEventModifierFlags f) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE uint32_t _sapp_macos_mod(NSEventModifierFlags f) {
     uint32_t m = 0;
-    if (f & NSEventModifierFlagShift) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (f & NSEventModifierFlagShift) {
         m |= SAPP_MODIFIER_SHIFT;
     }
-    if (f & NSEventModifierFlagControl) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (f & NSEventModifierFlagControl) {
         m |= SAPP_MODIFIER_CTRL;
     }
-    if (f & NSEventModifierFlagOption) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (f & NSEventModifierFlagOption) {
         m |= SAPP_MODIFIER_ALT;
     }
-    if (f & NSEventModifierFlagCommand) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (f & NSEventModifierFlagCommand) {
         m |= SAPP_MODIFIER_SUPER;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m;
+    return m;
 }
 
-_SOKOL_PRIVATE void _sapp_macos_mouse_event(sapp_event_type type, sapp_mousebutton btn, uint32_t mod) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_mouse_event(sapp_event_type type, sapp_mousebutton btn, uint32_t mod) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.mouse_button = btn;
@@ -2553,7 +2553,7 @@ _SOKOL_PRIVATE void _sapp_macos_mouse_event(sapp_event_type type, sapp_mousebutt
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_key_event(sapp_event_type type, sapp_keycode key, bool repeat, uint32_t mod) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_key_event(sapp_event_type type, sapp_keycode key, bool repeat, uint32_t mod) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.key_code = key;
@@ -2563,14 +2563,14 @@ _SOKOL_PRIVATE void _sapp_macos_key_event(sapp_event_type type, sapp_keycode key
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_app_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_app_event(sapp_event_type type) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp_call_event(&_sapp.event);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_update_dimensions(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_update_dimensions(void) {
     #if defined(SOKOL_METAL)
         const CGSize fb_size = [_sapp.macos.view drawableSize];
         _sapp.framebuffer_width = fb_size.width;
@@ -2583,22 +2583,22 @@ _SOKOL_PRIVATE void _sapp_macos_update_dimensions(void) {printf("\n --: %s:: %s:
     const NSRect bounds = [_sapp.macos.view bounds];
     _sapp.window_width = bounds.size.width;
     _sapp.window_height = bounds.size.height;
-    if (_sapp.framebuffer_width == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.framebuffer_width == 0) {
         _sapp.framebuffer_width = 1;
     }
-    if (_sapp.framebuffer_height == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.framebuffer_height == 0) {
         _sapp.framebuffer_height = 1;
     }
-    if (_sapp.window_width == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.window_width == 0) {
         _sapp.window_width = 1;
     }
-    if (_sapp.window_height == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.window_height == 0) {
         _sapp.window_height = 1;
     }
     _sapp.dpi_scale = (float)_sapp.framebuffer_width / (float)_sapp.window_width;
 }
 
-_SOKOL_PRIVATE void _sapp_macos_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_toggle_fullscreen(void) {
     /* NOTE: the _sapp.fullscreen flag is also notified by the
        windowDidEnterFullscreen / windowDidExitFullscreen
        event handlers
@@ -2607,7 +2607,7 @@ _SOKOL_PRIVATE void _sapp_macos_toggle_fullscreen(void) {printf("\n --: %s:: %s:
     [_sapp.macos.window toggleFullScreen:nil];
 }
 
-_SOKOL_PRIVATE void _sapp_macos_set_clipboard_string(const char* str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_set_clipboard_string(const char* str) {
     @autoreleasepool {
         NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
         [pasteboard declareTypes:@[NSPasteboardTypeString] owner:nil];
@@ -2615,34 +2615,34 @@ _SOKOL_PRIVATE void _sapp_macos_set_clipboard_string(const char* str) {printf("\
     }
 }
 
-_SOKOL_PRIVATE const char* _sapp_macos_get_clipboard_string(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE const char* _sapp_macos_get_clipboard_string(void) {
     SOKOL_ASSERT(_sapp.clipboard.buffer);
     @autoreleasepool {
         _sapp.clipboard.buffer[0] = 0;
         NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
         if (![[pasteboard types] containsObject:NSPasteboardTypeString]) {
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+            return _sapp.clipboard.buffer;
         }
         NSString* str = [pasteboard stringForType:NSPasteboardTypeString];
-        if (!str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        if (!str) {
+            return _sapp.clipboard.buffer;
         }
         _sapp_strcpy([str UTF8String], _sapp.clipboard.buffer, _sapp.clipboard.buf_size);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+    return _sapp.clipboard.buffer;
 }
 
-_SOKOL_PRIVATE void _sapp_macos_update_window_title(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_update_window_title(void) {
     [_sapp.macos.window setTitle: [NSString stringWithUTF8String:_sapp.window_title]];
 }
 
-_SOKOL_PRIVATE void _sapp_macos_update_mouse(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (!_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_update_mouse(void) {
+    if (!_sapp.mouse.locked) {
         const NSPoint mouse_pos = [_sapp.macos.window mouseLocationOutsideOfEventStream];
         float new_x = mouse_pos.x * _sapp.dpi_scale;
         float new_y = _sapp.framebuffer_height - (mouse_pos.y * _sapp.dpi_scale) - 1;
         /* don't update dx/dy in the very first update */
-        if (_sapp.mouse.pos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.mouse.pos_valid) {
             _sapp.mouse.dx = new_x - _sapp.mouse.x;
             _sapp.mouse.dy = new_y - _sapp.mouse.y;
         }
@@ -2652,9 +2652,9 @@ _SOKOL_PRIVATE void _sapp_macos_update_mouse(void) {printf("\n --: %s:: %s:%d ",
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_show_mouse(bool visible) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_show_mouse(bool visible) {
     /* NOTE: this function is only called when the mouse visibility actually changes */
-    if (visible) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (visible) {
         CGDisplayShowCursor(kCGDirectMainDisplay);
     }
     else {
@@ -2662,9 +2662,9 @@ _SOKOL_PRIVATE void _sapp_macos_show_mouse(bool visible) {printf("\n --: %s:: %s
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (lock == _sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+_SOKOL_PRIVATE void _sapp_macos_lock_mouse(bool lock) {
+    if (lock == _sapp.mouse.locked) {
+        return;
     }
     _sapp.mouse.dx = 0.0f;
     _sapp.mouse.dy = 0.0f;
@@ -2679,7 +2679,7 @@ _SOKOL_PRIVATE void _sapp_macos_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d
         NOTE also that the hide/show of the mouse cursor should properly
         stack with calls to sapp_show_mouse()
     */
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         [NSEvent setMouseCoalescingEnabled:NO];
         CGAssociateMouseAndMouseCursorPosition(NO);
         CGDisplayHideCursor(kCGDirectMainDisplay);
@@ -2691,10 +2691,10 @@ _SOKOL_PRIVATE void _sapp_macos_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d
     }
 }
 
-_SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_macos_frame(void) {
     _sapp_macos_update_mouse();
     _sapp_frame();
-    if (_sapp.quit_requested || _sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.quit_requested || _sapp.quit_ordered) {
         [_sapp.macos.window performClose:nil];
     }
 }
@@ -2702,11 +2702,11 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 @implementation _sapp_macos_app_delegate
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
     _SOKOL_UNUSED(aNotification);
-    if (_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.fullscreen) {
         NSRect screen_rect = NSScreen.mainScreen.frame;
         _sapp.window_width = screen_rect.size.width;
         _sapp.window_height = screen_rect.size.height;
-        if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.high_dpi) {
             _sapp.framebuffer_width = 2 * _sapp.window_width;
             _sapp.framebuffer_height = 2 * _sapp.window_height;
         }
@@ -2745,7 +2745,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
         _sapp.macos.view.sampleCount = _sapp.sample_count;
         _sapp.macos.window.contentView = _sapp.macos.view;
         [_sapp.macos.window makeFirstResponder:_sapp.macos.view];
-        if (!_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (!_sapp.desc.high_dpi) {
             CGSize drawable_size = { (CGFloat) _sapp.framebuffer_width, (CGFloat) _sapp.framebuffer_height };
             _sapp.macos.view.drawableSize = drawable_size;
         }
@@ -2760,7 +2760,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
         attrs[i++] = NSOpenGLPFAAlphaSize; attrs[i++] = 8;
         attrs[i++] = NSOpenGLPFADepthSize; attrs[i++] = 24;
         attrs[i++] = NSOpenGLPFAStencilSize; attrs[i++] = 8;
-        if (_sapp.sample_count > 1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.sample_count > 1) {
             attrs[i++] = NSOpenGLPFAMultisample;
             attrs[i++] = NSOpenGLPFASampleBuffers; attrs[i++] = 1;
             attrs[i++] = NSOpenGLPFASamples; attrs[i++] = _sapp.sample_count;
@@ -2777,7 +2777,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
             pixelFormat:glpixelformat_obj];
         _SAPP_OBJC_RELEASE(glpixelformat_obj);
         [_sapp.macos.view updateTrackingAreas];
-        if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.high_dpi) {
             [_sapp.macos.view setWantsBestResolutionOpenGLSurface:YES];
         }
         else {
@@ -2796,7 +2796,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
         timer_obj = nil;
     #endif
     _sapp.valid = true;
-    if (_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.fullscreen) {
         /* on GL, this already toggles a rendered frame, so set the valid flag before */
         [_sapp.macos.window toggleFullScreen:self];
     }
@@ -2809,7 +2809,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender {
     _SOKOL_UNUSED(sender);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 
 - (void)applicationWillTerminate:(NSNotification*)notification {
@@ -2824,29 +2824,29 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 - (BOOL)windowShouldClose:(id)sender {
     _SOKOL_UNUSED(sender);
     /* only give user-code a chance to intervene when sapp_quit() wasn't already called */
-    if (!_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.quit_ordered) {
         /* if window should be closed and event handling is enabled, give user code
            a chance to intervene via sapp_cancel_quit()
         */
         _sapp.quit_requested = true;
         _sapp_macos_app_event(SAPP_EVENTTYPE_QUIT_REQUESTED);
         /* user code hasn't intervened, quit the app */
-        if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.quit_requested) {
             _sapp.quit_ordered = true;
         }
     }
-    if (_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    if (_sapp.quit_ordered) {
+        return YES;
     }
     else {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return NO;
+        return NO;
     }
 }
 
 - (void)windowDidResize:(NSNotification*)notification {
     _SOKOL_UNUSED(notification);
     _sapp_macos_update_dimensions();
-    if (!_sapp.first_frame) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.first_frame) {
         _sapp_macos_app_event(SAPP_EVENTTYPE_RESIZED);
     }
 }
@@ -2909,16 +2909,16 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 }
 
 - (BOOL)isOpaque {
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 - (BOOL)canBecomeKeyView {
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 - (BOOL)acceptsFirstResponder {
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 - (void)updateTrackingAreas {
-    if (_sapp.macos.tracking_area != nil) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.macos.tracking_area != nil) {
         [self removeTrackingArea:_sapp.macos.tracking_area];
         _SAPP_OBJC_RELEASE(_sapp.macos.tracking_area);
     }
@@ -2936,12 +2936,12 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
     /* don't send mouse enter/leave while dragging (so that it behaves the same as
        on Windows while SetCapture is active
     */
-    if (0 == _sapp.macos.mouse_buttons) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (0 == _sapp.macos.mouse_buttons) {
         _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_ENTER, SAPP_MOUSEBUTTON_INVALID, _sapp_macos_mod(event.modifierFlags));
     }
 }
 - (void)mouseExited:(NSEvent*)event {
-    if (0 == _sapp.macos.mouse_buttons) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (0 == _sapp.macos.mouse_buttons) {
         _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_LEAVE, SAPP_MOUSEBUTTON_INVALID, _sapp_macos_mod(event.modifierFlags));
     }
 }
@@ -2962,20 +2962,20 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
     _sapp.macos.mouse_buttons &= ~(1<<SAPP_MOUSEBUTTON_RIGHT);
 }
 - (void)otherMouseDown:(NSEvent*)event {
-    if (2 == event.buttonNumber) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (2 == event.buttonNumber) {
         _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_DOWN, SAPP_MOUSEBUTTON_MIDDLE, _sapp_macos_mod(event.modifierFlags));
         _sapp.macos.mouse_buttons |= (1<<SAPP_MOUSEBUTTON_MIDDLE);
     }
 }
 - (void)otherMouseUp:(NSEvent*)event {
-    if (2 == event.buttonNumber) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (2 == event.buttonNumber) {
         _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_UP, SAPP_MOUSEBUTTON_MIDDLE, _sapp_macos_mod(event.modifierFlags));
         _sapp.macos.mouse_buttons &= (1<<SAPP_MOUSEBUTTON_MIDDLE);
     }
 }
 - (void)otherMouseDragged:(NSEvent*)event {
-    if (2 == event.buttonNumber) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (2 == event.buttonNumber) {
+        if (_sapp.mouse.locked) {
             _sapp.mouse.dx = [event deltaX];
             _sapp.mouse.dy = [event deltaY];
         }
@@ -2983,21 +2983,21 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
     }
 }
 - (void)mouseMoved:(NSEvent*)event {
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         _sapp.mouse.dx = [event deltaX];
         _sapp.mouse.dy = [event deltaY];
     }
     _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_MOVE, SAPP_MOUSEBUTTON_INVALID , _sapp_macos_mod(event.modifierFlags));
 }
 - (void)mouseDragged:(NSEvent*)event {
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         _sapp.mouse.dx = [event deltaX];
         _sapp.mouse.dy = [event deltaY];
     }
     _sapp_macos_mouse_event(SAPP_EVENTTYPE_MOUSE_MOVE, SAPP_MOUSEBUTTON_INVALID , _sapp_macos_mod(event.modifierFlags));
 }
 - (void)rightMouseDragged:(NSEvent*)event {
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         _sapp.mouse.dx = [event deltaX];
         _sapp.mouse.dy = [event deltaY];
     }
@@ -3007,7 +3007,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
     if (_sapp_events_enabled()) {
         float dx = (float) event.scrollingDeltaX;
         float dy = (float) event.scrollingDeltaY;
-        if (event.hasPreciseScrollingDeltas) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (event.hasPreciseScrollingDeltas) {
             dx *= 0.1;
             dy *= 0.1;
         }
@@ -3034,12 +3034,12 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
         }
         const NSString* chars = event.characters;
         const NSUInteger len = chars.length;
-        if (len > 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (len > 0) {
             _sapp_init_event(SAPP_EVENTTYPE_CHAR);
             _sapp.event.modifiers = mods;
             for (NSUInteger i = 0; i < len; i++) {
                 const unichar codepoint = [chars characterAtIndex:i];
-                if ((codepoint & 0xFF00) == 0xF700) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if ((codepoint & 0xFF00) == 0xF700) {
                     continue;
                 }
                 _sapp.event.char_code = codepoint;
@@ -3066,23 +3066,23 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
     _sapp.macos.flags_changed_store = new_f;
     sapp_keycode key_code = SAPP_KEYCODE_INVALID;
     bool down = false;
-    if ((new_f ^ old_f) & NSEventModifierFlagShift) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((new_f ^ old_f) & NSEventModifierFlagShift) {
         key_code = SAPP_KEYCODE_LEFT_SHIFT;
         down = 0 != (new_f & NSEventModifierFlagShift);
     }
-    if ((new_f ^ old_f) & NSEventModifierFlagControl) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((new_f ^ old_f) & NSEventModifierFlagControl) {
         key_code = SAPP_KEYCODE_LEFT_CONTROL;
         down = 0 != (new_f & NSEventModifierFlagControl);
     }
-    if ((new_f ^ old_f) & NSEventModifierFlagOption) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((new_f ^ old_f) & NSEventModifierFlagOption) {
         key_code = SAPP_KEYCODE_LEFT_ALT;
         down = 0 != (new_f & NSEventModifierFlagOption);
     }
-    if ((new_f ^ old_f) & NSEventModifierFlagCommand) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((new_f ^ old_f) & NSEventModifierFlagCommand) {
         key_code = SAPP_KEYCODE_LEFT_SUPER;
         down = 0 != (new_f & NSEventModifierFlagCommand);
     }
-    if (key_code != SAPP_KEYCODE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (key_code != SAPP_KEYCODE_INVALID) {
         _sapp_macos_key_event(down ? SAPP_EVENTTYPE_KEY_DOWN : SAPP_EVENTTYPE_KEY_UP,
             key_code,
             false,
@@ -3091,7 +3091,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 }
 - (void)cursorUpdate:(NSEvent*)event {
     _SOKOL_UNUSED(event);
-    if (_sapp.desc.user_cursor) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.user_cursor) {
         _sapp_macos_app_event(SAPP_EVENTTYPE_UPDATE_CURSOR);
     }
 }
@@ -3102,7 +3102,7 @@ _SOKOL_PRIVATE void _sapp_macos_frame(void) {printf("\n --: %s:: %s:%d ", __func
 /*== iOS =====================================================================*/
 #if defined(_SAPP_IOS)
 
-_SOKOL_PRIVATE void _sapp_ios_discard_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_discard_state(void) {
     // NOTE: it's safe to call [release] on a nil object
     _SAPP_OBJC_RELEASE(_sapp.ios.textfield_dlg);
     _SAPP_OBJC_RELEASE(_sapp.ios.textfield);
@@ -3117,7 +3117,7 @@ _SOKOL_PRIVATE void _sapp_ios_discard_state(void) {printf("\n --: %s:: %s:%d ", 
     _SAPP_OBJC_RELEASE(_sapp.ios.window);
 }
 
-_SOKOL_PRIVATE void _sapp_ios_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     static int argc = 1;
     static char* argv[] = { (char*)"sokol_app" };
@@ -3129,24 +3129,24 @@ _SOKOL_PRIVATE void _sapp_ios_run(const sapp_desc* desc) {printf("\n --: %s:: %s
 int main(int argc, char* argv[]) {
     sapp_desc desc = sokol_main(argc, argv);
     _sapp_ios_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_NO_ENTRY */
 
-_SOKOL_PRIVATE void _sapp_ios_app_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_app_event(sapp_event_type type) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp_call_event(&_sapp.event);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_ios_touch_event(sapp_event_type type, NSSet<UITouch *>* touches, UIEvent* event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_touch_event(sapp_event_type type, NSSet<UITouch *>* touches, UIEvent* event) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         NSEnumerator* enumerator = event.allTouches.objectEnumerator;
         UITouch* ios_touch;
         while ((ios_touch = [enumerator nextObject])) {
-            if ((_sapp.event.num_touches + 1) < SAPP_MAX_TOUCHPOINTS) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if ((_sapp.event.num_touches + 1) < SAPP_MAX_TOUCHPOINTS) {
                 CGPoint ios_pos = [ios_touch locationInView:_sapp.ios.view];
                 sapp_touchpoint* cur_point = &_sapp.event.touches[_sapp.event.num_touches++];
                 cur_point->identifier = (uintptr_t) ios_touch;
@@ -3155,13 +3155,13 @@ _SOKOL_PRIVATE void _sapp_ios_touch_event(sapp_event_type type, NSSet<UITouch *>
                 cur_point->changed = [touches containsObject:ios_touch];
             }
         }
-        if (_sapp.event.num_touches > 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.event.num_touches > 0) {
             _sapp_call_event(&_sapp.event);
         }
     }
 }
 
-_SOKOL_PRIVATE void _sapp_ios_update_dimensions(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_update_dimensions(void) {
     CGRect screen_rect = UIScreen.mainScreen.bounds;
     _sapp.window_width = (int) screen_rect.size.width;
     _sapp.window_height = (int) screen_rect.size.height;
@@ -3181,19 +3181,19 @@ _SOKOL_PRIVATE void _sapp_ios_update_dimensions(void) {printf("\n --: %s:: %s:%d
     _sapp.framebuffer_height = cur_fb_height;
     SOKOL_ASSERT((_sapp.framebuffer_width > 0) && (_sapp.framebuffer_height > 0));
     _sapp.dpi_scale = (float)_sapp.framebuffer_width / (float) _sapp.window_width;
-    if (dim_changed && !_sapp.first_frame) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (dim_changed && !_sapp.first_frame) {
         _sapp_ios_app_event(SAPP_EVENTTYPE_RESIZED);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_ios_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_frame(void) {
     _sapp_ios_update_dimensions();
     _sapp_frame();
 }
 
-_SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {
     /* if not happened yet, create an invisible text field */
-    if (nil == _sapp.ios.textfield) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (nil == _sapp.ios.textfield) {
         _sapp.ios.textfield_dlg = [[_sapp_textfield_dlg alloc] init];
         _sapp.ios.textfield = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 100, 50)];
         _sapp.ios.textfield.keyboardType = UIKeyboardTypeDefault;
@@ -3216,7 +3216,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
             selector:@selector(keyboardDidChangeFrame:)
             name:UIKeyboardDidChangeFrameNotification object:nil];
     }
-    if (shown) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (shown) {
         /* setting the text field as first responder brings up the onscreen keyboard */
         [_sapp.ios.textfield becomeFirstResponder];
     }
@@ -3231,7 +3231,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
     _sapp.ios.window = [[UIWindow alloc] initWithFrame:screen_rect];
     _sapp.window_width = screen_rect.size.width;
     _sapp.window_height = screen_rect.size.height;
-    if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.high_dpi) {
         _sapp.framebuffer_width = 2 * _sapp.window_width;
         _sapp.framebuffer_height = 2 * _sapp.window_height;
     }
@@ -3248,7 +3248,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
         _sapp.ios.view.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
         _sapp.ios.view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
         _sapp.ios.view.sampleCount = _sapp.sample_count;
-        if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.high_dpi) {
             _sapp.ios.view.contentScaleFactor = 2.0;
         }
         else {
@@ -3261,13 +3261,13 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
         _sapp.ios.view_ctrl.view = _sapp.ios.view;
         _sapp.ios.window.rootViewController = _sapp.ios.view_ctrl;
     #else
-        if (_sapp.desc.gl_force_gles2) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.gl_force_gles2) {
             _sapp.ios.eagl_ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
             _sapp.gles2_fallback = true;
         }
         else {
             _sapp.ios.eagl_ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
-            if (_sapp.ios.eagl_ctx == nil) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.ios.eagl_ctx == nil) {
                 _sapp.ios.eagl_ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
                 _sapp.gles2_fallback = true;
             }
@@ -3281,7 +3281,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
         _sapp.ios.view.enableSetNeedsDisplay = NO;
         _sapp.ios.view.userInteractionEnabled = YES;
         _sapp.ios.view.multipleTouchEnabled = YES;
-        if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.high_dpi) {
             _sapp.ios.view.contentScaleFactor = 2.0;
         }
         else {
@@ -3295,18 +3295,18 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
     [_sapp.ios.window makeKeyAndVisible];
 
     _sapp.valid = true;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    if (!_sapp.ios.suspended) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.ios.suspended) {
         _sapp.ios.suspended = true;
         _sapp_ios_app_event(SAPP_EVENTTYPE_SUSPENDED);
     }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    if (_sapp.ios.suspended) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.ios.suspended) {
         _sapp.ios.suspended = false;
         _sapp_ios_app_event(SAPP_EVENTTYPE_RESUMED);
     }
@@ -3328,7 +3328,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
 - (void)keyboardWasShown:(NSNotification*)notif {
     _sapp.onscreen_keyboard_shown = true;
     /* query the keyboard's size, and modify the content view's size */
-    if (_sapp.desc.ios_keyboard_resizes_canvas) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.ios_keyboard_resizes_canvas) {
         NSDictionary* info = notif.userInfo;
         CGFloat kbd_h = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
         CGRect view_frame = UIScreen.mainScreen.bounds;
@@ -3338,13 +3338,13 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
 }
 - (void)keyboardWillBeHidden:(NSNotification*)notif {
     _sapp.onscreen_keyboard_shown = false;
-    if (_sapp.desc.ios_keyboard_resizes_canvas) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.ios_keyboard_resizes_canvas) {
         _sapp.ios.view.frame = UIScreen.mainScreen.bounds;
     }
 }
 - (void)keyboardDidChangeFrame:(NSNotification*)notif {
     /* this is for the case when the screen rotation changes while the keyboard is open */
-    if (_sapp.onscreen_keyboard_shown && _sapp.desc.ios_keyboard_resizes_canvas) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.onscreen_keyboard_shown && _sapp.desc.ios_keyboard_resizes_canvas) {
         NSDictionary* info = notif.userInfo;
         CGFloat kbd_h = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
         CGRect view_frame = UIScreen.mainScreen.bounds;
@@ -3355,10 +3355,10 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
 - (BOOL)textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string {
     if (_sapp_events_enabled()) {
         const NSUInteger len = string.length;
-        if (len > 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (len > 0) {
             for (NSUInteger i = 0; i < len; i++) {
                 unichar c = [string characterAtIndex:i];
-                if (c >= 32) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (c >= 32) {
                     /* ignore surrogates for now */
                     if ((c < 0xD800) || (c > 0xDFFF)) {
                         _sapp_init_event(SAPP_EVENTTYPE_CHAR);
@@ -3366,14 +3366,14 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
                         _sapp_call_event(&_sapp.event);
                     }
                 }
-                if (c <= 32) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (c <= 32) {
                     sapp_keycode k = SAPP_KEYCODE_INVALID;
-                    switch (c) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    switch (c) {
                         case 10: k = SAPP_KEYCODE_ENTER; break;
                         case 32: k = SAPP_KEYCODE_SPACE; break;
                         default: break;
                     }
-                    if (k != SAPP_KEYCODE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (k != SAPP_KEYCODE_INVALID) {
                         _sapp_init_event(SAPP_EVENTTYPE_KEY_DOWN);
                         _sapp.event.key_code = k;
                         _sapp_call_event(&_sapp.event);
@@ -3394,7 +3394,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
             _sapp_call_event(&_sapp.event);
         }
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return NO;
+    return NO;
 }
 @end
 
@@ -3404,7 +3404,7 @@ _SOKOL_PRIVATE void _sapp_ios_show_keyboard(bool shown) {printf("\n --: %s:: %s:
     _sapp_ios_frame();
 }
 - (BOOL)isOpaque {
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return YES;
+    return YES;
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent*)event {
     _sapp_ios_touch_event(SAPP_EVENTTYPE_TOUCHES_BEGAN, touches, event);
@@ -3433,12 +3433,12 @@ extern "C" {
 /* this function is called from a JS event handler when the user hides
     the onscreen keyboard pressing the 'dismiss keyboard key'
 */
-EMSCRIPTEN_KEEPALIVE void _sapp_emsc_notify_keyboard_hidden(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+EMSCRIPTEN_KEEPALIVE void _sapp_emsc_notify_keyboard_hidden(void) {
     _sapp.onscreen_keyboard_shown = false;
 }
 
-EMSCRIPTEN_KEEPALIVE void _sapp_emsc_onpaste(const char* str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+EMSCRIPTEN_KEEPALIVE void _sapp_emsc_onpaste(const char* str) {
+    if (_sapp.clipboard.enabled) {
         _sapp_strcpy(str, _sapp.clipboard.buffer, _sapp.clipboard.buf_size);
         if (_sapp_events_enabled()) {
             _sapp_init_event(SAPP_EVENTTYPE_CLIPBOARD_PASTED);
@@ -3448,8 +3448,8 @@ EMSCRIPTEN_KEEPALIVE void _sapp_emsc_onpaste(const char* str) {printf("\n --: %s
 }
 
 /*  https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload */
-EMSCRIPTEN_KEEPALIVE int _sapp_html5_get_ask_leave_site(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.html5_ask_leave_site ? 1 : 0;
+EMSCRIPTEN_KEEPALIVE int _sapp_html5_get_ask_leave_site(void) {
+    return _sapp.html5_ask_leave_site ? 1 : 0;
 }
 
 #ifdef __cplusplus
@@ -3462,7 +3462,7 @@ EM_JS(void, sapp_js_create_textfield, (void), {
     _sapp_inp.type = "text";
     _sapp_inp.id = "_sokol_app_input_element";
     _sapp_inp.autocapitalize = "none";
-    _sapp_inp.addEventListener("focusout", function(_sapp_event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    _sapp_inp.addEventListener("focusout", function(_sapp_event) {
         __sapp_emsc_notify_keyboard_hidden()
 
     });
@@ -3478,8 +3478,8 @@ EM_JS(void, sapp_js_unfocus_textfield, (void), {
 });
 
 EM_JS(void, sapp_js_add_hook_beforeunload, (void), {
-    Module.sokol_beforeunload = function(_sapp_event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (__sapp_html5_get_ask_leave_site() != 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    Module.sokol_beforeunload = function(_sapp_event) {
+        if (__sapp_html5_get_ask_leave_site() != 0) {
             _sapp_event.preventDefault();
             _sapp_event.returnValue = ' ';
         }
@@ -3492,7 +3492,7 @@ EM_JS(void, sapp_js_remove_hook_beforeunload, (void), {
 });
 
 EM_JS(void, sapp_js_add_hook_clipboard, (void), {
-    Module.sokol_paste = function(event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    Module.sokol_paste = function(event) {
         var pasted_str = event.clipboardData.getData('text');
         ccall('_sapp_emsc_onpaste', 'void', ['string'], [pasted_str]);
     };
@@ -3521,7 +3521,7 @@ EM_JS(void, sapp_js_write_clipboard, (const char* c_str), {
     document.body.removeChild(ta);
 });
 
-_SOKOL_PRIVATE void _sapp_emsc_set_clipboard_string(const char* str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_set_clipboard_string(const char* str) {
     sapp_js_write_clipboard(str);
 }
 
@@ -3529,10 +3529,10 @@ _SOKOL_PRIVATE void _sapp_emsc_set_clipboard_string(const char* str) {printf("\n
     state, this must happen from an JS input event handler, otherwise
     the request will be ignored by the browser
 */
-_SOKOL_PRIVATE void _sapp_emsc_update_keyboard_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.emsc.wants_show_keyboard) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_update_keyboard_state(void) {
+    if (_sapp.emsc.wants_show_keyboard) {
         /* create input text field on demand */
-        if (!_sapp.emsc.textfield_created) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (!_sapp.emsc.textfield_created) {
             _sapp.emsc.textfield_created = true;
             sapp_js_create_textfield();
         }
@@ -3541,9 +3541,9 @@ _SOKOL_PRIVATE void _sapp_emsc_update_keyboard_state(void) {printf("\n --: %s:: 
         _sapp.emsc.wants_show_keyboard = false;
         sapp_js_focus_textfield();
     }
-    if (_sapp.emsc.wants_hide_keyboard) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.emsc.wants_hide_keyboard) {
         /* unfocus the text input field */
-        if (_sapp.emsc.textfield_created) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.emsc.textfield_created) {
             _sapp.onscreen_keyboard_shown = false;
             _sapp.emsc.wants_hide_keyboard = false;
             sapp_js_unfocus_textfield();
@@ -3555,8 +3555,8 @@ _SOKOL_PRIVATE void _sapp_emsc_update_keyboard_state(void) {printf("\n --: %s:: 
     input event handler, so we'll just keep track of the desired
     state, and the actual state change will happen with the next input event
 */
-_SOKOL_PRIVATE void _sapp_emsc_show_keyboard(bool show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_show_keyboard(bool show) {
+    if (show) {
         _sapp.emsc.wants_show_keyboard = true;
     }
     else {
@@ -3568,46 +3568,46 @@ EM_JS(void, sapp_js_pointer_init, (const char* c_str_target), {
     // lookup and store canvas object by name
     var target_str = UTF8ToString(c_str_target);
     Module.sapp_emsc_target = document.getElementById(target_str);
-    if (!Module.sapp_emsc_target) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!Module.sapp_emsc_target) {
         console.log("sokol_app.h: invalid target:" + target_str);
     }
-    if (!Module.sapp_emsc_target.requestPointerLock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!Module.sapp_emsc_target.requestPointerLock) {
         console.log("sokol_app.h: target doesn't support requestPointerLock:" + target_str);
     }
 });
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_pointerlockchange_cb(int emsc_type, const EmscriptenPointerlockChangeEvent* emsc_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_pointerlockchange_cb(int emsc_type, const EmscriptenPointerlockChangeEvent* emsc_event, void* user_data) {
     _SOKOL_UNUSED(emsc_type);
     _SOKOL_UNUSED(user_data);
     _sapp.mouse.locked = emsc_event->isActive;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return EM_TRUE;
+    return EM_TRUE;
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_pointerlockerror_cb(int emsc_type, const void* reserved, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_pointerlockerror_cb(int emsc_type, const void* reserved, void* user_data) {
     _SOKOL_UNUSED(emsc_type);
     _SOKOL_UNUSED(reserved);
     _SOKOL_UNUSED(user_data);
     _sapp.mouse.locked = false;
     _sapp.emsc.mouse_lock_requested = false;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
 EM_JS(void, sapp_js_request_pointerlock, (void), {
-    if (Module.sapp_emsc_target) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (Module.sapp_emsc_target.requestPointerLock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (Module.sapp_emsc_target) {
+        if (Module.sapp_emsc_target.requestPointerLock) {
             Module.sapp_emsc_target.requestPointerLock();
         }
     }
 });
 
 EM_JS(void, sapp_js_exit_pointerlock, (void), {
-    if (document.exitPointerLock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (document.exitPointerLock) {
         document.exitPointerLock();
     }
 });
 
-_SOKOL_PRIVATE void _sapp_emsc_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_lock_mouse(bool lock) {
+    if (lock) {
         /* request mouse-lock during event handler invocation (see _sapp_emsc_update_mouse_lock_state) */
         _sapp.emsc.mouse_lock_requested = true;
     }
@@ -3621,8 +3621,8 @@ _SOKOL_PRIVATE void _sapp_emsc_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d 
 /* called from inside event handlers to check if mouse lock had been requested,
    and if yes, actually enter mouse lock.
 */
-_SOKOL_PRIVATE void _sapp_emsc_update_mouse_lock_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.emsc.mouse_lock_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_update_mouse_lock_state(void) {
+    if (_sapp.emsc.mouse_lock_requested) {
         _sapp.emsc.mouse_lock_requested = false;
         sapp_js_request_pointerlock();
     }
@@ -3633,7 +3633,7 @@ _SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_create(void);
 _SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_discard(void);
 #endif
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_size_changed(int event_type, const EmscriptenUiEvent* ui_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_size_changed(int event_type, const EmscriptenUiEvent* ui_event, void* user_data) {
     _SOKOL_UNUSED(event_type);
     _SOKOL_UNUSED(user_data);
     double w, h;
@@ -3658,19 +3658,19 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_size_changed(int event_type, const EmscriptenU
             overflow: hidden;
             display: block;
     */
-    if (w < 1.0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (w < 1.0) {
         w = ui_event->windowInnerWidth;
     }
     else {
         _sapp.window_width = (int) w;
     }
-    if (h < 1.0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (h < 1.0) {
         h = ui_event->windowInnerHeight;
     }
     else {
         _sapp.window_height = (int) h;
     }
-    if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.high_dpi) {
         _sapp.dpi_scale = emscripten_get_device_pixel_ratio();
     }
     _sapp.framebuffer_width = (int) (w * _sapp.dpi_scale);
@@ -3686,19 +3686,19 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_size_changed(int event_type, const EmscriptenU
         _sapp_init_event(SAPP_EVENTTYPE_RESIZED);
         _sapp_call_event(&_sapp.event);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_mouse_cb(int emsc_type, const EmscriptenMouseEvent* emsc_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_mouse_cb(int emsc_type, const EmscriptenMouseEvent* emsc_event, void* user_data) {
     _SOKOL_UNUSED(user_data);
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         _sapp.mouse.dx = (float) emsc_event->movementX;
         _sapp.mouse.dy = (float) emsc_event->movementY;
     }
     else {
         float new_x = emsc_event->targetX * _sapp.dpi_scale;
         float new_y = emsc_event->targetY * _sapp.dpi_scale;
-        if (_sapp.mouse.pos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.mouse.pos_valid) {
             _sapp.mouse.dx = new_x - _sapp.mouse.x;
             _sapp.mouse.dy = new_y - _sapp.mouse.y;
         }
@@ -3709,7 +3709,7 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_mouse_cb(int emsc_type, const EmscriptenMouseE
     if (_sapp_events_enabled() && (emsc_event->button >= 0) && (emsc_event->button < SAPP_MAX_MOUSEBUTTONS)) {
         sapp_event_type type;
         bool is_button_event = false;
-        switch (emsc_type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (emsc_type) {
             case EMSCRIPTEN_EVENT_MOUSEDOWN:
                 type = SAPP_EVENTTYPE_MOUSE_DOWN;
                 is_button_event = true;
@@ -3731,22 +3731,22 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_mouse_cb(int emsc_type, const EmscriptenMouseE
                 type = SAPP_EVENTTYPE_INVALID;
                 break;
         }
-        if (type != SAPP_EVENTTYPE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (type != SAPP_EVENTTYPE_INVALID) {
             _sapp_init_event(type);
-            if (emsc_event->ctrlKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->ctrlKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_CTRL;
             }
-            if (emsc_event->shiftKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->shiftKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SHIFT;
             }
-            if (emsc_event->altKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->altKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_ALT;
             }
-            if (emsc_event->metaKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->metaKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SUPER;
             }
-            if (is_button_event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                switch (emsc_event->button) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (is_button_event) {
+                switch (emsc_event->button) {
                     case 0: _sapp.event.mouse_button = SAPP_MOUSEBUTTON_LEFT; break;
                     case 1: _sapp.event.mouse_button = SAPP_MOUSEBUTTON_MIDDLE; break;
                     case 2: _sapp.event.mouse_button = SAPP_MOUSEBUTTON_RIGHT; break;
@@ -3759,34 +3759,34 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_mouse_cb(int emsc_type, const EmscriptenMouseE
             _sapp_call_event(&_sapp.event);
         }
         /* mouse lock can only be activated in mouse button events (not in move, enter or leave) */
-        if (is_button_event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (is_button_event) {
             _sapp_emsc_update_mouse_lock_state();
         }
     }
     _sapp_emsc_update_keyboard_state();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_wheel_cb(int emsc_type, const EmscriptenWheelEvent* emsc_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_wheel_cb(int emsc_type, const EmscriptenWheelEvent* emsc_event, void* user_data) {
     _SOKOL_UNUSED(emsc_type);
     _SOKOL_UNUSED(user_data);
     if (_sapp_events_enabled()) {
         _sapp_init_event(SAPP_EVENTTYPE_MOUSE_SCROLL);
-        if (emsc_event->mouse.ctrlKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (emsc_event->mouse.ctrlKey) {
             _sapp.event.modifiers |= SAPP_MODIFIER_CTRL;
         }
-        if (emsc_event->mouse.shiftKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (emsc_event->mouse.shiftKey) {
             _sapp.event.modifiers |= SAPP_MODIFIER_SHIFT;
         }
-        if (emsc_event->mouse.altKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (emsc_event->mouse.altKey) {
             _sapp.event.modifiers |= SAPP_MODIFIER_ALT;
         }
-        if (emsc_event->mouse.metaKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (emsc_event->mouse.metaKey) {
             _sapp.event.modifiers |= SAPP_MODIFIER_SUPER;
         }
         /* see https://github.com/floooh/sokol/issues/339 */
         float scale;
-        switch (emsc_event->deltaMode) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (emsc_event->deltaMode) {
             case DOM_DELTA_PIXEL: scale = -0.04f; break;
             case DOM_DELTA_LINE:  scale = -1.33f; break;
             case DOM_DELTA_PAGE:  scale = -10.0f; break; // FIXME: this is a guess
@@ -3798,15 +3798,15 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_wheel_cb(int emsc_type, const EmscriptenWheelE
     }
     _sapp_emsc_update_keyboard_state();
     _sapp_emsc_update_mouse_lock_state();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboardEvent* emsc_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboardEvent* emsc_event, void* user_data) {
     _SOKOL_UNUSED(user_data);
     bool retval = true;
     if (_sapp_events_enabled()) {
         sapp_event_type type;
-        switch (emsc_type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (emsc_type) {
             case EMSCRIPTEN_EVENT_KEYDOWN:
                 type = SAPP_EVENTTYPE_KEY_DOWN;
                 break;
@@ -3820,23 +3820,23 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboard
                 type = SAPP_EVENTTYPE_INVALID;
                 break;
         }
-        if (type != SAPP_EVENTTYPE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (type != SAPP_EVENTTYPE_INVALID) {
             bool send_keyup_followup = false;
             _sapp_init_event(type);
             _sapp.event.key_repeat = emsc_event->repeat;
-            if (emsc_event->ctrlKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->ctrlKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_CTRL;
             }
-            if (emsc_event->shiftKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->shiftKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SHIFT;
             }
-            if (emsc_event->altKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->altKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_ALT;
             }
-            if (emsc_event->metaKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->metaKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SUPER;
             }
-            if (type == SAPP_EVENTTYPE_CHAR) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (type == SAPP_EVENTTYPE_CHAR) {
                 _sapp.event.char_code = emsc_event->charCode;
                 /* workaround to make Cmd+V work on Safari */
                 if ((emsc_event->metaKey) && (emsc_event->charCode == 118)) {
@@ -3858,7 +3858,7 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboard
                     send_keyup_followup = true;
                 }
                 /* only forward a certain key ranges to the browser */
-                switch (_sapp.event.key_code) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                switch (_sapp.event.key_code) {
                     case SAPP_KEYCODE_WORLD_1:
                     case SAPP_KEYCODE_WORLD_2:
                     case SAPP_KEYCODE_ESCAPE:
@@ -3926,7 +3926,7 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboard
                 /* consume event via sapp_consume_event() */
                 retval = true;
             }
-            if (send_keyup_followup) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (send_keyup_followup) {
                 _sapp.event.type = SAPP_EVENTTYPE_KEY_UP;
                 if (_sapp_call_event(&_sapp.event)) {
                     retval = true;
@@ -3936,15 +3936,15 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_key_cb(int emsc_type, const EmscriptenKeyboard
     }
     _sapp_emsc_update_keyboard_state();
     _sapp_emsc_update_mouse_lock_state();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return retval;
+    return retval;
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_touch_cb(int emsc_type, const EmscriptenTouchEvent* emsc_event, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_touch_cb(int emsc_type, const EmscriptenTouchEvent* emsc_event, void* user_data) {
     _SOKOL_UNUSED(user_data);
     bool retval = true;
     if (_sapp_events_enabled()) {
         sapp_event_type type;
-        switch (emsc_type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (emsc_type) {
             case EMSCRIPTEN_EVENT_TOUCHSTART:
                 type = SAPP_EVENTTYPE_TOUCHES_BEGAN;
                 break;
@@ -3962,22 +3962,22 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_touch_cb(int emsc_type, const EmscriptenTouchE
                 retval = false;
                 break;
         }
-        if (type != SAPP_EVENTTYPE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (type != SAPP_EVENTTYPE_INVALID) {
             _sapp_init_event(type);
-            if (emsc_event->ctrlKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->ctrlKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_CTRL;
             }
-            if (emsc_event->shiftKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->shiftKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SHIFT;
             }
-            if (emsc_event->altKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->altKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_ALT;
             }
-            if (emsc_event->metaKey) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (emsc_event->metaKey) {
                 _sapp.event.modifiers |= SAPP_MODIFIER_SUPER;
             }
             _sapp.event.num_touches = emsc_event->numTouches;
-            if (_sapp.event.num_touches > SAPP_MAX_TOUCHPOINTS) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.event.num_touches > SAPP_MAX_TOUCHPOINTS) {
                 _sapp.event.num_touches = SAPP_MAX_TOUCHPOINTS;
             }
             for (int i = 0; i < _sapp.event.num_touches; i++) {
@@ -3992,10 +3992,10 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_touch_cb(int emsc_type, const EmscriptenTouchE
         }
     }
     _sapp_emsc_update_keyboard_state();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return retval;
+    return retval;
 }
 
-_SOKOL_PRIVATE void _sapp_emsc_keytable_init(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_keytable_init(void) {
     _sapp.keycodes[8]   = SAPP_KEYCODE_BACKSPACE;
     _sapp.keycodes[9]   = SAPP_KEYCODE_TAB;
     _sapp.keycodes[13]  = SAPP_KEYCODE_ENTER;
@@ -4100,11 +4100,11 @@ _SOKOL_PRIVATE void _sapp_emsc_keytable_init(void) {printf("\n --: %s:: %s:%d ",
 }
 
 #if defined(SOKOL_GLES2) || defined(SOKOL_GLES3)
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_webgl_context_cb(int emsc_type, const void* reserved, void* user_data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_webgl_context_cb(int emsc_type, const void* reserved, void* user_data) {
     _SOKOL_UNUSED(reserved);
     _SOKOL_UNUSED(user_data);
     sapp_event_type type;
-    switch (emsc_type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    switch (emsc_type) {
         case EMSCRIPTEN_EVENT_WEBGLCONTEXTLOST:     type = SAPP_EVENTTYPE_SUSPENDED; break;
         case EMSCRIPTEN_EVENT_WEBGLCONTEXTRESTORED: type = SAPP_EVENTTYPE_RESUMED; break;
         default:                                    type = SAPP_EVENTTYPE_INVALID; break;
@@ -4113,10 +4113,10 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_webgl_context_cb(int emsc_type, const void* re
         _sapp_init_event(type);
         _sapp_call_event(&_sapp.event);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE void _sapp_emsc_webgl_init(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_webgl_init(void) {
     EmscriptenWebGLContextAttributes attrs;
     emscripten_webgl_init_context_attributes(&attrs);
     attrs.alpha = _sapp.desc.alpha;
@@ -4127,7 +4127,7 @@ _SOKOL_PRIVATE void _sapp_emsc_webgl_init(void) {printf("\n --: %s:: %s:%d ", __
     attrs.preserveDrawingBuffer = _sapp.desc.html5_preserve_drawing_buffer;
     attrs.enableExtensionsByDefault = true;
     #if defined(SOKOL_GLES3)
-        if (_sapp.desc.gl_force_gles2) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.desc.gl_force_gles2) {
             attrs.majorVersion = 1;
             _sapp.gles2_fallback = true;
         }
@@ -4136,7 +4136,7 @@ _SOKOL_PRIVATE void _sapp_emsc_webgl_init(void) {printf("\n --: %s:: %s:%d ", __
         }
     #endif
     EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(_sapp.html5_canvas_name, &attrs);
-    if (!ctx) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!ctx) {
         attrs.majorVersion = 1;
         ctx = emscripten_webgl_create_context(_sapp.html5_canvas_name, &attrs);
         _sapp.gles2_fallback = true;
@@ -4157,7 +4157,7 @@ _SOKOL_PRIVATE void _sapp_emsc_webgl_init(void) {printf("\n --: %s:: %s:%d ", __
 extern "C" {
 #endif
 /* called when the asynchronous WebGPU device + swapchain init code in JS has finished */
-EMSCRIPTEN_KEEPALIVE void _sapp_emsc_wgpu_ready(int device_id, int swapchain_id, int swapchain_fmt) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+EMSCRIPTEN_KEEPALIVE void _sapp_emsc_wgpu_ready(int device_id, int swapchain_id, int swapchain_fmt) {
     SOKOL_ASSERT(0 == _sapp.emsc.wgpu.device);
     _sapp.emsc.wgpu.device = (WGPUDevice) device_id;
     _sapp.emsc.wgpu.swapchain = (WGPUSwapChain) swapchain_id;
@@ -4172,17 +4172,17 @@ EMSCRIPTEN_KEEPALIVE void _sapp_emsc_wgpu_ready(int device_id, int swapchain_id,
 EM_JS(void, sapp_js_wgpu_init, (), {
     WebGPU.initManagers();
     // FIXME: the extension activation must be more clever here
-    navigator.gpu.requestAdapter().then(function(adapter) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    navigator.gpu.requestAdapter().then(function(adapter) {
         console.log("wgpu adapter extensions: " + adapter.extensions);
-        adapter.requestDevice({ extensions: ["textureCompressionBC"]}).then(function(device) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        adapter.requestDevice({ extensions: ["textureCompressionBC"]}).then(function(device) {
             var gpuContext = document.getElementById("canvas").getContext("gpupresent");
             console.log("wgpu device extensions: " + adapter.extensions);
-            gpuContext.getSwapChainPreferredFormat(device).then(function(fmt) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            gpuContext.getSwapChainPreferredFormat(device).then(function(fmt) {
                 var swapChainDescriptor = { device: device, format: fmt };
                 var swapChain = gpuContext.configureSwapChain(swapChainDescriptor);
                 var deviceId = WebGPU.mgrDevice.create(device);
                 var swapChainId = WebGPU.mgrSwapChain.create(swapChain);
-                var fmtId = WebGPU.TextureFormat.findIndex(function(elm) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return elm==fmt; });
+                var fmtId = WebGPU.TextureFormat.findIndex(function(elm) { return elm==fmt; });
                 console.log("wgpu device: " + device);
                 console.log("wgpu swap chain: " + swapChain);
                 console.log("wgpu preferred format: " + fmt + " (" + fmtId + ")");
@@ -4192,7 +4192,7 @@ EM_JS(void, sapp_js_wgpu_init, (), {
     });
 });
 
-_SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_create(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_create(void) {
     SOKOL_ASSERT(_sapp.emsc.wgpu.device);
     SOKOL_ASSERT(_sapp.emsc.wgpu.swapchain);
     SOKOL_ASSERT(0 == _sapp.emsc.wgpu.depth_stencil_tex);
@@ -4214,7 +4214,7 @@ _SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_create(void) {printf("\n --: %s:: %
     _sapp.emsc.wgpu.depth_stencil_tex = wgpuDeviceCreateTexture(_sapp.emsc.wgpu.device, &ds_desc);
     _sapp.emsc.wgpu.depth_stencil_view = wgpuTextureCreateView(_sapp.emsc.wgpu.depth_stencil_tex, 0);
 
-    if (_sapp.sample_count > 1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.sample_count > 1) {
         WGPUTextureDescriptor msaa_desc;
         memset(&msaa_desc, 0, sizeof(msaa_desc));
         msaa_desc.usage = WGPUTextureUsage_OutputAttachment;
@@ -4231,34 +4231,34 @@ _SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_create(void) {printf("\n --: %s:: %
     }
 }
 
-_SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_discard(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.emsc.wgpu.msaa_tex) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_wgpu_surfaces_discard(void) {
+    if (_sapp.emsc.wgpu.msaa_tex) {
         wgpuTextureRelease(_sapp.emsc.wgpu.msaa_tex);
         _sapp.emsc.wgpu.msaa_tex = 0;
     }
-    if (_sapp.emsc.wgpu.msaa_view) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.emsc.wgpu.msaa_view) {
         wgpuTextureViewRelease(_sapp.emsc.wgpu.msaa_view);
         _sapp.emsc.wgpu.msaa_view = 0;
     }
-    if (_sapp.emsc.wgpu.depth_stencil_tex) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.emsc.wgpu.depth_stencil_tex) {
         wgpuTextureRelease(_sapp.emsc.wgpu.depth_stencil_tex);
         _sapp.emsc.wgpu.depth_stencil_tex = 0;
     }
-    if (_sapp.emsc.wgpu.depth_stencil_view) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.emsc.wgpu.depth_stencil_view) {
         wgpuTextureViewRelease(_sapp.emsc.wgpu.depth_stencil_view);
         _sapp.emsc.wgpu.depth_stencil_view = 0;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_emsc_wgpu_next_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.emsc.wgpu.swapchain_view) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_wgpu_next_frame(void) {
+    if (_sapp.emsc.wgpu.swapchain_view) {
         wgpuTextureViewRelease(_sapp.emsc.wgpu.swapchain_view);
     }
     _sapp.emsc.wgpu.swapchain_view = wgpuSwapChainGetCurrentTextureView(_sapp.emsc.wgpu.swapchain);
 }
 #endif
 
-_SOKOL_PRIVATE void _sapp_emsc_register_eventhandlers(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_register_eventhandlers(void) {
     emscripten_set_mousedown_callback(_sapp.html5_canvas_name, 0, true, _sapp_emsc_mouse_cb);
     emscripten_set_mouseup_callback(_sapp.html5_canvas_name, 0, true, _sapp_emsc_mouse_cb);
     emscripten_set_mousemove_callback(_sapp.html5_canvas_name, 0, true, _sapp_emsc_mouse_cb);
@@ -4275,7 +4275,7 @@ _SOKOL_PRIVATE void _sapp_emsc_register_eventhandlers(void) {printf("\n --: %s::
     emscripten_set_pointerlockchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, _sapp_emsc_pointerlockchange_cb);
     emscripten_set_pointerlockerror_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, _sapp_emsc_pointerlockerror_cb);
     sapp_js_add_hook_beforeunload();
-    if (_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.clipboard.enabled) {
         sapp_js_add_hook_clipboard();
     }
     #if defined(SOKOL_GLES2) || defined(SOKOL_GLES3)
@@ -4301,7 +4301,7 @@ _SOKOL_PRIVATE void _sapp_emsc_unregister_eventhandlers() {
     emscripten_set_pointerlockchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, 0);
     emscripten_set_pointerlockerror_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, 0);
     sapp_js_remove_hook_beforeunload();
-    if (_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.clipboard.enabled) {
         sapp_js_remove_hook_clipboard();
     }
     #if defined(SOKOL_GLES2) || defined(SOKOL_GLES3)
@@ -4310,7 +4310,7 @@ _SOKOL_PRIVATE void _sapp_emsc_unregister_eventhandlers() {
     #endif
 }
 
-_SOKOL_PRIVATE EM_BOOL _sapp_emsc_frame(double time, void* userData) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE EM_BOOL _sapp_emsc_frame(double time, void* userData) {
     _SOKOL_UNUSED(time);
     _SOKOL_UNUSED(userData);
 
@@ -4320,7 +4320,7 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_frame(double time, void* userData) {printf("\n
             the asynchronous WebGPU device and swapchain initialization is still
             in progress
         */
-        switch (_sapp.emsc.wgpu.state) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (_sapp.emsc.wgpu.state) {
             case _SAPP_EMSC_WGPU_STATE_INITIAL:
                 /* async JS init hasn't finished yet */
                 break;
@@ -4341,28 +4341,28 @@ _SOKOL_PRIVATE EM_BOOL _sapp_emsc_frame(double time, void* userData) {printf("\n
     #endif
 
     /* quit-handling */
-    if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.quit_requested) {
         _sapp_init_event(SAPP_EVENTTYPE_QUIT_REQUESTED);
         _sapp_call_event(&_sapp.event);
-        if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.quit_requested) {
             _sapp.quit_ordered = true;
         }
     }
-    if (_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.quit_ordered) {
         _sapp_emsc_unregister_eventhandlers();
         _sapp_call_cleanup();
         _sapp_discard_state();
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return EM_FALSE;
+        return EM_FALSE;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return EM_TRUE;
+    return EM_TRUE;
 }
 
-_SOKOL_PRIVATE void _sapp_emsc_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_emsc_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     sapp_js_pointer_init(_sapp.html5_canvas_name);
     _sapp_emsc_keytable_init();
     double w, h;
-    if (_sapp.desc.html5_canvas_resize) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.html5_canvas_resize) {
         w = (double) _sapp.desc.width;
         h = (double) _sapp.desc.height;
     }
@@ -4370,7 +4370,7 @@ _SOKOL_PRIVATE void _sapp_emsc_run(const sapp_desc* desc) {printf("\n --: %s:: %
         emscripten_get_element_css_size(_sapp.html5_canvas_name, &w, &h);
         emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, false, _sapp_emsc_size_changed);
     }
-    if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.high_dpi) {
         _sapp.dpi_scale = emscripten_get_device_pixel_ratio();
     }
     _sapp.window_width = (int) w;
@@ -4398,7 +4398,7 @@ _SOKOL_PRIVATE void _sapp_emsc_run(const sapp_desc* desc) {printf("\n --: %s:: %
 int main(int argc, char* argv[]) {
     sapp_desc desc = sokol_main(argc, argv);
     _sapp_emsc_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_NO_ENTRY */
 #endif /* _SAPP_EMSCRIPTEN */
@@ -4417,7 +4417,7 @@ typedef struct {
     uintptr_t   handle;
 } _sapp_gl_fbconfig;
 
-_SOKOL_PRIVATE void _sapp_gl_init_fbconfig(_sapp_gl_fbconfig* fbconfig) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_gl_init_fbconfig(_sapp_gl_fbconfig* fbconfig) {
     memset(fbconfig, 0, sizeof(_sapp_gl_fbconfig));
     /* -1 means "don't care" */
     fbconfig->red_bits = -1;
@@ -4429,7 +4429,7 @@ _SOKOL_PRIVATE void _sapp_gl_init_fbconfig(_sapp_gl_fbconfig* fbconfig) {printf(
     fbconfig->samples = -1;
 }
 
-_SOKOL_PRIVATE const _sapp_gl_fbconfig* _sapp_gl_choose_fbconfig(const _sapp_gl_fbconfig* desired, const _sapp_gl_fbconfig* alternatives, unsigned int count) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE const _sapp_gl_fbconfig* _sapp_gl_choose_fbconfig(const _sapp_gl_fbconfig* desired, const _sapp_gl_fbconfig* alternatives, unsigned int count) {
     unsigned int i;
     unsigned int missing, least_missing = 1000000;
     unsigned int color_diff, least_color_diff = 10000000;
@@ -4438,20 +4438,20 @@ _SOKOL_PRIVATE const _sapp_gl_fbconfig* _sapp_gl_choose_fbconfig(const _sapp_gl_
     const _sapp_gl_fbconfig* closest = NULL;
     for (i = 0;  i < count;  i++) {
         current = alternatives + i;
-        if (desired->doublebuffer != current->doublebuffer) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->doublebuffer != current->doublebuffer) {
             continue;
         }
         missing = 0;
-        if (desired->alpha_bits > 0 && current->alpha_bits == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->alpha_bits > 0 && current->alpha_bits == 0) {
             missing++;
         }
-        if (desired->depth_bits > 0 && current->depth_bits == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->depth_bits > 0 && current->depth_bits == 0) {
             missing++;
         }
-        if (desired->stencil_bits > 0 && current->stencil_bits == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->stencil_bits > 0 && current->stencil_bits == 0) {
             missing++;
         }
-        if (desired->samples > 0 && current->samples == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->samples > 0 && current->samples == 0) {
             /* Technically, several multisampling buffers could be
                 involved, but that's a lower level implementation detail and
                 not important to us here, so we count them as one
@@ -4464,28 +4464,28 @@ _SOKOL_PRIVATE const _sapp_gl_fbconfig* _sapp_gl_choose_fbconfig(const _sapp_gl_
             Calculate color channel size difference value
         */
         color_diff = 0;
-        if (desired->red_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->red_bits != -1) {
             color_diff += (desired->red_bits - current->red_bits) * (desired->red_bits - current->red_bits);
         }
-        if (desired->green_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->green_bits != -1) {
             color_diff += (desired->green_bits - current->green_bits) * (desired->green_bits - current->green_bits);
         }
-        if (desired->blue_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->blue_bits != -1) {
             color_diff += (desired->blue_bits - current->blue_bits) * (desired->blue_bits - current->blue_bits);
         }
 
         /* Calculate non-color channel size difference value */
         extra_diff = 0;
-        if (desired->alpha_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->alpha_bits != -1) {
             extra_diff += (desired->alpha_bits - current->alpha_bits) * (desired->alpha_bits - current->alpha_bits);
         }
-        if (desired->depth_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->depth_bits != -1) {
             extra_diff += (desired->depth_bits - current->depth_bits) * (desired->depth_bits - current->depth_bits);
         }
-        if (desired->stencil_bits != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->stencil_bits != -1) {
             extra_diff += (desired->stencil_bits - current->stencil_bits) * (desired->stencil_bits - current->stencil_bits);
         }
-        if (desired->samples != -1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (desired->samples != -1) {
             extra_diff += (desired->samples - current->samples) * (desired->samples - current->samples);
         }
 
@@ -4493,51 +4493,51 @@ _SOKOL_PRIVATE const _sapp_gl_fbconfig* _sapp_gl_choose_fbconfig(const _sapp_gl_
             Least number of missing buffers is the most important heuristic,
             then color buffer size match and lastly size match for other buffers
         */
-        if (missing < least_missing) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (missing < least_missing) {
             closest = current;
         }
-        else if (missing == least_missing) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        else if (missing == least_missing) {
             if ((color_diff < least_color_diff) ||
                 (color_diff == least_color_diff && extra_diff < least_extra_diff))
             {
                 closest = current;
             }
         }
-        if (current == closest) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (current == closest) {
             least_missing = missing;
             least_color_diff = color_diff;
             least_extra_diff = extra_diff;
         }
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return closest;
+    return closest;
 }
 #endif
 
 /*== WINDOWS DESKTOP and UWP====================================================*/
 #if defined(_SAPP_WIN32) || defined(_SAPP_UWP)
-_SOKOL_PRIVATE bool _sapp_win32_uwp_utf8_to_wide(const char* src, wchar_t* dst, int dst_num_bytes) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_win32_uwp_utf8_to_wide(const char* src, wchar_t* dst, int dst_num_bytes) {
     SOKOL_ASSERT(src && dst && (dst_num_bytes > 1));
     memset(dst, 0, dst_num_bytes);
     const int dst_chars = dst_num_bytes / sizeof(wchar_t);
     const int dst_needed = MultiByteToWideChar(CP_UTF8, 0, src, -1, 0, 0);
     if ((dst_needed > 0) && (dst_needed < dst_chars)) {
         MultiByteToWideChar(CP_UTF8, 0, src, -1, dst, dst_chars);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+        return true;
     }
     else {
         /* input string doesn't fit into destination buffer */
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        return false;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_uwp_app_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_uwp_app_event(sapp_event_type type) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp_call_event(&_sapp.event);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_uwp_init_keytable(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_uwp_init_keytable(void) {
     /* same as GLFW */
     _sapp.keycodes[0x00B] = SAPP_KEYCODE_0;
     _sapp.keycodes[0x002] = SAPP_KEYCODE_1;
@@ -4671,57 +4671,57 @@ _SOKOL_PRIVATE void _sapp_win32_uwp_init_keytable(void) {printf("\n --: %s:: %s:
 #define _sapp_d3d11_Release(self) (self)->lpVtbl->Release(self)
 #endif
 
-#define _SAPP_SAFE_RELEASE(class, obj) if (obj) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ ); _sapp_d3d11_Release(obj); obj=0; }
+#define _SAPP_SAFE_RELEASE(class, obj) if (obj) { _sapp_d3d11_Release(obj); obj=0; }
 
-static inline HRESULT _sapp_dxgi_GetBuffer(IDXGISwapChain* self, UINT Buffer, REFIID riid, void** ppSurface) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_dxgi_GetBuffer(IDXGISwapChain* self, UINT Buffer, REFIID riid, void** ppSurface) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->GetBuffer(Buffer, riid, ppSurface);
+        return self->GetBuffer(Buffer, riid, ppSurface);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->GetBuffer(self, Buffer, riid, ppSurface);
+        return self->lpVtbl->GetBuffer(self, Buffer, riid, ppSurface);
     #endif
 }
 
-static inline HRESULT _sapp_d3d11_CreateRenderTargetView(ID3D11Device* self, ID3D11Resource *pResource, const D3D11_RENDER_TARGET_VIEW_DESC* pDesc, ID3D11RenderTargetView** ppRTView) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_d3d11_CreateRenderTargetView(ID3D11Device* self, ID3D11Resource *pResource, const D3D11_RENDER_TARGET_VIEW_DESC* pDesc, ID3D11RenderTargetView** ppRTView) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->CreateRenderTargetView(pResource, pDesc, ppRTView);
+        return self->CreateRenderTargetView(pResource, pDesc, ppRTView);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->CreateRenderTargetView(self, pResource, pDesc, ppRTView);
+        return self->lpVtbl->CreateRenderTargetView(self, pResource, pDesc, ppRTView);
     #endif
 }
 
-static inline HRESULT _sapp_d3d11_CreateTexture2D(ID3D11Device* self, const D3D11_TEXTURE2D_DESC* pDesc, const D3D11_SUBRESOURCE_DATA* pInitialData, ID3D11Texture2D** ppTexture2D) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_d3d11_CreateTexture2D(ID3D11Device* self, const D3D11_TEXTURE2D_DESC* pDesc, const D3D11_SUBRESOURCE_DATA* pInitialData, ID3D11Texture2D** ppTexture2D) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->CreateTexture2D(pDesc, pInitialData, ppTexture2D);
+        return self->CreateTexture2D(pDesc, pInitialData, ppTexture2D);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->CreateTexture2D(self, pDesc, pInitialData, ppTexture2D);
+        return self->lpVtbl->CreateTexture2D(self, pDesc, pInitialData, ppTexture2D);
     #endif
 }
 
-static inline HRESULT _sapp_d3d11_CreateDepthStencilView(ID3D11Device* self, ID3D11Resource* pResource, const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc, ID3D11DepthStencilView** ppDepthStencilView) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_d3d11_CreateDepthStencilView(ID3D11Device* self, ID3D11Resource* pResource, const D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc, ID3D11DepthStencilView** ppDepthStencilView) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->CreateDepthStencilView(pResource, pDesc, ppDepthStencilView);
+        return self->CreateDepthStencilView(pResource, pDesc, ppDepthStencilView);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->CreateDepthStencilView(self, pResource, pDesc, ppDepthStencilView);
+        return self->lpVtbl->CreateDepthStencilView(self, pResource, pDesc, ppDepthStencilView);
     #endif
 }
 
-static inline HRESULT _sapp_dxgi_ResizeBuffers(IDXGISwapChain* self, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_dxgi_ResizeBuffers(IDXGISwapChain* self, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->ResizeBuffers(BufferCount, Width, Height, NewFormat, SwapChainFlags);
+        return self->ResizeBuffers(BufferCount, Width, Height, NewFormat, SwapChainFlags);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->ResizeBuffers(self, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+        return self->lpVtbl->ResizeBuffers(self, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     #endif
 }
 
-static inline HRESULT _sapp_dxgi_Present(IDXGISwapChain* self, UINT SyncInterval, UINT Flags) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+static inline HRESULT _sapp_dxgi_Present(IDXGISwapChain* self, UINT SyncInterval, UINT Flags) {
     #if defined(__cplusplus)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->Present(SyncInterval, Flags);
+        return self->Present(SyncInterval, Flags);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return self->lpVtbl->Present(self, SyncInterval, Flags);
+        return self->lpVtbl->Present(self, SyncInterval, Flags);
     #endif
 }
 
-_SOKOL_PRIVATE void _sapp_d3d11_create_device_and_swapchain(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_d3d11_create_device_and_swapchain(void) {
     DXGI_SWAP_CHAIN_DESC* sc_desc = &_sapp.d3d11.swap_chain_desc;
     sc_desc->BufferDesc.Width = _sapp.framebuffer_width;
     sc_desc->BufferDesc.Height = _sapp.framebuffer_height;
@@ -4757,13 +4757,13 @@ _SOKOL_PRIVATE void _sapp_d3d11_create_device_and_swapchain(void) {printf("\n --
     SOKOL_ASSERT(SUCCEEDED(hr) && _sapp.d3d11.swap_chain && _sapp.d3d11.device && _sapp.d3d11.device_context);
 }
 
-_SOKOL_PRIVATE void _sapp_d3d11_destroy_device_and_swapchain(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_d3d11_destroy_device_and_swapchain(void) {
     _SAPP_SAFE_RELEASE(IDXGISwapChain, _sapp.d3d11.swap_chain);
     _SAPP_SAFE_RELEASE(ID3D11DeviceContext, _sapp.d3d11.device_context);
     _SAPP_SAFE_RELEASE(ID3D11Device, _sapp.d3d11.device);
 }
 
-_SOKOL_PRIVATE void _sapp_d3d11_create_default_render_target(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_d3d11_create_default_render_target(void) {
     HRESULT hr;
     #ifdef __cplusplus
     hr = _sapp_dxgi_GetBuffer(_sapp.d3d11.swap_chain, 0, IID_ID3D11Texture2D, (void**)&_sapp.d3d11.rt);
@@ -4793,15 +4793,15 @@ _SOKOL_PRIVATE void _sapp_d3d11_create_default_render_target(void) {printf("\n -
     SOKOL_ASSERT(SUCCEEDED(hr) && _sapp.d3d11.dsv);
 }
 
-_SOKOL_PRIVATE void _sapp_d3d11_destroy_default_render_target(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_d3d11_destroy_default_render_target(void) {
     _SAPP_SAFE_RELEASE(ID3D11Texture2D, _sapp.d3d11.rt);
     _SAPP_SAFE_RELEASE(ID3D11RenderTargetView, _sapp.d3d11.rtv);
     _SAPP_SAFE_RELEASE(ID3D11Texture2D, _sapp.d3d11.ds);
     _SAPP_SAFE_RELEASE(ID3D11DepthStencilView, _sapp.d3d11.dsv);
 }
 
-_SOKOL_PRIVATE void _sapp_d3d11_resize_default_render_target(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.d3d11.swap_chain) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_d3d11_resize_default_render_target(void) {
+    if (_sapp.d3d11.swap_chain) {
         _sapp_d3d11_destroy_default_render_target();
         _sapp_dxgi_ResizeBuffers(_sapp.d3d11.swap_chain, 1, _sapp.framebuffer_width, _sapp.framebuffer_height, DXGI_FORMAT_B8G8R8A8_UNORM, 0);
         _sapp_d3d11_create_default_render_target();
@@ -4810,10 +4810,10 @@ _SOKOL_PRIVATE void _sapp_d3d11_resize_default_render_target(void) {printf("\n -
 #endif /* SOKOL_D3D11 */
 
 #if defined(SOKOL_GLCORE33)
-_SOKOL_PRIVATE void _sapp_wgl_init(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_init(void) {
 	//_sapp.wgl.opengl32 = LoadLibraryA("opengl32.dll");
     _sapp.wgl.opengl32 = LoadLibraryA("E:/Data/setting/mesa/_cwc/Lib/Windows_Debug/opengl32.dll");
-    if (!_sapp.wgl.opengl32) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.opengl32) {
         _sapp_fail("Failed to load opengl32.dll\n");
     }
     SOKOL_ASSERT(_sapp.wgl.opengl32);
@@ -4847,7 +4847,7 @@ _SOKOL_PRIVATE void _sapp_wgl_init(void) {printf("\n --: %s:: %s:%d ", __func__,
         NULL, NULL,
         GetModuleHandleW(NULL),
         NULL);
-    if (!_sapp.wgl.msg_hwnd) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.msg_hwnd) {
         _sapp_fail("Win32: failed to create helper window!\n");
     }
     ShowWindow(_sapp.wgl.msg_hwnd, SW_HIDE);
@@ -4857,26 +4857,24 @@ _SOKOL_PRIVATE void _sapp_wgl_init(void) {printf("\n --: %s:: %s:%d ", __func__,
         DispatchMessageW(&msg);
     }
     _sapp.wgl.msg_dc = GetDC(_sapp.wgl.msg_hwnd);
-    if (!_sapp.wgl.msg_dc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.msg_dc) {
         _sapp_fail("Win32: failed to obtain helper window DC!\n");
     }
 }
 
-_SOKOL_PRIVATE void _sapp_wgl_shutdown(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_shutdown(void) {
     SOKOL_ASSERT(_sapp.wgl.opengl32 && _sapp.wgl.msg_hwnd);
     DestroyWindow(_sapp.wgl.msg_hwnd); _sapp.wgl.msg_hwnd = 0;
     FreeLibrary(_sapp.wgl.opengl32); _sapp.wgl.opengl32 = 0;
 }
 
-_SOKOL_PRIVATE bool _sapp_wgl_has_ext(const char* ext, const char* extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_wgl_has_ext(const char* ext, const char* extensions) {
     SOKOL_ASSERT(ext && extensions);
     const char* start = extensions;
-    while (true) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-	printf("\nstart: %s:: ", start );
-	printf("\next: %s:: ", ext );
+    while (true) {
         const char* where = strstr(start, ext);
-        if (!where) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        if (!where) {
+            return false;
         }
         const char* terminator = where + strlen(ext);
         if ((where == start) || (*(where - 1) == ' ')) {
@@ -4886,32 +4884,31 @@ _SOKOL_PRIVATE bool _sapp_wgl_has_ext(const char* ext, const char* extensions) {
         }
         start = terminator;
     }
-	printf("\ntrue");
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE bool _sapp_wgl_ext_supported(const char* ext) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_wgl_ext_supported(const char* ext) {
     SOKOL_ASSERT(ext);
-    if (_sapp.wgl.GetExtensionsStringEXT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.wgl.GetExtensionsStringEXT) {
         const char* extensions = _sapp.wgl.GetExtensionsStringEXT();
-        if (extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (extensions) {
             if (_sapp_wgl_has_ext(ext, extensions)) {
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+                return true;
             }
         }
     }
-    if (_sapp.wgl.GetExtensionsStringARB) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.wgl.GetExtensionsStringARB) {
         const char* extensions = _sapp.wgl.GetExtensionsStringARB(_sapp.wgl.GetCurrentDC());
-        if (extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (extensions) {
             if (_sapp_wgl_has_ext(ext, extensions)) {
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+                return true;
             }
         }
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    return false;
 }
 
-_SOKOL_PRIVATE void _sapp_wgl_load_extensions(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_load_extensions(void) {
     SOKOL_ASSERT(_sapp.wgl.msg_dc);
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(pfd));
@@ -4937,7 +4934,7 @@ _SOKOL_PRIVATE void _sapp_wgl_load_extensions(void) {printf("\n --: %s:: %s:%d "
         _sapp_fail("WGL: failed to set pixel format for dummy context\n");
     }
     HGLRC rc = _sapp.wgl.CreateContext(_sapp.wgl.msg_dc);
-    if (!rc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!rc) {
         _sapp_fail("WGL: Failed to create dummy context\n");
     }
     if (!_sapp.wgl.MakeCurrent(_sapp.wgl.msg_dc, rc)) {
@@ -4953,23 +4950,20 @@ _SOKOL_PRIVATE void _sapp_wgl_load_extensions(void) {printf("\n --: %s:: %s:%d "
     _sapp.wgl.arb_create_context_profile = _sapp_wgl_ext_supported("WGL_ARB_create_context_profile");
     _sapp.wgl.ext_swap_control = _sapp_wgl_ext_supported("WGL_EXT_swap_control");
     _sapp.wgl.arb_pixel_format = _sapp_wgl_ext_supported("WGL_ARB_pixel_format");
-	printf("\nMakeCurrent");
     _sapp.wgl.MakeCurrent(_sapp.wgl.msg_dc, 0);
-		printf("\nOKAY");
     _sapp.wgl.DeleteContext(rc);
-		printf("\nODeleteContext");
 }
 
-_SOKOL_PRIVATE int _sapp_wgl_attrib(int pixel_format, int attrib) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_wgl_attrib(int pixel_format, int attrib) {
     SOKOL_ASSERT(_sapp.wgl.arb_pixel_format);
     int value = 0;
     if (!_sapp.wgl.GetPixelFormatAttribivARB(_sapp.win32.dc, pixel_format, 0, 1, &attrib, &value)) {
         _sapp_fail("WGL: Failed to retrieve pixel format attribute\n");
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return value;
+    return value;
 }
 
-_SOKOL_PRIVATE int _sapp_wgl_find_pixel_format(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_wgl_find_pixel_format(void) {
     SOKOL_ASSERT(_sapp.win32.dc);
     SOKOL_ASSERT(_sapp.wgl.arb_pixel_format);
     const _sapp_gl_fbconfig* closest;
@@ -4984,10 +4978,10 @@ _SOKOL_PRIVATE int _sapp_wgl_find_pixel_format(void) {printf("\n --: %s:: %s:%d 
         if (!_sapp_wgl_attrib(n, WGL_SUPPORT_OPENGL_ARB) || !_sapp_wgl_attrib(n, WGL_DRAW_TO_WINDOW_ARB)) {
             continue;
         }
-        if (_sapp_wgl_attrib(n, WGL_PIXEL_TYPE_ARB) != WGL_TYPE_RGBA_ARB) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp_wgl_attrib(n, WGL_PIXEL_TYPE_ARB) != WGL_TYPE_RGBA_ARB) {
             continue;
         }
-        if (_sapp_wgl_attrib(n, WGL_ACCELERATION_ARB) == WGL_NO_ACCELERATION_ARB) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp_wgl_attrib(n, WGL_ACCELERATION_ARB) == WGL_NO_ACCELERATION_ARB) {
             continue;
         }
         u->red_bits     = _sapp_wgl_attrib(n, WGL_RED_BITS_ARB);
@@ -4999,7 +4993,7 @@ _SOKOL_PRIVATE int _sapp_wgl_find_pixel_format(void) {printf("\n --: %s:: %s:%d 
         if (_sapp_wgl_attrib(n, WGL_DOUBLE_BUFFER_ARB)) {
             u->doublebuffer = true;
         }
-        if (_sapp.wgl.arb_multisample) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.wgl.arb_multisample) {
             u->samples = _sapp_wgl_attrib(n, WGL_SAMPLES_ARB);
         }
         u->handle = n;
@@ -5018,17 +5012,16 @@ _SOKOL_PRIVATE int _sapp_wgl_find_pixel_format(void) {printf("\n --: %s:: %s:%d 
     desired.samples = _sapp.sample_count > 1 ? _sapp.sample_count : 0;
     closest = _sapp_gl_choose_fbconfig(&desired, usable_configs, usable_count);
     int pixel_format = 0;
-    if (closest) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (closest) {
         pixel_format = (int) closest->handle;
     }
     SOKOL_FREE(usable_configs);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return pixel_format;
+    return pixel_format;
 }
 
-_SOKOL_PRIVATE void _sapp_wgl_create_context(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\nss \n");
-	int pixel_format = _sapp_wgl_find_pixel_format();
-    if (0 == pixel_format) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_create_context(void) {
+    int pixel_format = _sapp_wgl_find_pixel_format();
+    if (0 == pixel_format) {
         _sapp_fail("WGL: Didn't find matching pixel format.\n");
     }
     PIXELFORMATDESCRIPTOR pfd;
@@ -5038,10 +5031,10 @@ _SOKOL_PRIVATE void _sapp_wgl_create_context(void) {printf("\n --: %s:: %s:%d ",
     if (!SetPixelFormat(_sapp.win32.dc, pixel_format, &pfd)) {
         _sapp_fail("WGL: Failed to set selected pixel format!\n");
     }
-    if (!_sapp.wgl.arb_create_context) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.arb_create_context) {
         _sapp_fail("WGL: ARB_create_context required!\n");
     }
-    if (!_sapp.wgl.arb_create_context_profile) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.arb_create_context_profile) {
         _sapp_fail("WGL: ARB_create_context_profile required!\n");
     }
     const int attrs[] = {
@@ -5052,7 +5045,7 @@ _SOKOL_PRIVATE void _sapp_wgl_create_context(void) {printf("\n --: %s:: %s:%d ",
         0, 0
     };
     _sapp.wgl.gl_ctx = _sapp.wgl.CreateContextAttribsARB(_sapp.win32.dc, 0, attrs);
-    if (!_sapp.wgl.gl_ctx) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.wgl.gl_ctx) {
         const DWORD err = GetLastError();
         if (err == (0xc0070000 | ERROR_INVALID_VERSION_ARB)) {
             _sapp_fail("WGL: Driver does not support OpenGL version 3.3\n");
@@ -5068,32 +5061,32 @@ _SOKOL_PRIVATE void _sapp_wgl_create_context(void) {printf("\n --: %s:: %s:%d ",
         }
     }
     _sapp.wgl.MakeCurrent(_sapp.win32.dc, _sapp.wgl.gl_ctx);
-    if (_sapp.wgl.ext_swap_control) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.wgl.ext_swap_control) {
         /* FIXME: DwmIsCompositionEnabled() (see GLFW) */
         _sapp.wgl.SwapIntervalEXT(_sapp.swap_interval);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_wgl_destroy_context(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_destroy_context(void) {
     SOKOL_ASSERT(_sapp.wgl.gl_ctx);
     _sapp.wgl.DeleteContext(_sapp.wgl.gl_ctx);
     _sapp.wgl.gl_ctx = 0;
 }
 
-_SOKOL_PRIVATE void _sapp_wgl_swap_buffers(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_wgl_swap_buffers(void) {
     SOKOL_ASSERT(_sapp.win32.dc);
     /* FIXME: DwmIsCompositionEnabled? (see GLFW) */
     SwapBuffers(_sapp.win32.dc);
 }
 #endif /* SOKOL_GLCORE33 */
 
-_SOKOL_PRIVATE bool _sapp_win32_wide_to_utf8(const wchar_t* src, char* dst, int dst_num_bytes) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_win32_wide_to_utf8(const wchar_t* src, char* dst, int dst_num_bytes) {
     SOKOL_ASSERT(src && dst && (dst_num_bytes > 1));
     memset(dst, 0, dst_num_bytes);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0 != WideCharToMultiByte(CP_UTF8, 0, src, -1, dst, dst_num_bytes, NULL, NULL);
+    return 0 != WideCharToMultiByte(CP_UTF8, 0, src, -1, dst, dst_num_bytes, NULL, NULL);
 }
 
-_SOKOL_PRIVATE void _sapp_win32_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_toggle_fullscreen(void) {
     HMONITOR monitor = MonitorFromWindow(_sapp.win32.hwnd, MONITOR_DEFAULTTONEAREST);
     MONITORINFO minfo;
     memset(&minfo, 0, sizeof(minfo));
@@ -5108,7 +5101,7 @@ _SOKOL_PRIVATE void _sapp_win32_toggle_fullscreen(void) {printf("\n --: %s:: %s:
     RECT rect = { 0, 0, 0, 0 };
 
     _sapp.fullscreen = !_sapp.fullscreen;
-    if (!_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.fullscreen) {
         win_style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SIZEBOX;
         rect.right = (int) ((float)_sapp.desc.width * _sapp.win32.dpi.window_scale);
         rect.bottom = (int) ((float)_sapp.desc.height * _sapp.win32.dpi.window_scale);
@@ -5121,7 +5114,7 @@ _SOKOL_PRIVATE void _sapp_win32_toggle_fullscreen(void) {printf("\n --: %s:: %s:
     AdjustWindowRectEx(&rect, win_style, FALSE, win_ex_style);
     int win_width = rect.right - rect.left;
     int win_height = rect.bottom - rect.top;
-    if (!_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.fullscreen) {
         rect.left = (monitor_w - win_width) / 2;
         rect.top = (monitor_h - win_height) / 2;
     }
@@ -5130,36 +5123,36 @@ _SOKOL_PRIVATE void _sapp_win32_toggle_fullscreen(void) {printf("\n --: %s:: %s:
     SetWindowPos(_sapp.win32.hwnd, HWND_TOP, mr.left + rect.left, mr.top + rect.top, win_width, win_height, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 }
 
-_SOKOL_PRIVATE void _sapp_win32_show_mouse(bool visible) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_show_mouse(bool visible) {
     /* NOTE: this function is only called when the mouse visibility actually changes */
     ShowCursor((BOOL)visible);
 }
 
-_SOKOL_PRIVATE void _sapp_win32_capture_mouse(uint8_t btn_mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (0 == _sapp.win32.mouse_capture_mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_capture_mouse(uint8_t btn_mask) {
+    if (0 == _sapp.win32.mouse_capture_mask) {
         SetCapture(_sapp.win32.hwnd);
     }
     _sapp.win32.mouse_capture_mask |= btn_mask;
 }
 
-_SOKOL_PRIVATE void _sapp_win32_release_mouse(uint8_t btn_mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (0 != _sapp.win32.mouse_capture_mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_release_mouse(uint8_t btn_mask) {
+    if (0 != _sapp.win32.mouse_capture_mask) {
         _sapp.win32.mouse_capture_mask &= ~btn_mask;
-        if (0 == _sapp.win32.mouse_capture_mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (0 == _sapp.win32.mouse_capture_mask) {
             ReleaseCapture();
         }
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (lock == _sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+_SOKOL_PRIVATE void _sapp_win32_lock_mouse(bool lock) {
+    if (lock == _sapp.mouse.locked) {
+        return;
     }
     _sapp.mouse.dx = 0.0f;
     _sapp.mouse.dy = 0.0f;
     _sapp.mouse.locked = lock;
     _sapp_win32_release_mouse(0xFF);
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
         /* store the current mouse position, so it can be restored when unlocked */
         POINT pos;
         BOOL res = GetCursorPos(&pos);
@@ -5215,7 +5208,7 @@ _SOKOL_PRIVATE void _sapp_win32_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d
 }
 
 /* updates current window and framebuffer size from the window's client rect, returns true if size has changed */
-_SOKOL_PRIVATE bool _sapp_win32_update_dimensions(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_win32_update_dimensions(void) {
     RECT rect;
     if (GetClientRect(_sapp.win32.hwnd, &rect)) {
         _sapp.window_width = (int)((float)(rect.right - rect.left) / _sapp.win32.dpi.window_scale);
@@ -5226,23 +5219,23 @@ _SOKOL_PRIVATE bool _sapp_win32_update_dimensions(void) {printf("\n --: %s:: %s:
             _sapp.framebuffer_width = fb_width;
             _sapp.framebuffer_height = fb_height;
             /* prevent a framebuffer size of 0 when window is minimized */
-            if (_sapp.framebuffer_width == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.framebuffer_width == 0) {
                 _sapp.framebuffer_width = 1;
             }
-            if (_sapp.framebuffer_height == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.framebuffer_height == 0) {
                 _sapp.framebuffer_height = 1;
             }
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+            return true;
         }
     }
     else {
         _sapp.window_width = _sapp.window_height = 1;
         _sapp.framebuffer_width = _sapp.framebuffer_height = 1;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    return false;
 }
 
-_SOKOL_PRIVATE uint32_t _sapp_win32_mods(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE uint32_t _sapp_win32_mods(void) {
     uint32_t mods = 0;
     if (GetKeyState(VK_SHIFT) & (1<<15)) {
         mods |= SAPP_MODIFIER_SHIFT;
@@ -5256,10 +5249,10 @@ _SOKOL_PRIVATE uint32_t _sapp_win32_mods(void) {printf("\n --: %s:: %s:%d ", __f
     if ((GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN)) & (1<<15)) {
         mods |= SAPP_MODIFIER_SUPER;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return mods;
+    return mods;
 }
 
-_SOKOL_PRIVATE void _sapp_win32_mouse_event(sapp_event_type type, sapp_mousebutton btn) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_mouse_event(sapp_event_type type, sapp_mousebutton btn) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.modifiers = _sapp_win32_mods();
@@ -5268,7 +5261,7 @@ _SOKOL_PRIVATE void _sapp_win32_mouse_event(sapp_event_type type, sapp_mousebutt
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_scroll_event(float x, float y) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_scroll_event(float x, float y) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(SAPP_EVENTTYPE_MOUSE_SCROLL);
         _sapp.event.modifiers = _sapp_win32_mods();
@@ -5278,7 +5271,7 @@ _SOKOL_PRIVATE void _sapp_win32_scroll_event(float x, float y) {printf("\n --: %
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_key_event(sapp_event_type type, int vk, bool repeat) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_key_event(sapp_event_type type, int vk, bool repeat) {
     if (_sapp_events_enabled() && (vk < SAPP_MAX_KEYCODES)) {
         _sapp_init_event(type);
         _sapp.event.modifiers = _sapp_win32_mods();
@@ -5297,7 +5290,7 @@ _SOKOL_PRIVATE void _sapp_win32_key_event(sapp_event_type type, int vk, bool rep
     }
 }
 
-_SOKOL_PRIVATE void _sapp_win32_char_event(uint32_t c, bool repeat) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_char_event(uint32_t c, bool repeat) {
     if (_sapp_events_enabled() && (c >= 32)) {
         _sapp_init_event(SAPP_EVENTTYPE_CHAR);
         _sapp.event.modifiers = _sapp_win32_mods();
@@ -5307,49 +5300,49 @@ _SOKOL_PRIVATE void _sapp_win32_char_event(uint32_t c, bool repeat) {printf("\n 
     }
 }
 
-_SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     /* FIXME: refresh rendering during resize with a WM_TIMER event */
-    if (!_sapp.win32.in_create_window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        switch (uMsg) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.win32.in_create_window) {
+        switch (uMsg) {
             case WM_CLOSE:
                 /* only give user a chance to intervene when sapp_quit() wasn't already called */
-                if (!_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (!_sapp.quit_ordered) {
                     /* if window should be closed and event handling is enabled, give user code
                         a change to intervene via sapp_cancel_quit()
                     */
                     _sapp.quit_requested = true;
                     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_QUIT_REQUESTED);
                     /* if user code hasn't intervened, quit the app */
-                    if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (_sapp.quit_requested) {
                         _sapp.quit_ordered = true;
                     }
                 }
-                if (_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.quit_ordered) {
                     PostQuitMessage(0);
                 }
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+                return 0;
             case WM_SYSCOMMAND:
-                switch (wParam & 0xFFF0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                switch (wParam & 0xFFF0) {
                     case SC_SCREENSAVE:
                     case SC_MONITORPOWER:
-                        if (_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        if (_sapp.fullscreen) {
                             /* disable screen saver and blanking in fullscreen mode */
-                            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+                            return 0;
                         }
                         break;
                     case SC_KEYMENU:
                         /* user trying to access menu via ALT */
-                        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+                        return 0;
                 }
                 break;
             case WM_ERASEBKGND:
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+                return 1;
             case WM_SIZE:
                 {
                     const bool iconified = wParam == SIZE_MINIMIZED;
-                    if (iconified != _sapp.win32.iconified) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (iconified != _sapp.win32.iconified) {
                         _sapp.win32.iconified = iconified;
-                        if (iconified) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        if (iconified) {
                             _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_ICONIFIED);
                         }
                         else {
@@ -5359,10 +5352,10 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                 }
                 break;
             case WM_SETCURSOR:
-                if (_sapp.desc.user_cursor) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                    if (LOWORD(lParam) == HTCLIENT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.desc.user_cursor) {
+                    if (LOWORD(lParam) == HTCLIENT) {
                         _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_UPDATE_CURSOR);
-                        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+                        return 1;
                     }
                 }
                 break;
@@ -5391,18 +5384,18 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                 _sapp_win32_release_mouse(1<<SAPP_MOUSEBUTTON_MIDDLE);
                 break;
             case WM_MOUSEMOVE:
-                if (!_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (!_sapp.mouse.locked) {
                     const float new_x  = (float)GET_X_LPARAM(lParam) * _sapp.win32.dpi.mouse_scale;
                     const float new_y = (float)GET_Y_LPARAM(lParam) * _sapp.win32.dpi.mouse_scale;
                     /* don't update dx/dy in the very first event */
-                    if (_sapp.mouse.pos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (_sapp.mouse.pos_valid) {
                         _sapp.mouse.dx = new_x - _sapp.mouse.x;
                         _sapp.mouse.dy = new_y - _sapp.mouse.y;
                     }
                     _sapp.mouse.x = new_x;
                     _sapp.mouse.y = new_y;
                     _sapp.mouse.pos_valid = true;
-                    if (!_sapp.win32.mouse_tracked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (!_sapp.win32.mouse_tracked) {
                         _sapp.win32.mouse_tracked = true;
                         TRACKMOUSEEVENT tme;
                         memset(&tme, 0, sizeof(tme));
@@ -5417,7 +5410,7 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                 break;
             case WM_INPUT:
                 /* raw mouse input during mouse-lock */
-                if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.mouse.locked) {
                     HRAWINPUT ri = (HRAWINPUT) lParam;
                     UINT size = sizeof(_sapp.win32.raw_input_data);
                     if (-1 == GetRawInputData(ri, RID_INPUT, &_sapp.win32.raw_input_data, &size, sizeof(RAWINPUTHEADER))) {
@@ -5425,13 +5418,13 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                         break;
                     }
                     const RAWINPUT* raw_mouse_data = (const RAWINPUT*) &_sapp.win32.raw_input_data;
-                    if (raw_mouse_data->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (raw_mouse_data->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE) {
                         /* mouse only reports absolute position
                            NOTE: THIS IS UNTESTED, it's unclear from reading the
                            Win32 RawInput docs under which circumstances absolute
                            positions are sent.
                         */
-                        if (_sapp.win32.raw_input_mousepos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        if (_sapp.win32.raw_input_mousepos_valid) {
                             LONG new_x = raw_mouse_data->data.mouse.lLastX;
                             LONG new_y = raw_mouse_data->data.mouse.lLastY;
                             _sapp.mouse.dx = (float) (new_x - _sapp.win32.raw_input_mousepos_x);
@@ -5451,7 +5444,7 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                 break;
 
             case WM_MOUSELEAVE:
-                if (!_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (!_sapp.mouse.locked) {
                     _sapp.win32.mouse_tracked = false;
                     _sapp_win32_mouse_event(SAPP_EVENTTYPE_MOUSE_LEAVE, SAPP_MOUSEBUTTON_INVALID);
                 }
@@ -5477,28 +5470,24 @@ _SOKOL_PRIVATE LRESULT CALLBACK _sapp_win32_wndproc(HWND hWnd, UINT uMsg, WPARAM
                 break;
         }
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return DefWindowProcW(hWnd, uMsg, wParam, lParam);
+    return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-_SOKOL_PRIVATE void _sapp_win32_create_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-//return;   
-   WNDCLASSW wndclassw;
+_SOKOL_PRIVATE void _sapp_win32_create_window(void) {
+    WNDCLASSW wndclassw;
     memset(&wndclassw, 0, sizeof(wndclassw));
     wndclassw.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
     wndclassw.lpfnWndProc = (WNDPROC) _sapp_win32_wndproc;
     wndclassw.hInstance = GetModuleHandleW(NULL);
-    wndclassw.hCursor = 0;
-    wndclassw.hIcon = 0;
+    wndclassw.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclassw.hIcon = LoadIcon(NULL, IDI_WINLOGO);
     wndclassw.lpszClassName = L"SOKOLAPP";
-	
     RegisterClassW(&wndclassw);
-		return;
-printf("\n__1");
 
     DWORD win_style;
     const DWORD win_ex_style = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
     RECT rect = { 0, 0, 0, 0 };
-    if (_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.fullscreen) {
         win_style = WS_POPUP | WS_SYSMENU | WS_VISIBLE;
         rect.right = GetSystemMetrics(SM_CXSCREEN);
         rect.bottom = GetSystemMetrics(SM_CYSCREEN);
@@ -5508,7 +5497,6 @@ printf("\n__1");
         rect.right = (int) ((float)_sapp.window_width * _sapp.win32.dpi.window_scale);
         rect.bottom = (int) ((float)_sapp.window_height * _sapp.win32.dpi.window_scale);
     }
-	
     AdjustWindowRectEx(&rect, win_style, FALSE, win_ex_style);
     const int win_width = rect.right - rect.left;
     const int win_height = rect.bottom - rect.top;
@@ -5526,23 +5514,19 @@ printf("\n__1");
         NULL,                       /* hMenu */
         GetModuleHandle(NULL),      /* hInstance */
         NULL);                      /* lParam */
-		printf("\nrShowWindow");
-		
-		return;
-   // ShowWindow(_sapp.win32.hwnd, SW_SHOW);
+    ShowWindow(_sapp.win32.hwnd, SW_SHOW);
     _sapp.win32.in_create_window = false;
     _sapp.win32.dc = GetDC(_sapp.win32.hwnd);
- //   SOKOL_ASSERT(_sapp.win32.dc);
-//    _sapp_win32_update_dimensions();
-printf("\nret");
+    SOKOL_ASSERT(_sapp.win32.dc);
+    _sapp_win32_update_dimensions();
 }
 
-_SOKOL_PRIVATE void _sapp_win32_destroy_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_destroy_window(void) {
     DestroyWindow(_sapp.win32.hwnd); _sapp.win32.hwnd = 0;
     UnregisterClassW(L"SOKOLAPP", GetModuleHandleW(NULL));
 }
 
-_SOKOL_PRIVATE void _sapp_win32_init_dpi(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_init_dpi(void) {
 
     typedef BOOL(WINAPI * SETPROCESSDPIAWARE_T)(void);
     typedef HRESULT(WINAPI * SETPROCESSDPIAWARENESS_T)(PROCESS_DPI_AWARENESS);
@@ -5552,30 +5536,30 @@ _SOKOL_PRIVATE void _sapp_win32_init_dpi(void) {printf("\n --: %s:: %s:%d ", __f
     SETPROCESSDPIAWARENESS_T fn_setprocessdpiawareness = 0;
     GETDPIFORMONITOR_T fn_getdpiformonitor = 0;
     HINSTANCE user32 = LoadLibraryA("user32.dll");
-    if (user32) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (user32) {
         fn_setprocessdpiaware = (SETPROCESSDPIAWARE_T) GetProcAddress(user32, "SetProcessDPIAware");
     }
     HINSTANCE shcore = LoadLibraryA("shcore.dll");
-    if (shcore) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (shcore) {
         fn_setprocessdpiawareness = (SETPROCESSDPIAWARENESS_T) GetProcAddress(shcore, "SetProcessDpiAwareness");
         fn_getdpiformonitor = (GETDPIFORMONITOR_T) GetProcAddress(shcore, "GetDpiForMonitor");
     }
-    if (fn_setprocessdpiawareness) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (fn_setprocessdpiawareness) {
         /* if the app didn't request HighDPI rendering, let Windows do the upscaling */
         PROCESS_DPI_AWARENESS process_dpi_awareness = PROCESS_SYSTEM_DPI_AWARE;
         _sapp.win32.dpi.aware = true;
-        if (!_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (!_sapp.desc.high_dpi) {
             process_dpi_awareness = PROCESS_DPI_UNAWARE;
             _sapp.win32.dpi.aware = false;
         }
         fn_setprocessdpiawareness(process_dpi_awareness);
     }
-    else if (fn_setprocessdpiaware) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    else if (fn_setprocessdpiaware) {
         fn_setprocessdpiaware();
         _sapp.win32.dpi.aware = true;
     }
     /* get dpi scale factor for main monitor */
-    if (fn_getdpiformonitor && _sapp.win32.dpi.aware) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (fn_getdpiformonitor && _sapp.win32.dpi.aware) {
         POINT pt = { 1, 1 };
         HMONITOR hm = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
         UINT dpix, dpiy;
@@ -5588,7 +5572,7 @@ _SOKOL_PRIVATE void _sapp_win32_init_dpi(void) {printf("\n --: %s:: %s:%d ", __f
     else {
         _sapp.win32.dpi.window_scale = 1.0f;
     }
-    if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.high_dpi) {
         _sapp.win32.dpi.content_scale = _sapp.win32.dpi.window_scale;
         _sapp.win32.dpi.mouse_scale = 1.0f;
     }
@@ -5597,15 +5581,15 @@ _SOKOL_PRIVATE void _sapp_win32_init_dpi(void) {printf("\n --: %s:: %s:%d ", __f
         _sapp.win32.dpi.mouse_scale = 1.0f / _sapp.win32.dpi.window_scale;
     }
     _sapp.dpi_scale = _sapp.win32.dpi.content_scale;
-    if (user32) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (user32) {
         FreeLibrary(user32);
     }
-    if (shcore) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (shcore) {
         FreeLibrary(shcore);
     }
 }
 
-_SOKOL_PRIVATE bool _sapp_win32_set_clipboard_string(const char* str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_win32_set_clipboard_string(const char* str) {
     SOKOL_ASSERT(str);
     SOKOL_ASSERT(_sapp.win32.hwnd);
     SOKOL_ASSERT(_sapp.clipboard.enabled && (_sapp.clipboard.buf_size > 0));
@@ -5613,11 +5597,11 @@ _SOKOL_PRIVATE bool _sapp_win32_set_clipboard_string(const char* str) {printf("\
     wchar_t* wchar_buf = 0;
     const int wchar_buf_size = _sapp.clipboard.buf_size * sizeof(wchar_t);
     HANDLE object = GlobalAlloc(GMEM_MOVEABLE, wchar_buf_size);
-    if (!object) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!object) {
         goto error;
     }
     wchar_buf = (wchar_t*) GlobalLock(object);
-    if (!wchar_buf) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!wchar_buf) {
         goto error;
     }
     if (!_sapp_win32_uwp_utf8_to_wide(str, wchar_buf, wchar_buf_size)) {
@@ -5631,64 +5615,61 @@ _SOKOL_PRIVATE bool _sapp_win32_set_clipboard_string(const char* str) {printf("\
     EmptyClipboard();
     SetClipboardData(CF_UNICODETEXT, object);
     CloseClipboard();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 
 error:
-    if (wchar_buf) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (wchar_buf) {
         GlobalUnlock(object);
     }
-    if (object) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (object) {
         GlobalFree(object);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    return false;
 }
 
-_SOKOL_PRIVATE const char* _sapp_win32_get_clipboard_string(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE const char* _sapp_win32_get_clipboard_string(void) {
     SOKOL_ASSERT(_sapp.clipboard.enabled && _sapp.clipboard.buffer);
     SOKOL_ASSERT(_sapp.win32.hwnd);
     if (!OpenClipboard(_sapp.win32.hwnd)) {
-        /* silently ignore any errors and just printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return the current
+        /* silently ignore any errors and just return the current
            content of the local clipboard buffer
         */
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        return _sapp.clipboard.buffer;
     }
     HANDLE object = GetClipboardData(CF_UNICODETEXT);
-    if (!object) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!object) {
         CloseClipboard();
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        return _sapp.clipboard.buffer;
     }
     const wchar_t* wchar_buf = (const wchar_t*) GlobalLock(object);
-    if (!wchar_buf) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!wchar_buf) {
         CloseClipboard();
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        return _sapp.clipboard.buffer;
     }
     _sapp_win32_wide_to_utf8(wchar_buf, _sapp.clipboard.buffer, _sapp.clipboard.buf_size);
     GlobalUnlock(object);
     CloseClipboard();
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+    return _sapp.clipboard.buffer;
 }
 
-_SOKOL_PRIVATE void _sapp_win32_update_window_title(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_update_window_title(void) {
     _sapp_win32_uwp_utf8_to_wide(_sapp.window_title, _sapp.window_title_wide, sizeof(_sapp.window_title_wide));
     SetWindowTextW(_sapp.win32.hwnd, _sapp.window_title_wide);
 }
 
-_SOKOL_PRIVATE void _sapp_win32_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_win32_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     _sapp_win32_uwp_init_keytable();
     _sapp_win32_uwp_utf8_to_wide(_sapp.window_title, _sapp.window_title_wide, sizeof(_sapp.window_title_wide));
- //   _sapp_win32_init_dpi();
+    _sapp_win32_init_dpi();
     _sapp_win32_create_window();
-	printf("\n1");
     #if defined(SOKOL_D3D11)
         _sapp_d3d11_create_device_and_swapchain();
         _sapp_d3d11_create_default_render_target();
     #endif
     #if defined(SOKOL_GLCORE33)
-	printf("\n2");
         _sapp_wgl_init();
         _sapp_wgl_load_extensions();
-		printf("\nASS");
         _sapp_wgl_create_context();
         #if !defined(SOKOL_WIN32_NO_GL_LOADER)
             _sapp_win32_gl_loadfuncs();
@@ -5700,7 +5681,7 @@ _SOKOL_PRIVATE void _sapp_win32_run(const sapp_desc* desc) {printf("\n --: %s:: 
     while (!(done || _sapp.quit_ordered)) {
         MSG msg;
         while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
-            if (WM_QUIT == msg.message) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (WM_QUIT == msg.message) {
                 done = true;
                 continue;
             }
@@ -5726,7 +5707,7 @@ _SOKOL_PRIVATE void _sapp_win32_run(const sapp_desc* desc) {printf("\n --: %s:: 
             #endif
             _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_RESIZED);
         }
-        if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.quit_requested) {
             PostMessage(_sapp.win32.hwnd, WM_CLOSE, 0, 0);
         }
     }
@@ -5743,22 +5724,22 @@ _SOKOL_PRIVATE void _sapp_win32_run(const sapp_desc* desc) {printf("\n --: %s:: 
     _sapp_discard_state();
 }
 
-_SOKOL_PRIVATE char** _sapp_win32_command_line_to_utf8_argv(LPWSTR w_command_line, int* o_argc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE char** _sapp_win32_command_line_to_utf8_argv(LPWSTR w_command_line, int* o_argc) {
     int argc = 0;
     char** argv = 0;
     char* args;
 
     LPWSTR* w_argv = CommandLineToArgvW(w_command_line, &argc);
-    if (w_argv == NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (w_argv == NULL) {
         _sapp_fail("Win32: failed to parse command line");
     } else {
         size_t size = wcslen(w_command_line) * 4;
         argv = (char**) SOKOL_CALLOC(1, (argc + 1) * sizeof(char*) + size);
         args = (char*)&argv[argc + 1];
         int n;
-        for (int i = 0; i < argc; ++i) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        for (int i = 0; i < argc; ++i) {
             n = WideCharToMultiByte(CP_UTF8, 0, w_argv[i], -1, args, (int)size, NULL, NULL);
-            if (n == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (n == 0) {
                 _sapp_fail("Win32: failed to convert all arguments to utf8");
                 break;
             }
@@ -5769,7 +5750,7 @@ _SOKOL_PRIVATE char** _sapp_win32_command_line_to_utf8_argv(LPWSTR w_command_lin
         LocalFree(w_argv);
     }
     *o_argc = argc;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return argv;
+    return argv;
 }
 
 #if !defined(SOKOL_NO_ENTRY)
@@ -5777,7 +5758,7 @@ _SOKOL_PRIVATE char** _sapp_win32_command_line_to_utf8_argv(LPWSTR w_command_lin
 int main(int argc, char* argv[]) {
     sapp_desc desc = sokol_main(argc, argv);
     _sapp_win32_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #else
 
@@ -5794,11 +5775,11 @@ printf("\n main_entry Called\n ");
 	printf("\n _sapp_win32_run Called\n ");
     _sapp_win32_run(&desc);
 
-printf("\n end");printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+printf("\n end");return 0;
 }
 
 
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {
     _SOKOL_UNUSED(hInstance);
     _SOKOL_UNUSED(hPrevInstance);
     _SOKOL_UNUSED(lpCmdLine);
@@ -5808,7 +5789,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     sapp_desc desc = sokol_main(argc_utf8, argv_utf8);
     _sapp_win32_run(&desc);
     SOKOL_FREE(argv_utf8);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_WIN32_FORCE_MAIN */
 #endif /* SOKOL_NO_ENTRY */
@@ -5823,9 +5804,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #if defined(_SAPP_UWP)
 
 // Helper functions
-_SOKOL_PRIVATE void _sapp_uwp_configure_dpi(float monitor_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_configure_dpi(float monitor_dpi) {
     _sapp.uwp.dpi.window_scale = monitor_dpi / 96.0f;
-    if (_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.high_dpi) {
         _sapp.uwp.dpi.content_scale = _sapp.uwp.dpi.window_scale;
         _sapp.uwp.dpi.mouse_scale = 1.0f * _sapp.uwp.dpi.window_scale;
     }
@@ -5836,7 +5817,7 @@ _SOKOL_PRIVATE void _sapp_uwp_configure_dpi(float monitor_dpi) {printf("\n --: %
     _sapp.dpi_scale = _sapp.uwp.dpi.content_scale;
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_show_mouse(bool visible) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_show_mouse(bool visible) {
     using namespace winrt::Windows::UI::Core;
 
     /* NOTE: this function is only called when the mouse visibility actually changes */
@@ -5845,18 +5826,18 @@ _SOKOL_PRIVATE void _sapp_uwp_show_mouse(bool visible) {printf("\n --: %s:: %s:%
         CoreCursor(nullptr));
 }
 
-_SOKOL_PRIVATE uint32_t _sapp_uwp_mods(winrt::Windows::UI::Core::CoreWindow const& sender_window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE uint32_t _sapp_uwp_mods(winrt::Windows::UI::Core::CoreWindow const& sender_window) {
     using namespace winrt::Windows::System;
     using namespace winrt::Windows::UI::Core;
 
     uint32_t mods = 0;
-    if ((sender_window.GetKeyState(VirtualKey::Shift) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((sender_window.GetKeyState(VirtualKey::Shift) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {
         mods |= SAPP_MODIFIER_SHIFT;
     }
-    if ((sender_window.GetKeyState(VirtualKey::Control) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((sender_window.GetKeyState(VirtualKey::Control) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {
         mods |= SAPP_MODIFIER_CTRL;
     }
-    if ((sender_window.GetKeyState(VirtualKey::Menu) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if ((sender_window.GetKeyState(VirtualKey::Menu) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) {
         mods |= SAPP_MODIFIER_ALT;
     }
     if (((sender_window.GetKeyState(VirtualKey::LeftWindows) & CoreVirtualKeyStates::Down) == CoreVirtualKeyStates::Down) ||
@@ -5864,10 +5845,10 @@ _SOKOL_PRIVATE uint32_t _sapp_uwp_mods(winrt::Windows::UI::Core::CoreWindow cons
     {
         mods |= SAPP_MODIFIER_SUPER;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return mods;
+    return mods;
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_mouse_event(sapp_event_type type, sapp_mousebutton btn, winrt::Windows::UI::Core::CoreWindow const& sender_window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_mouse_event(sapp_event_type type, sapp_mousebutton btn, winrt::Windows::UI::Core::CoreWindow const& sender_window) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.modifiers = _sapp_uwp_mods(sender_window);
@@ -5876,7 +5857,7 @@ _SOKOL_PRIVATE void _sapp_uwp_mouse_event(sapp_event_type type, sapp_mousebutton
     }
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_scroll_event(float delta, bool horizontal, winrt::Windows::UI::Core::CoreWindow const& sender_window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_scroll_event(float delta, bool horizontal, winrt::Windows::UI::Core::CoreWindow const& sender_window) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(SAPP_EVENTTYPE_MOUSE_SCROLL);
         _sapp.event.modifiers = _sapp_uwp_mods(sender_window);
@@ -5886,7 +5867,7 @@ _SOKOL_PRIVATE void _sapp_uwp_scroll_event(float delta, bool horizontal, winrt::
     }
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_extract_mouse_button_events(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_extract_mouse_button_events(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
 
     // we need to figure out ourselves what mouse buttons have been pressed and released,
     // because UWP doesn't properly send down/up mouse button events when multiple buttons
@@ -5914,24 +5895,24 @@ _SOKOL_PRIVATE void _sapp_uwp_extract_mouse_button_events(winrt::Windows::UI::Co
 
     sapp_event_type type = SAPP_EVENTTYPE_INVALID;
     sapp_mousebutton btn = SAPP_MOUSEBUTTON_INVALID;
-    if (chg_btns & lmb_bit) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (chg_btns & lmb_bit) {
         btn = SAPP_MOUSEBUTTON_LEFT;
         type = (new_btns & lmb_bit) ? SAPP_EVENTTYPE_MOUSE_DOWN : SAPP_EVENTTYPE_MOUSE_UP;
     }
-    if (chg_btns & rmb_bit) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (chg_btns & rmb_bit) {
         btn = SAPP_MOUSEBUTTON_RIGHT;
         type = (new_btns & rmb_bit) ? SAPP_EVENTTYPE_MOUSE_DOWN : SAPP_EVENTTYPE_MOUSE_UP;
     }
-    if (chg_btns & mmb_bit) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (chg_btns & mmb_bit) {
         btn = SAPP_MOUSEBUTTON_MIDDLE;
         type = (new_btns & mmb_bit) ? SAPP_EVENTTYPE_MOUSE_DOWN : SAPP_EVENTTYPE_MOUSE_UP;
     }
-    if (type != SAPP_EVENTTYPE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (type != SAPP_EVENTTYPE_INVALID) {
         _sapp_uwp_mouse_event(type, btn, sender);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_key_event(sapp_event_type type, winrt::Windows::UI::Core::CoreWindow const& sender_window, winrt::Windows::UI::Core::KeyEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_key_event(sapp_event_type type, winrt::Windows::UI::Core::CoreWindow const& sender_window, winrt::Windows::UI::Core::KeyEventArgs const& args) {
     auto key_status = args.KeyStatus();
     if (_sapp_events_enabled() && (key_status.ScanCode < SAPP_MAX_KEYCODES)) {
         _sapp_init_event(type);
@@ -5951,7 +5932,7 @@ _SOKOL_PRIVATE void _sapp_uwp_key_event(sapp_event_type type, winrt::Windows::UI
     }
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_char_event(uint32_t c, bool repeat, winrt::Windows::UI::Core::CoreWindow const& sender_window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_char_event(uint32_t c, bool repeat, winrt::Windows::UI::Core::CoreWindow const& sender_window) {
     if (_sapp_events_enabled() && (c >= 32)) {
         _sapp_init_event(SAPP_EVENTTYPE_CHAR);
         _sapp.event.modifiers = _sapp_uwp_mods(sender_window);
@@ -5961,10 +5942,10 @@ _SOKOL_PRIVATE void _sapp_uwp_char_event(uint32_t c, bool repeat, winrt::Windows
     }
 }
 
-_SOKOL_PRIVATE void _sapp_uwp_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_toggle_fullscreen(void) {
     auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
     _sapp.fullscreen = appView.IsFullScreenMode();
-    if (!_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.fullscreen) {
         appView.TryEnterFullScreenMode();
     }
     else {
@@ -5995,16 +5976,16 @@ public:
     void RegisterDeviceNotify(IDeviceNotify* deviceNotify);
     void Trim();
     void Present();
-    winrt::Windows::Foundation::Size GetOutputSize() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_outputSize; }
-    winrt::Windows::Foundation::Size GetLogicalSize() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_logicalSize; }
-    ID3D11Device3* GetD3DDevice() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_d3dDevice.get(); }
-    ID3D11DeviceContext3* GetD3DDeviceContext() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_d3dContext.get(); }
-    IDXGISwapChain3* GetSwapChain() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_swapChain.get(); }
-    D3D_FEATURE_LEVEL GetDeviceFeatureLevel() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_d3dFeatureLevel; }
-    ID3D11RenderTargetView1* GetBackBufferRenderTargetView() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_d3dRenderTargetView.get(); }
-    ID3D11DepthStencilView* GetDepthStencilView() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_d3dDepthStencilView.get(); }
-    D3D11_VIEWPORT GetScreenViewport() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_screenViewport; }
-    DirectX::XMFLOAT4X4 GetOrientationTransform3D() const { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return m_orientationTransform3D; }
+    winrt::Windows::Foundation::Size GetOutputSize() const { return m_outputSize; }
+    winrt::Windows::Foundation::Size GetLogicalSize() const { return m_logicalSize; }
+    ID3D11Device3* GetD3DDevice() const { return m_d3dDevice.get(); }
+    ID3D11DeviceContext3* GetD3DDeviceContext() const { return m_d3dContext.get(); }
+    IDXGISwapChain3* GetSwapChain() const { return m_swapChain.get(); }
+    D3D_FEATURE_LEVEL GetDeviceFeatureLevel() const { return m_d3dFeatureLevel; }
+    ID3D11RenderTargetView1* GetBackBufferRenderTargetView() const { return m_d3dRenderTargetView.get(); }
+    ID3D11DepthStencilView* GetDepthStencilView() const { return m_d3dDepthStencilView.get(); }
+    D3D11_VIEWPORT GetScreenViewport() const { return m_screenViewport; }
+    DirectX::XMFLOAT4X4 GetOrientationTransform3D() const { return m_orientationTransform3D; }
 
 private:
 
@@ -6075,7 +6056,7 @@ private:
 struct App : winrt::implements<App, winrt::Windows::ApplicationModel::Core::IFrameworkViewSource, winrt::Windows::ApplicationModel::Core::IFrameworkView> {
 public:
     // IFrameworkViewSource Methods
-    winrt::Windows::ApplicationModel::Core::IFrameworkView CreateView() { printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return *this; }
+    winrt::Windows::ApplicationModel::Core::IFrameworkView CreateView() { return *this; }
 
     // IFrameworkView Methods.
     virtual void Initialize(winrt::Windows::ApplicationModel::Core::CoreApplicationView const& applicationView);
@@ -6231,7 +6212,7 @@ void DeviceResources::CreateWindowSizeDependentResources() {
     m_d3dRenderTargetSize.Width = swapDimensions ? m_outputSize.Height : m_outputSize.Width;
     m_d3dRenderTargetSize.Height = swapDimensions ? m_outputSize.Width : m_outputSize.Height;
 
-    if (m_swapChain != nullptr) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (m_swapChain != nullptr) {
         // If the swap chain already exists, resize it.
         HRESULT hr = m_swapChain->ResizeBuffers(
             2, // Double-buffered swap chain.
@@ -6241,13 +6222,13 @@ void DeviceResources::CreateWindowSizeDependentResources() {
             0
         );
 
-        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET) {
             // If the device was removed for any reason, a new device and swap chain will need to be created.
             HandleDeviceLost();
 
             // Everything is set up now. Do not continue execution of this method. HandleDeviceLost will reenter this method
             // and correctly set up the new device.
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+            return;
         }
         else {
             winrt::check_hresult(hr);
@@ -6295,7 +6276,7 @@ void DeviceResources::CreateWindowSizeDependentResources() {
     // Note the rotation angle for the 2D and 3D transforms are different.
     // This is due to the difference in coordinate spaces.  Additionally,
     // the 3D matrix is specified explicitly to avoid rounding errors.
-    switch (displayRotation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    switch (displayRotation) {
         case DXGI_MODE_ROTATION_IDENTITY:
             m_orientationTransform3D = m_rotation0;
             break;
@@ -6366,7 +6347,7 @@ void DeviceResources::UpdateRenderTargetSize() {
 }
 
 // This method is called when the CoreWindow is created (or re-created).
-void DeviceResources::SetWindow(winrt::Windows::UI::Core::CoreWindow const& window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void DeviceResources::SetWindow(winrt::Windows::UI::Core::CoreWindow const& window) {
     auto currentDisplayInformation = winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView();
     m_window = window;
     m_logicalSize = winrt::Windows::Foundation::Size(window.Bounds().Width, window.Bounds().Height);
@@ -6378,16 +6359,16 @@ void DeviceResources::SetWindow(winrt::Windows::UI::Core::CoreWindow const& wind
 }
 
 // This method is called in the event handler for the SizeChanged event.
-void DeviceResources::SetLogicalSize(winrt::Windows::Foundation::Size logicalSize) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (m_logicalSize != logicalSize) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void DeviceResources::SetLogicalSize(winrt::Windows::Foundation::Size logicalSize) {
+    if (m_logicalSize != logicalSize) {
         m_logicalSize = logicalSize;
         CreateWindowSizeDependentResources();
     }
 }
 
 // This method is called in the event handler for the DpiChanged event.
-void DeviceResources::SetDpi(float dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (dpi != m_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void DeviceResources::SetDpi(float dpi) {
+    if (dpi != m_dpi) {
         m_dpi = dpi;
         _sapp_uwp_configure_dpi(m_dpi);
         // When the display DPI changes, the logical size of the window (measured in Dips) also changes and needs to be updated.
@@ -6398,8 +6379,8 @@ void DeviceResources::SetDpi(float dpi) {printf("\n --: %s:: %s:%d ", __func__, 
 }
 
 // This method is called in the event handler for the OrientationChanged event.
-void DeviceResources::SetCurrentOrientation(winrt::Windows::Graphics::Display::DisplayOrientations currentOrientation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (m_currentOrientation != currentOrientation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void DeviceResources::SetCurrentOrientation(winrt::Windows::Graphics::Display::DisplayOrientations currentOrientation) {
+    if (m_currentOrientation != currentOrientation) {
         m_currentOrientation = currentOrientation;
         CreateWindowSizeDependentResources();
     }
@@ -6449,18 +6430,18 @@ void DeviceResources::ValidateDevice() {
 // Recreate all device resources and set them back to the current state.
 void DeviceResources::HandleDeviceLost() {
     m_swapChain = nullptr;
-    if (m_deviceNotify != nullptr) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (m_deviceNotify != nullptr) {
         m_deviceNotify->OnDeviceLost();
     }
     CreateDeviceResources();
     CreateWindowSizeDependentResources();
-    if (m_deviceNotify != nullptr) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (m_deviceNotify != nullptr) {
         m_deviceNotify->OnDeviceRestored();
     }
 }
 
 // Register our DeviceNotify to be informed on device lost and creation.
-void DeviceResources::RegisterDeviceNotify(IDeviceNotify* deviceNotify) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void DeviceResources::RegisterDeviceNotify(IDeviceNotify* deviceNotify) {
     m_deviceNotify = deviceNotify;
 }
 
@@ -6488,7 +6469,7 @@ void DeviceResources::Present() {
 
     // If the device was removed either by a disconnection or a driver upgrade, we
     // must recreate all device resources.
-    if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET) {
         HandleDeviceLost();
     }
     else {
@@ -6503,9 +6484,9 @@ DXGI_MODE_ROTATION DeviceResources::ComputeDisplayRotation() {
 
     // Note: NativeOrientation can only be Landscape or Portrait even though
     // the DisplayOrientations enum has other values.
-    switch (m_nativeOrientation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    switch (m_nativeOrientation) {
         case winrt::Windows::Graphics::Display::DisplayOrientations::Landscape:
-            switch (m_currentOrientation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            switch (m_currentOrientation) {
                 case winrt::Windows::Graphics::Display::DisplayOrientations::Landscape:
                     rotation = DXGI_MODE_ROTATION_IDENTITY;
                     break;
@@ -6525,7 +6506,7 @@ DXGI_MODE_ROTATION DeviceResources::ComputeDisplayRotation() {
             break;
 
         case winrt::Windows::Graphics::Display::DisplayOrientations::Portrait:
-            switch (m_currentOrientation) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            switch (m_currentOrientation) {
                 case winrt::Windows::Graphics::Display::DisplayOrientations::Landscape:
                     rotation = DXGI_MODE_ROTATION_ROTATE90;
                     break;
@@ -6544,7 +6525,7 @@ DXGI_MODE_ROTATION DeviceResources::ComputeDisplayRotation() {
             }
             break;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return rotation;
+    return rotation;
 }
 
 // Check for SDK Layer support.
@@ -6562,14 +6543,14 @@ bool DeviceResources::SdkLayersAvailable() {
             nullptr,                    // No need to know the feature level.
             nullptr                     // No need to keep the D3D device context reference.
         );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SUCCEEDED(hr);
+        return SUCCEEDED(hr);
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        return false;
     #endif
 }
 
 // The first method called when the IFrameworkView is being created.
-void App::Initialize(winrt::Windows::ApplicationModel::Core::CoreApplicationView const& applicationView) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::Initialize(winrt::Windows::ApplicationModel::Core::CoreApplicationView const& applicationView) {
     // Register event handlers for app lifecycle. This example includes Activated, so that we
     // can make the CoreWindow active and start rendering on the window.
     applicationView.Activated({ this, &App::OnActivated });
@@ -6583,7 +6564,7 @@ void App::Initialize(winrt::Windows::ApplicationModel::Core::CoreApplicationView
 }
 
 // Called when the CoreWindow object is created (or re-created).
-void App::SetWindow(winrt::Windows::UI::Core::CoreWindow const& window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::SetWindow(winrt::Windows::UI::Core::CoreWindow const& window) {
     window.SizeChanged({ this, &App::OnWindowSizeChanged });
     window.VisibilityChanged({ this, &App::OnVisibilityChanged });
 
@@ -6610,15 +6591,15 @@ void App::SetWindow(winrt::Windows::UI::Core::CoreWindow const& window) {printf(
 }
 
 // Initializes scene resources, or loads a previously saved app state.
-void App::Load(winrt::hstring const& entryPoint) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::Load(winrt::hstring const& entryPoint) {
     _SOKOL_UNUSED(entryPoint);
 }
 
 // This method is called after the window becomes active.
 void App::Run() {
     // NOTE: UWP will simply terminate an application, it's not possible to detect when an application is being closed
-    while (true) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (m_windowVisible) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (true) {
+        if (m_windowVisible) {
             winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().Dispatcher().ProcessEvents(winrt::Windows::UI::Core::CoreProcessEventsOption::ProcessAllIfPresent);
             _sapp_frame();
             m_deviceResources->Present();
@@ -6637,7 +6618,7 @@ void App::Uninitialize() {
 }
 
 // Application lifecycle event handlers.
-void App::OnActivated(winrt::Windows::ApplicationModel::Core::CoreApplicationView const& applicationView, winrt::Windows::ApplicationModel::Activation::IActivatedEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnActivated(winrt::Windows::ApplicationModel::Core::CoreApplicationView const& applicationView, winrt::Windows::ApplicationModel::Activation::IActivatedEventArgs const& args) {
     _SOKOL_UNUSED(args);
     _SOKOL_UNUSED(applicationView);
     auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
@@ -6651,89 +6632,89 @@ void App::OnActivated(winrt::Windows::ApplicationModel::Core::CoreApplicationVie
 
     // Run() won't start until the CoreWindow is activated.
     winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().Activate();
-    if (_sapp.desc.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.desc.fullscreen) {
         appView.TryEnterFullScreenMode();
     }
     _sapp.fullscreen = appView.IsFullScreenMode();
 }
 
-void App::OnSuspending(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::ApplicationModel::SuspendingEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnSuspending(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::ApplicationModel::SuspendingEventArgs const& args) {
     _SOKOL_UNUSED(sender);
     _SOKOL_UNUSED(args);
     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_SUSPENDED);
 }
 
-void App::OnResuming(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::Foundation::IInspectable const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnResuming(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::Foundation::IInspectable const& args) {
     _SOKOL_UNUSED(args);
     _SOKOL_UNUSED(sender);
     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_RESUMED);
 }
 
-void App::OnWindowSizeChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::WindowSizeChangedEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnWindowSizeChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::WindowSizeChangedEventArgs const& args) {
     _SOKOL_UNUSED(args);
     m_deviceResources->SetLogicalSize(winrt::Windows::Foundation::Size(sender.Bounds().Width, sender.Bounds().Height));
     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_RESIZED);
 }
 
-void App::OnVisibilityChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::VisibilityChangedEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnVisibilityChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::VisibilityChangedEventArgs const& args) {
     _SOKOL_UNUSED(sender);
     m_windowVisible = args.Visible();
     _sapp_win32_uwp_app_event(m_windowVisible ? SAPP_EVENTTYPE_RESTORED : SAPP_EVENTTYPE_ICONIFIED);
 }
 
-void App::OnBackRequested(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Core::BackRequestedEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnBackRequested(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Core::BackRequestedEventArgs const& args) {
     _SOKOL_UNUSED(sender);
     args.Handled(true);
 }
 
-void App::OnKeyDown(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::KeyEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnKeyDown(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::KeyEventArgs const& args) {
     auto status = args.KeyStatus();
     _sapp_uwp_key_event(SAPP_EVENTTYPE_KEY_DOWN, sender, args);
 }
 
-void App::OnKeyUp(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::KeyEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnKeyUp(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::KeyEventArgs const& args) {
     auto status = args.KeyStatus();
     _sapp_uwp_key_event(SAPP_EVENTTYPE_KEY_UP, sender, args);
 }
 
-void App::OnCharacterReceived(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::CharacterReceivedEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnCharacterReceived(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::CharacterReceivedEventArgs const& args) {
     _sapp_uwp_char_event(args.KeyCode(), args.KeyStatus().WasKeyDown, sender);
 }
 
-void App::OnPointerEntered(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerEntered(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     _SOKOL_UNUSED(args);
     _sapp.uwp.mouse_tracked = true;
     _sapp_uwp_mouse_event(SAPP_EVENTTYPE_MOUSE_ENTER, SAPP_MOUSEBUTTON_INVALID, sender);
 }
 
-void App::OnPointerExited(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerExited(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     _SOKOL_UNUSED(args);
     _sapp.uwp.mouse_tracked = false;
     _sapp_uwp_mouse_event(SAPP_EVENTTYPE_MOUSE_LEAVE, SAPP_MOUSEBUTTON_INVALID, sender);
 }
 
-void App::OnPointerPressed(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerPressed(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     _sapp_uwp_extract_mouse_button_events(sender, args);
 }
 
 // NOTE: for some reason this event handler is never called??
-void App::OnPointerReleased(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerReleased(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     _sapp_uwp_extract_mouse_button_events(sender, args);
 }
 
-void App::OnPointerMoved(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerMoved(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     auto position = args.CurrentPoint().Position();
     const float new_x = (float)(int)(position.X * _sapp.uwp.dpi.mouse_scale + 0.5f);
     const float new_y = (float)(int)(position.Y * _sapp.uwp.dpi.mouse_scale + 0.5f);
     // don't update dx/dy in the very first event
-    if (_sapp.mouse.pos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.pos_valid) {
         _sapp.mouse.dx = new_x - _sapp.mouse.x;
         _sapp.mouse.dy = new_y - _sapp.mouse.y;
     }
     _sapp.mouse.x = new_x;
     _sapp.mouse.y = new_y;
     _sapp.mouse.pos_valid = true;
-    if (!_sapp.uwp.mouse_tracked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.uwp.mouse_tracked) {
         _sapp.uwp.mouse_tracked = true;
         _sapp_uwp_mouse_event(SAPP_EVENTTYPE_MOUSE_ENTER, SAPP_MOUSEBUTTON_INVALID, sender);
     }
@@ -6743,26 +6724,26 @@ void App::OnPointerMoved(winrt::Windows::UI::Core::CoreWindow const& sender, win
     _sapp_uwp_extract_mouse_button_events(sender, args);
 }
 
-void App::OnPointerWheelChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnPointerWheelChanged(winrt::Windows::UI::Core::CoreWindow const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args) {
     auto properties = args.CurrentPoint().Properties();
     _sapp_uwp_scroll_event((float)properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), sender);
 }
 
-void App::OnDpiChanged(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnDpiChanged(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {
     // NOTE: UNTESTED
     _SOKOL_UNUSED(args);
     m_deviceResources->SetDpi(sender.LogicalDpi());
     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_RESIZED);
 }
 
-void App::OnOrientationChanged(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnOrientationChanged(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {
     // NOTE: UNTESTED
     _SOKOL_UNUSED(args);
     m_deviceResources->SetCurrentOrientation(sender.CurrentOrientation());
     _sapp_win32_uwp_app_event(SAPP_EVENTTYPE_RESIZED);
 }
 
-void App::OnDisplayContentsInvalidated(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void App::OnDisplayContentsInvalidated(winrt::Windows::Graphics::Display::DisplayInformation const& sender, winrt::Windows::Foundation::IInspectable const& args) {
     // NOTE: UNTESTED
     _SOKOL_UNUSED(args);
     _SOKOL_UNUSED(sender);
@@ -6771,7 +6752,7 @@ void App::OnDisplayContentsInvalidated(winrt::Windows::Graphics::Display::Displa
 
 } /* End empty namespace */
 
-_SOKOL_PRIVATE void _sapp_uwp_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_uwp_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     _sapp_win32_uwp_init_keytable();
     _sapp_win32_uwp_utf8_to_wide(_sapp.window_title, _sapp.window_title_wide, sizeof(_sapp.window_title_wide));
@@ -6780,9 +6761,9 @@ _SOKOL_PRIVATE void _sapp_uwp_run(const sapp_desc* desc) {printf("\n --: %s:: %s
 
 #if !defined(SOKOL_NO_ENTRY)
 #if defined(UNICODE)
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {
 #else
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {
 #endif
     _SOKOL_UNUSED(hInstance);
     _SOKOL_UNUSED(hPrevInstance);
@@ -6790,7 +6771,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     _SOKOL_UNUSED(nCmdShow);
     sapp_desc desc = sokol_main(0, nullptr);
     _sapp_uwp_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_NO_ENTRY */
 #endif /* _SAPP_UWP */
@@ -6799,16 +6780,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #if defined(_SAPP_ANDROID)
 
 /* android loop thread */
-_SOKOL_PRIVATE bool _sapp_android_init_egl(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_android_init_egl(void) {
     SOKOL_ASSERT(_sapp.android.display == EGL_NO_DISPLAY);
     SOKOL_ASSERT(_sapp.android.context == EGL_NO_CONTEXT);
 
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-    if (display == EGL_NO_DISPLAY) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (display == EGL_NO_DISPLAY) {
+        return false;
     }
-    if (eglInitialize(display, NULL, NULL) == EGL_FALSE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (eglInitialize(display, NULL, NULL) == EGL_FALSE) {
+        return false;
     }
 
     EGLint alpha_size = _sapp.desc.alpha ? 8 : 0;
@@ -6831,7 +6812,7 @@ _SOKOL_PRIVATE bool _sapp_android_init_egl(void) {printf("\n --: %s:: %s:%d ", _
     /* find config with 8-bit rgb buffer if available, ndk sample does not trust egl spec */
     EGLConfig config;
     bool exact_cfg_found = false;
-    for (int i = 0; i < cfg_count; ++i) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    for (int i = 0; i < cfg_count; ++i) {
         EGLConfig c = available_cfgs[i];
         EGLint r, g, b, a, d;
         if (eglGetConfigAttrib(display, c, EGL_RED_SIZE, &r) == EGL_TRUE &&
@@ -6839,13 +6820,13 @@ _SOKOL_PRIVATE bool _sapp_android_init_egl(void) {printf("\n --: %s:: %s:%d ", _
             eglGetConfigAttrib(display, c, EGL_BLUE_SIZE, &b) == EGL_TRUE &&
             eglGetConfigAttrib(display, c, EGL_ALPHA_SIZE, &a) == EGL_TRUE &&
             eglGetConfigAttrib(display, c, EGL_DEPTH_SIZE, &d) == EGL_TRUE &&
-            r == 8 && g == 8 && b == 8 && (alpha_size == 0 || a == alpha_size) && d == 16) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            r == 8 && g == 8 && b == 8 && (alpha_size == 0 || a == alpha_size) && d == 16) {
             exact_cfg_found = true;
             config = c;
             break;
         }
     }
-    if (!exact_cfg_found) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!exact_cfg_found) {
         config = available_cfgs[0];
     }
 
@@ -6858,25 +6839,25 @@ _SOKOL_PRIVATE bool _sapp_android_init_egl(void) {printf("\n --: %s:: %s:%d ", _
         EGL_NONE,
     };
     EGLContext context = eglCreateContext(display, config, EGL_NO_CONTEXT, ctx_attributes);
-    if (context == EGL_NO_CONTEXT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (context == EGL_NO_CONTEXT) {
+        return false;
     }
 
     _sapp.android.config = config;
     _sapp.android.display = display;
     _sapp.android.context = context;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE void _sapp_android_cleanup_egl(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.android.display != EGL_NO_DISPLAY) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_cleanup_egl(void) {
+    if (_sapp.android.display != EGL_NO_DISPLAY) {
         eglMakeCurrent(_sapp.android.display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        if (_sapp.android.surface != EGL_NO_SURFACE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.android.surface != EGL_NO_SURFACE) {
             SOKOL_LOG("Destroying egl surface");
             eglDestroySurface(_sapp.android.display, _sapp.android.surface);
             _sapp.android.surface = EGL_NO_SURFACE;
         }
-        if (_sapp.android.context != EGL_NO_CONTEXT) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.android.context != EGL_NO_CONTEXT) {
             SOKOL_LOG("Destroying egl context");
             eglDestroyContext(_sapp.android.display, _sapp.android.context);
             _sapp.android.context = EGL_NO_CONTEXT;
@@ -6887,7 +6868,7 @@ _SOKOL_PRIVATE void _sapp_android_cleanup_egl(void) {printf("\n --: %s:: %s:%d "
     }
 }
 
-_SOKOL_PRIVATE bool _sapp_android_init_egl_surface(ANativeWindow* window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_android_init_egl_surface(ANativeWindow* window) {
     SOKOL_ASSERT(_sapp.android.display != EGL_NO_DISPLAY);
     SOKOL_ASSERT(_sapp.android.context != EGL_NO_CONTEXT);
     SOKOL_ASSERT(_sapp.android.surface == EGL_NO_SURFACE);
@@ -6898,28 +6879,28 @@ _SOKOL_PRIVATE bool _sapp_android_init_egl_surface(ANativeWindow* window) {print
 
     /* create egl surface and make it current */
     EGLSurface surface = eglCreateWindowSurface(_sapp.android.display, _sapp.android.config, window, NULL);
-    if (surface == EGL_NO_SURFACE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (surface == EGL_NO_SURFACE) {
+        return false;
     }
-    if (eglMakeCurrent(_sapp.android.display, surface, surface, _sapp.android.context) == EGL_FALSE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (eglMakeCurrent(_sapp.android.display, surface, surface, _sapp.android.context) == EGL_FALSE) {
+        return false;
     }
     _sapp.android.surface = surface;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE void _sapp_android_cleanup_egl_surface(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.android.display == EGL_NO_DISPLAY) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+_SOKOL_PRIVATE void _sapp_android_cleanup_egl_surface(void) {
+    if (_sapp.android.display == EGL_NO_DISPLAY) {
+        return;
     }
     eglMakeCurrent(_sapp.android.display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    if (_sapp.android.surface != EGL_NO_SURFACE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.android.surface != EGL_NO_SURFACE) {
         eglDestroySurface(_sapp.android.display, _sapp.android.surface);
         _sapp.android.surface = EGL_NO_SURFACE;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_android_app_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_app_event(sapp_event_type type) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         SOKOL_LOG("event_cb()");
@@ -6927,7 +6908,7 @@ _SOKOL_PRIVATE void _sapp_android_app_event(sapp_event_type type) {printf("\n --
     }
 }
 
-_SOKOL_PRIVATE void _sapp_android_update_dimensions(ANativeWindow* window, bool force_update) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_update_dimensions(ANativeWindow* window, bool force_update) {
     SOKOL_ASSERT(_sapp.android.display != EGL_NO_DISPLAY);
     SOKOL_ASSERT(_sapp.android.context != EGL_NO_CONTEXT);
     SOKOL_ASSERT(_sapp.android.surface != EGL_NO_SURFACE);
@@ -6939,8 +6920,8 @@ _SOKOL_PRIVATE void _sapp_android_update_dimensions(ANativeWindow* window, bool 
     const bool win_changed = (win_w != _sapp.window_width) || (win_h != _sapp.window_height);
     _sapp.window_width = win_w;
     _sapp.window_height = win_h;
-    if (win_changed || force_update) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (!_sapp.desc.high_dpi) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (win_changed || force_update) {
+        if (!_sapp.desc.high_dpi) {
             const int32_t buf_w = win_w / 2;
             const int32_t buf_h = win_h / 2;
             EGLint format;
@@ -6966,19 +6947,19 @@ _SOKOL_PRIVATE void _sapp_android_update_dimensions(ANativeWindow* window, bool 
     _sapp.framebuffer_width = fb_w;
     _sapp.framebuffer_height = fb_h;
     _sapp.dpi_scale = (float)_sapp.framebuffer_width / (float)_sapp.window_width;
-    if (win_changed || fb_changed || force_update) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (!_sapp.first_frame) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (win_changed || fb_changed || force_update) {
+        if (!_sapp.first_frame) {
             SOKOL_LOG("SAPP_EVENTTYPE_RESIZED");
             _sapp_android_app_event(SAPP_EVENTTYPE_RESIZED);
         }
     }
 }
 
-_SOKOL_PRIVATE void _sapp_android_cleanup(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_cleanup(void) {
     SOKOL_LOG("Cleaning up");
-    if (_sapp.android.surface != EGL_NO_SURFACE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.android.surface != EGL_NO_SURFACE) {
         /* egl context is bound, cleanup gracefully */
-        if (_sapp.init_called && !_sapp.cleanup_called) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.init_called && !_sapp.cleanup_called) {
             SOKOL_LOG("cleanup_cb()");
             _sapp_call_cleanup();
         }
@@ -6987,14 +6968,14 @@ _SOKOL_PRIVATE void _sapp_android_cleanup(void) {printf("\n --: %s:: %s:%d ", __
     _sapp_android_cleanup_egl();
 }
 
-_SOKOL_PRIVATE void _sapp_android_shutdown(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_shutdown(void) {
     /* try to cleanup while we still have a surface and can call cleanup_cb() */
     _sapp_android_cleanup();
     /* request exit */
     ANativeActivity_finish(_sapp.android.activity);
 }
 
-_SOKOL_PRIVATE void _sapp_android_frame(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_frame(void) {
     SOKOL_ASSERT(_sapp.android.display != EGL_NO_DISPLAY);
     SOKOL_ASSERT(_sapp.android.context != EGL_NO_CONTEXT);
     SOKOL_ASSERT(_sapp.android.surface != EGL_NO_SURFACE);
@@ -7003,17 +6984,17 @@ _SOKOL_PRIVATE void _sapp_android_frame(void) {printf("\n --: %s:: %s:%d ", __fu
     eglSwapBuffers(_sapp.android.display, _sapp.android.surface);
 }
 
-_SOKOL_PRIVATE bool _sapp_android_touch_event(const AInputEvent* e) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (AInputEvent_getType(e) != AINPUT_EVENT_TYPE_MOTION) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+_SOKOL_PRIVATE bool _sapp_android_touch_event(const AInputEvent* e) {
+    if (AInputEvent_getType(e) != AINPUT_EVENT_TYPE_MOTION) {
+        return false;
     }
     if (!_sapp_events_enabled()) {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        return false;
     }
     int32_t action_idx = AMotionEvent_getAction(e);
     int32_t action = action_idx & AMOTION_EVENT_ACTION_MASK;
     sapp_event_type type = SAPP_EVENTTYPE_INVALID;
-    switch (action) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    switch (action) {
         case AMOTION_EVENT_ACTION_DOWN:
             SOKOL_LOG("Touch: down");
         case AMOTION_EVENT_ACTION_POINTER_DOWN:
@@ -7036,13 +7017,13 @@ _SOKOL_PRIVATE bool _sapp_android_touch_event(const AInputEvent* e) {printf("\n 
         default:
             break;
     }
-    if (type == SAPP_EVENTTYPE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    if (type == SAPP_EVENTTYPE_INVALID) {
+        return false;
     }
     int32_t idx = action_idx >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
     _sapp_init_event(type);
     _sapp.event.num_touches = AMotionEvent_getPointerCount(e);
-    if (_sapp.event.num_touches > SAPP_MAX_TOUCHPOINTS) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.event.num_touches > SAPP_MAX_TOUCHPOINTS) {
         _sapp.event.num_touches = SAPP_MAX_TOUCHPOINTS;
     }
     for (int32_t i = 0; i < _sapp.event.num_touches; i++) {
@@ -7052,40 +7033,40 @@ _SOKOL_PRIVATE bool _sapp_android_touch_event(const AInputEvent* e) {printf("\n 
         dst->pos_y = (AMotionEvent_getRawY(e, i) / _sapp.window_height) * _sapp.framebuffer_height;
 
         if (action == AMOTION_EVENT_ACTION_POINTER_DOWN ||
-            action == AMOTION_EVENT_ACTION_POINTER_UP) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            action == AMOTION_EVENT_ACTION_POINTER_UP) {
             dst->changed = i == idx;
         } else {
             dst->changed = true;
         }
     }
     _sapp_call_event(&_sapp.event);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE bool _sapp_android_key_event(const AInputEvent* e) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (AInputEvent_getType(e) != AINPUT_EVENT_TYPE_KEY) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+_SOKOL_PRIVATE bool _sapp_android_key_event(const AInputEvent* e) {
+    if (AInputEvent_getType(e) != AINPUT_EVENT_TYPE_KEY) {
+        return false;
     }
-    if (AKeyEvent_getKeyCode(e) == AKEYCODE_BACK) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (AKeyEvent_getKeyCode(e) == AKEYCODE_BACK) {
         /* FIXME: this should be hooked into a "really quit?" mechanism
            so the app can ask the user for confirmation, this is currently
            generally missing in sokol_app.h
         */
         _sapp_android_shutdown();
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+        return true;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+    return false;
 }
 
-_SOKOL_PRIVATE int _sapp_android_input_cb(int fd, int events, void* data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if ((events & ALOOPER_EVENT_INPUT) == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_android_input_cb(int fd, int events, void* data) {
+    if ((events & ALOOPER_EVENT_INPUT) == 0) {
         SOKOL_LOG("_sapp_android_input_cb() encountered unsupported event");
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+        return 1;
     }
     SOKOL_ASSERT(_sapp.android.current.input);
     AInputEvent* event = NULL;
-    while (AInputQueue_getEvent(_sapp.android.current.input, &event) >= 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (AInputQueue_preDispatchEvent(_sapp.android.current.input, event) != 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (AInputQueue_getEvent(_sapp.android.current.input, &event) >= 0) {
+        if (AInputQueue_preDispatchEvent(_sapp.android.current.input, event) != 0) {
             continue;
         }
         int32_t handled = 0;
@@ -7094,23 +7075,23 @@ _SOKOL_PRIVATE int _sapp_android_input_cb(int fd, int events, void* data) {print
         }
         AInputQueue_finishEvent(_sapp.android.current.input, event, handled);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+    return 1;
 }
 
-_SOKOL_PRIVATE int _sapp_android_main_cb(int fd, int events, void* data) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if ((events & ALOOPER_EVENT_INPUT) == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_android_main_cb(int fd, int events, void* data) {
+    if ((events & ALOOPER_EVENT_INPUT) == 0) {
         SOKOL_LOG("_sapp_android_main_cb() encountered unsupported event");
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+        return 1;
     }
 
     _sapp_android_msg_t msg;
     if (read(fd, &msg, sizeof(msg)) != sizeof(msg)) {
         SOKOL_LOG("Could not write to read_from_main_fd");
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+        return 1;
     }
 
     pthread_mutex_lock(&_sapp.android.pt.mutex);
-    switch (msg) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    switch (msg) {
         case _SOKOL_ANDROID_MSG_CREATE:
             {
                 SOKOL_LOG("MSG_CREATE");
@@ -7141,11 +7122,11 @@ _SOKOL_PRIVATE int _sapp_android_main_cb(int fd, int events, void* data) {printf
             break;
         case _SOKOL_ANDROID_MSG_SET_NATIVE_WINDOW:
             SOKOL_LOG("MSG_SET_NATIVE_WINDOW");
-            if (_sapp.android.current.window != _sapp.android.pending.window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                if (_sapp.android.current.window != NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.android.current.window != _sapp.android.pending.window) {
+                if (_sapp.android.current.window != NULL) {
                     _sapp_android_cleanup_egl_surface();
                 }
-                if (_sapp.android.pending.window != NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.android.pending.window != NULL) {
                     SOKOL_LOG("Creating egl surface ...");
                     if (_sapp_android_init_egl_surface(_sapp.android.pending.window)) {
                         SOKOL_LOG("... ok!");
@@ -7160,11 +7141,11 @@ _SOKOL_PRIVATE int _sapp_android_main_cb(int fd, int events, void* data) {printf
             break;
         case _SOKOL_ANDROID_MSG_SET_INPUT_QUEUE:
             SOKOL_LOG("MSG_SET_INPUT_QUEUE");
-            if (_sapp.android.current.input != _sapp.android.pending.input) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                if (_sapp.android.current.input != NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.android.current.input != _sapp.android.pending.input) {
+                if (_sapp.android.current.input != NULL) {
                     AInputQueue_detachLooper(_sapp.android.current.input);
                 }
-                if (_sapp.android.pending.input != NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.android.pending.input != NULL) {
                     AInputQueue_attachLooper(
                         _sapp.android.pending.input,
                         _sapp.android.looper,
@@ -7187,19 +7168,19 @@ _SOKOL_PRIVATE int _sapp_android_main_cb(int fd, int events, void* data) {printf
     }
     pthread_cond_broadcast(&_sapp.android.pt.cond); /* signal "received" */
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 1;
+    return 1;
 }
 
-_SOKOL_PRIVATE bool _sapp_android_should_update(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_android_should_update(void) {
     bool is_in_front = _sapp.android.has_resumed && _sapp.android.has_focus;
     bool has_surface = _sapp.android.surface != EGL_NO_SURFACE;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return is_in_front && has_surface;
+    return is_in_front && has_surface;
 }
 
-_SOKOL_PRIVATE void _sapp_android_show_keyboard(bool shown) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_show_keyboard(bool shown) {
     SOKOL_ASSERT(_sapp.valid);
     /* This seems to be broken in the NDK, but there is (a very cumbersome) workaround... */
-    if (shown) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (shown) {
         SOKOL_LOG("Showing keyboard");
         ANativeActivity_showSoftInput(_sapp.android.activity, ANATIVEACTIVITY_SHOW_SOFT_INPUT_FORCED);
     } else {
@@ -7208,7 +7189,7 @@ _SOKOL_PRIVATE void _sapp_android_show_keyboard(bool shown) {printf("\n --: %s::
     }
 }
 
-_SOKOL_PRIVATE void* _sapp_android_loop(void* arg) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void* _sapp_android_loop(void* arg) {
     _SOKOL_UNUSED(arg);
     SOKOL_LOG("Loop thread started");
 
@@ -7227,7 +7208,7 @@ _SOKOL_PRIVATE void* _sapp_android_loop(void* arg) {printf("\n --: %s:: %s:%d ",
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
 
     /* main loop */
-    while (!_sapp.android.is_thread_stopping) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (!_sapp.android.is_thread_stopping) {
         /* sokol frame */
         if (_sapp_android_should_update()) {
             _sapp_android_frame();
@@ -7235,14 +7216,14 @@ _SOKOL_PRIVATE void* _sapp_android_loop(void* arg) {printf("\n --: %s:: %s:%d ",
 
         /* process all events (or stop early if app is requested to quit) */
         bool process_events = true;
-        while (process_events && !_sapp.android.is_thread_stopping) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        while (process_events && !_sapp.android.is_thread_stopping) {
             bool block_until_event = !_sapp.android.is_thread_stopping && !_sapp_android_should_update();
             process_events = ALooper_pollOnce(block_until_event ? -1 : 0, NULL, NULL, NULL) == ALOOPER_POLL_CALLBACK;
         }
     }
 
     /* cleanup thread */
-    if (_sapp.android.current.input != NULL) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.android.current.input != NULL) {
         AInputQueue_detachLooper(_sapp.android.current.input);
     }
 
@@ -7256,99 +7237,99 @@ _SOKOL_PRIVATE void* _sapp_android_loop(void* arg) {printf("\n --: %s:: %s:%d ",
     pthread_cond_broadcast(&_sapp.android.pt.cond);
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
     SOKOL_LOG("Loop thread done");
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return NULL;
+    return NULL;
 }
 
 /* android main/ui thread */
-_SOKOL_PRIVATE void _sapp_android_msg(_sapp_android_msg_t msg) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_msg(_sapp_android_msg_t msg) {
     if (write(_sapp.android.pt.write_from_main_fd, &msg, sizeof(msg)) != sizeof(msg)) {
         SOKOL_LOG("Could not write to write_from_main_fd");
     }
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_start(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_start(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onStart()");
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_resume(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_resume(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onResume()");
     _sapp_android_msg(_SOKOL_ANDROID_MSG_RESUME);
 }
 
-_SOKOL_PRIVATE void* _sapp_android_on_save_instance_state(ANativeActivity* activity, size_t* out_size) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void* _sapp_android_on_save_instance_state(ANativeActivity* activity, size_t* out_size) {
     SOKOL_LOG("NativeActivity onSaveInstanceState()");
     *out_size = 0;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return NULL;
+    return NULL;
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_window_focus_changed(ANativeActivity* activity, int has_focus) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_window_focus_changed(ANativeActivity* activity, int has_focus) {
     SOKOL_LOG("NativeActivity onWindowFocusChanged()");
-    if (has_focus) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (has_focus) {
         _sapp_android_msg(_SOKOL_ANDROID_MSG_FOCUS);
     } else {
         _sapp_android_msg(_SOKOL_ANDROID_MSG_NO_FOCUS);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_pause(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_pause(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onPause()");
     _sapp_android_msg(_SOKOL_ANDROID_MSG_PAUSE);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_stop(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_stop(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onStop()");
 }
 
-_SOKOL_PRIVATE void _sapp_android_msg_set_native_window(ANativeWindow* window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_msg_set_native_window(ANativeWindow* window) {
     pthread_mutex_lock(&_sapp.android.pt.mutex);
     _sapp.android.pending.window = window;
     _sapp_android_msg(_SOKOL_ANDROID_MSG_SET_NATIVE_WINDOW);
-    while (_sapp.android.current.window != window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (_sapp.android.current.window != window) {
         pthread_cond_wait(&_sapp.android.pt.cond, &_sapp.android.pt.mutex);
     }
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_native_window_created(ANativeActivity* activity, ANativeWindow* window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_native_window_created(ANativeActivity* activity, ANativeWindow* window) {
     SOKOL_LOG("NativeActivity onNativeWindowCreated()");
     _sapp_android_msg_set_native_window(window);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_native_window_destroyed(ANativeActivity* activity, ANativeWindow* window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_native_window_destroyed(ANativeActivity* activity, ANativeWindow* window) {
     SOKOL_LOG("NativeActivity onNativeWindowDestroyed()");
     _sapp_android_msg_set_native_window(NULL);
 }
 
-_SOKOL_PRIVATE void _sapp_android_msg_set_input_queue(AInputQueue* input) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_msg_set_input_queue(AInputQueue* input) {
     pthread_mutex_lock(&_sapp.android.pt.mutex);
     _sapp.android.pending.input = input;
     _sapp_android_msg(_SOKOL_ANDROID_MSG_SET_INPUT_QUEUE);
-    while (_sapp.android.current.input != input) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (_sapp.android.current.input != input) {
         pthread_cond_wait(&_sapp.android.pt.cond, &_sapp.android.pt.mutex);
     }
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_input_queue_created(ANativeActivity* activity, AInputQueue* queue) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_input_queue_created(ANativeActivity* activity, AInputQueue* queue) {
     SOKOL_LOG("NativeActivity onInputQueueCreated()");
     _sapp_android_msg_set_input_queue(queue);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_input_queue_destroyed(ANativeActivity* activity, AInputQueue* queue) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_input_queue_destroyed(ANativeActivity* activity, AInputQueue* queue) {
     SOKOL_LOG("NativeActivity onInputQueueDestroyed()");
     _sapp_android_msg_set_input_queue(NULL);
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_config_changed(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_config_changed(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onConfigurationChanged()");
     /* see android:configChanges in manifest */
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_low_memory(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_low_memory(ANativeActivity* activity) {
     SOKOL_LOG("NativeActivity onLowMemory()");
 }
 
-_SOKOL_PRIVATE void _sapp_android_on_destroy(ANativeActivity* activity) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_android_on_destroy(ANativeActivity* activity) {
     /*
      * For some reason even an empty app using nativeactivity.h will crash (WIN DEATH)
      * on my device (Moto X 2nd gen) when the app is removed from the task view
@@ -7362,7 +7343,7 @@ _SOKOL_PRIVATE void _sapp_android_on_destroy(ANativeActivity* activity) {printf(
     /* send destroy msg */
     pthread_mutex_lock(&_sapp.android.pt.mutex);
     _sapp_android_msg(_SOKOL_ANDROID_MSG_DESTROY);
-    while (!_sapp.android.is_thread_stopped) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (!_sapp.android.is_thread_stopped) {
         pthread_cond_wait(&_sapp.android.pt.cond, &_sapp.android.pt.mutex);
     }
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
@@ -7381,7 +7362,7 @@ _SOKOL_PRIVATE void _sapp_android_on_destroy(ANativeActivity* activity) {printf(
 }
 
 JNIEXPORT
-void ANativeActivity_onCreate(ANativeActivity* activity, void* saved_state, size_t saved_state_size) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+void ANativeActivity_onCreate(ANativeActivity* activity, void* saved_state, size_t saved_state_size) {
     SOKOL_LOG("NativeActivity onCreate()");
 
     sapp_desc desc = sokol_main(0, NULL);
@@ -7391,9 +7372,9 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* saved_state, size
     _sapp.android.activity = activity;
 
     int pipe_fd[2];
-    if (pipe(pipe_fd) != 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (pipe(pipe_fd) != 0) {
         SOKOL_LOG("Could not create thread pipe");
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+        return;
     }
     _sapp.android.pt.read_from_main_fd = pipe_fd[0];
     _sapp.android.pt.write_from_main_fd = pipe_fd[1];
@@ -7409,7 +7390,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* saved_state, size
 
     /* wait until main loop has started */
     pthread_mutex_lock(&_sapp.android.pt.mutex);
-    while (!_sapp.android.is_thread_started) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (!_sapp.android.is_thread_started) {
         pthread_cond_wait(&_sapp.android.pt.cond, &_sapp.android.pt.mutex);
     }
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
@@ -7417,7 +7398,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* saved_state, size
     /* send create msg */
     pthread_mutex_lock(&_sapp.android.pt.mutex);
     _sapp_android_msg(_SOKOL_ANDROID_MSG_CREATE);
-    while (!_sapp.android.has_created) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (!_sapp.android.has_created) {
         pthread_cond_wait(&_sapp.android.pt.cond, &_sapp.android.pt.mutex);
     }
     pthread_mutex_unlock(&_sapp.android.pt.mutex);
@@ -8285,23 +8266,23 @@ static const struct _sapp_x11_codepair {
   { 0xffbd /*XKB_KEY_KP_Equal*/,     '=' }
 };
 
-_SOKOL_PRIVATE int _sapp_x11_error_handler(Display* display, XErrorEvent* event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_x11_error_handler(Display* display, XErrorEvent* event) {
     _SOKOL_UNUSED(display);
     _sapp.x11.error_code = event->error_code;
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 
-_SOKOL_PRIVATE void _sapp_x11_grab_error_handler(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_grab_error_handler(void) {
     _sapp.x11.error_code = Success;
     XSetErrorHandler(_sapp_x11_error_handler);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_release_error_handler(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_release_error_handler(void) {
     XSync(_sapp.x11.display, False);
     XSetErrorHandler(NULL);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_init_extensions(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_init_extensions(void) {
     _sapp.x11.UTF8_STRING             = XInternAtom(_sapp.x11.display, "UTF8_STRING", False);
     _sapp.x11.WM_PROTOCOLS            = XInternAtom(_sapp.x11.display, "WM_PROTOCOLS", False);
     _sapp.x11.WM_DELETE_WINDOW        = XInternAtom(_sapp.x11.display, "WM_DELETE_WINDOW", False);
@@ -8315,13 +8296,13 @@ _SOKOL_PRIVATE void _sapp_x11_init_extensions(void) {printf("\n --: %s:: %s:%d "
     if (XQueryExtension(_sapp.x11.display, "XInputExtension", &_sapp.x11.xi.major_opcode, &_sapp.x11.xi.event_base, &_sapp.x11.xi.error_base)) {
         _sapp.x11.xi.major = 2;
         _sapp.x11.xi.minor = 0;
-        if (XIQueryVersion(_sapp.x11.display, &_sapp.x11.xi.major, &_sapp.x11.xi.minor) == Success) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (XIQueryVersion(_sapp.x11.display, &_sapp.x11.xi.major, &_sapp.x11.xi.minor) == Success) {
             _sapp.x11.xi.available = true;
         }
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_query_system_dpi(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_query_system_dpi(void) {
     /* from GLFW:
 
        NOTE: Default to the display-wide DPI as we don't currently have a policy
@@ -8335,13 +8316,13 @@ _SOKOL_PRIVATE void _sapp_x11_query_system_dpi(void) {printf("\n --: %s:: %s:%d 
              always the most accurate one
     */
     char* rms = XResourceManagerString(_sapp.x11.display);
-    if (rms) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (rms) {
         XrmDatabase db = XrmGetStringDatabase(rms);
-        if (db) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (db) {
             XrmValue value;
             char* type = NULL;
             if (XrmGetResource(db, "Xft.dpi", "Xft.Dpi", &type, &value)) {
-                if (type && strcmp(type, "String") == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (type && strcmp(type, "String") == 0) {
                     _sapp.x11.dpi = atof(value.addr);
                 }
             }
@@ -8350,13 +8331,13 @@ _SOKOL_PRIVATE void _sapp_x11_query_system_dpi(void) {printf("\n --: %s:: %s:%d 
     }
 }
 
-_SOKOL_PRIVATE bool _sapp_glx_has_ext(const char* ext, const char* extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_glx_has_ext(const char* ext, const char* extensions) {
     SOKOL_ASSERT(ext);
     const char* start = extensions;
-    while (true) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (true) {
         const char* where = strstr(start, ext);
-        if (!where) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        if (!where) {
+            return false;
         }
         const char* terminator = where + strlen(ext);
         if ((where == start) || (*(where - 1) == ' ')) {
@@ -8366,28 +8347,28 @@ _SOKOL_PRIVATE bool _sapp_glx_has_ext(const char* ext, const char* extensions) {
         }
         start = terminator;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return true;
+    return true;
 }
 
-_SOKOL_PRIVATE bool _sapp_glx_extsupported(const char* ext, const char* extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (extensions) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp_glx_has_ext(ext, extensions);
+_SOKOL_PRIVATE bool _sapp_glx_extsupported(const char* ext, const char* extensions) {
+    if (extensions) {
+        return _sapp_glx_has_ext(ext, extensions);
     }
     else {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return false;
+        return false;
     }
 }
 
 _SOKOL_PRIVATE void* _sapp_glx_getprocaddr(const char* procname)
 {
-    if (_sapp.glx.GetProcAddress) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (void*) _sapp.glx.GetProcAddress((const GLubyte*) procname);
+    if (_sapp.glx.GetProcAddress) {
+        return (void*) _sapp.glx.GetProcAddress((const GLubyte*) procname);
     }
-    else if (_sapp.glx.GetProcAddressARB) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (void*) _sapp.glx.GetProcAddressARB((const GLubyte*) procname);
+    else if (_sapp.glx.GetProcAddressARB) {
+        return (void*) _sapp.glx.GetProcAddressARB((const GLubyte*) procname);
     }
     else {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return dlsym(_sapp.glx.libgl, procname);
+        return dlsym(_sapp.glx.libgl, procname);
     }
 }
 
@@ -8395,11 +8376,11 @@ _SOKOL_PRIVATE void _sapp_glx_init() {
     const char* sonames[] = { "libGL.so.1", "libGL.so", 0 };
     for (int i = 0; sonames[i]; i++) {
         _sapp.glx.libgl = dlopen(sonames[i], RTLD_LAZY|RTLD_GLOBAL);
-        if (_sapp.glx.libgl) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.glx.libgl) {
             break;
         }
     }
-    if (!_sapp.glx.libgl) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.glx.libgl) {
         _sapp_fail("GLX: failed to load libGL");
     }
     _sapp.glx.GetFBConfigs          = (PFNGLXGETFBCONFIGSPROC)          dlsym(_sapp.glx.libgl, "glXGetFBConfigs");
@@ -8440,7 +8421,7 @@ _SOKOL_PRIVATE void _sapp_glx_init() {
     if (!_sapp.glx.QueryVersion(_sapp.x11.display, &_sapp.glx.major, &_sapp.glx.minor)) {
         _sapp_fail("GLX: Failed to query GLX version");
     }
-    if (_sapp.glx.major == 1 && _sapp.glx.minor < 3) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.glx.major == 1 && _sapp.glx.minor < 3) {
         _sapp_fail("GLX: GLX version 1.3 is required");
     }
     const char* exts = _sapp.glx.QueryExtensionsString(_sapp.x11.display, _sapp.x11.screen);
@@ -8460,10 +8441,10 @@ _SOKOL_PRIVATE void _sapp_glx_init() {
     _sapp.glx.ARB_create_context_profile = _sapp_glx_extsupported("GLX_ARB_create_context_profile", exts);
 }
 
-_SOKOL_PRIVATE int _sapp_glx_attrib(GLXFBConfig fbconfig, int attrib) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_glx_attrib(GLXFBConfig fbconfig, int attrib) {
     int value;
     _sapp.glx.GetFBConfigAttrib(_sapp.x11.display, fbconfig, attrib, &value);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return value;
+    return value;
 }
 
 _SOKOL_PRIVATE GLXFBConfig _sapp_glx_choosefbconfig() {
@@ -8478,12 +8459,12 @@ _SOKOL_PRIVATE GLXFBConfig _sapp_glx_choosefbconfig() {
            (VirtualBox GL) not setting the window bit on any GLXFBConfigs
     */
     vendor = _sapp.glx.GetClientString(_sapp.x11.display, GLX_VENDOR);
-    if (vendor && strcmp(vendor, "Chromium") == 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (vendor && strcmp(vendor, "Chromium") == 0) {
         trust_window_bit = false;
     }
 
     native_configs = _sapp.glx.GetFBConfigs(_sapp.x11.display, _sapp.x11.screen, &native_count);
-    if (!native_configs || !native_count) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!native_configs || !native_count) {
         _sapp_fail("GLX: No GLXFBConfigs returned");
     }
 
@@ -8500,7 +8481,7 @@ _SOKOL_PRIVATE GLXFBConfig _sapp_glx_choosefbconfig() {
         }
         /* Only consider window GLXFBConfigs */
         if (0 == (_sapp_glx_attrib(n, GLX_DRAWABLE_TYPE) & GLX_WINDOW_BIT)) {
-            if (trust_window_bit) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (trust_window_bit) {
                 continue;
             }
         }
@@ -8513,7 +8494,7 @@ _SOKOL_PRIVATE GLXFBConfig _sapp_glx_choosefbconfig() {
         if (_sapp_glx_attrib(n, GLX_DOUBLEBUFFER)) {
             u->doublebuffer = true;
         }
-        if (_sapp.glx.ARB_multisample) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.glx.ARB_multisample) {
             u->samples = _sapp_glx_attrib(n, GLX_SAMPLES);
         }
         u->handle = (uintptr_t) n;
@@ -8531,21 +8512,21 @@ _SOKOL_PRIVATE GLXFBConfig _sapp_glx_choosefbconfig() {
     desired.samples = _sapp.sample_count > 1 ? _sapp.sample_count : 0;
     closest = _sapp_gl_choose_fbconfig(&desired, usable_configs, usable_count);
     GLXFBConfig result = 0;
-    if (closest) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (closest) {
         result = (GLXFBConfig) closest->handle;
     }
     XFree(native_configs);
     SOKOL_FREE(usable_configs);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return result;
+    return result;
 }
 
-_SOKOL_PRIVATE void _sapp_glx_choose_visual(Visual** visual, int* depth) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_choose_visual(Visual** visual, int* depth) {
     GLXFBConfig native = _sapp_glx_choosefbconfig();
-    if (0 == native) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (0 == native) {
         _sapp_fail("GLX: Failed to find a suitable GLXFBConfig");
     }
     XVisualInfo* result = _sapp.glx.GetVisualFromFBConfig(_sapp.x11.display, native);
-    if (!result) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!result) {
         _sapp_fail("GLX: Failed to retrieve Visual for GLXFBConfig");
     }
     *visual = result->visual;
@@ -8553,7 +8534,7 @@ _SOKOL_PRIVATE void _sapp_glx_choose_visual(Visual** visual, int* depth) {printf
     XFree(result);
 }
 
-_SOKOL_PRIVATE void _sapp_glx_create_context(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_create_context(void) {
     GLXFBConfig native = _sapp_glx_choosefbconfig();
     if (0 == native){
         _sapp_fail("GLX: Failed to find a suitable GLXFBConfig (2)");
@@ -8570,46 +8551,46 @@ _SOKOL_PRIVATE void _sapp_glx_create_context(void) {printf("\n --: %s:: %s:%d ",
         0, 0
     };
     _sapp.glx.ctx = _sapp.glx.CreateContextAttribsARB(_sapp.x11.display, native, NULL, True, attribs);
-    if (!_sapp.glx.ctx) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.glx.ctx) {
         _sapp_fail("GLX: failed to create GL context");
     }
     _sapp_x11_release_error_handler();
     _sapp.glx.window = _sapp.glx.CreateWindow(_sapp.x11.display, native, _sapp.x11.window, NULL);
-    if (!_sapp.glx.window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.glx.window) {
         _sapp_fail("GLX: failed to create window");
     }
 }
 
-_SOKOL_PRIVATE void _sapp_glx_destroy_context(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.glx.window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_destroy_context(void) {
+    if (_sapp.glx.window) {
         _sapp.glx.DestroyWindow(_sapp.x11.display, _sapp.glx.window);
         _sapp.glx.window = 0;
     }
-    if (_sapp.glx.ctx) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.glx.ctx) {
         _sapp.glx.DestroyContext(_sapp.x11.display, _sapp.glx.ctx);
         _sapp.glx.ctx = 0;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_glx_make_current(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_make_current(void) {
     _sapp.glx.MakeCurrent(_sapp.x11.display, _sapp.glx.window, _sapp.glx.ctx);
 }
 
-_SOKOL_PRIVATE void _sapp_glx_swap_buffers(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_swap_buffers(void) {
     _sapp.glx.SwapBuffers(_sapp.x11.display, _sapp.glx.window);
 }
 
-_SOKOL_PRIVATE void _sapp_glx_swapinterval(int interval) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_glx_swapinterval(int interval) {
     _sapp_glx_make_current();
-    if (_sapp.glx.EXT_swap_control) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.glx.EXT_swap_control) {
         _sapp.glx.SwapIntervalEXT(_sapp.x11.display, _sapp.glx.window, interval);
     }
-    else if (_sapp.glx.MESA_swap_control) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    else if (_sapp.glx.MESA_swap_control) {
         _sapp.glx.SwapIntervalMESA(interval);
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_send_event(Atom type, int a, int b, int c, int d, int e) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_send_event(Atom type, int a, int b, int c, int d, int e) {
     XEvent event;
     memset(&event, 0, sizeof(event));
 
@@ -8629,7 +8610,7 @@ _SOKOL_PRIVATE void _sapp_x11_send_event(Atom type, int a, int b, int c, int d, 
                &event);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_query_window_size(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_query_window_size(void) {
     XWindowAttributes attribs;
     XGetWindowAttributes(_sapp.x11.display, _sapp.x11.window, &attribs);
     _sapp.window_width = attribs.width;
@@ -8638,10 +8619,10 @@ _SOKOL_PRIVATE void _sapp_x11_query_window_size(void) {printf("\n --: %s:: %s:%d
     _sapp.framebuffer_height = _sapp.window_height;
 }
 
-_SOKOL_PRIVATE void _sapp_x11_set_fullscreen(bool enable) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_set_fullscreen(bool enable) {
     /* NOTE: this function must be called after XMapWindow (which happens in _sapp_x11_show_window()) */
-    if (_sapp.x11.NET_WM_STATE && _sapp.x11.NET_WM_STATE_FULLSCREEN) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (enable) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.x11.NET_WM_STATE && _sapp.x11.NET_WM_STATE_FULLSCREEN) {
+        if (enable) {
             const int _NET_WM_STATE_ADD = 1;
             _sapp_x11_send_event(_sapp.x11.NET_WM_STATE,
                                 _NET_WM_STATE_ADD,
@@ -8659,7 +8640,7 @@ _SOKOL_PRIVATE void _sapp_x11_set_fullscreen(bool enable) {printf("\n --: %s:: %
     XFlush(_sapp.x11.display);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_create_hidden_cursor(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_create_hidden_cursor(void) {
     SOKOL_ASSERT(0 == _sapp.x11.hidden_cursor);
     const int w = 16;
     const int h = 16;
@@ -8673,14 +8654,14 @@ _SOKOL_PRIVATE void _sapp_x11_create_hidden_cursor(void) {printf("\n --: %s:: %s
     XcursorImageDestroy(img);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_toggle_fullscreen(void) {
     _sapp.fullscreen = !_sapp.fullscreen;
     _sapp_x11_set_fullscreen(_sapp.fullscreen);
     _sapp_x11_query_window_size();
 }
 
-_SOKOL_PRIVATE void _sapp_x11_show_mouse(bool show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_show_mouse(bool show) {
+    if (show) {
         XUndefineCursor(_sapp.x11.display, _sapp.x11.window);
     }
     else {
@@ -8688,15 +8669,15 @@ _SOKOL_PRIVATE void _sapp_x11_show_mouse(bool show) {printf("\n --: %s:: %s:%d "
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (lock == _sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+_SOKOL_PRIVATE void _sapp_x11_lock_mouse(bool lock) {
+    if (lock == _sapp.mouse.locked) {
+        return;
     }
     _sapp.mouse.dx = 0.0f;
     _sapp.mouse.dy = 0.0f;
     _sapp.mouse.locked = lock;
-    if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        if (_sapp.x11.xi.available) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.mouse.locked) {
+        if (_sapp.x11.xi.available) {
             XIEventMask em;
             unsigned char mask[XIMaskLen(XI_RawMotion)] = { 0 }; // XIMaskLen is a macro
             em.deviceid = XIAllMasterDevices;
@@ -8716,7 +8697,7 @@ _SOKOL_PRIVATE void _sapp_x11_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d "
             CurrentTime);               // time
     }
     else {
-        if (_sapp.x11.xi.available) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.x11.xi.available) {
             XIEventMask em;
             unsigned char mask[] = { 0 };
             em.deviceid = XIAllMasterDevices;
@@ -8730,7 +8711,7 @@ _SOKOL_PRIVATE void _sapp_x11_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d "
     XFlush(_sapp.x11.display);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_update_window_title(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_update_window_title(void) {
     Xutf8SetWMProperties(_sapp.x11.display,
         _sapp.x11.window,
         _sapp.window_title, _sapp.window_title,
@@ -8748,7 +8729,7 @@ _SOKOL_PRIVATE void _sapp_x11_update_window_title(void) {printf("\n --: %s:: %s:
     XFlush(_sapp.x11.display);
 }
 
-_SOKOL_PRIVATE void _sapp_x11_create_window(Visual* visual, int depth) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_create_window(Visual* visual, int depth) {
     _sapp.x11.colormap = XCreateColormap(_sapp.x11.display, _sapp.x11.root, visual, AllocNone);
     XSetWindowAttributes wa;
     memset(&wa, 0, sizeof(wa));
@@ -8772,7 +8753,7 @@ _SOKOL_PRIVATE void _sapp_x11_create_window(Visual* visual, int depth) {printf("
                                      wamask,
                                      &wa);
     _sapp_x11_release_error_handler();
-    if (!_sapp.x11.window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.x11.window) {
         _sapp_fail("X11: Failed to create window");
     }
     Atom protocols[] = {
@@ -8789,26 +8770,26 @@ _SOKOL_PRIVATE void _sapp_x11_create_window(Visual* visual, int depth) {printf("
     _sapp_x11_update_window_title();
 }
 
-_SOKOL_PRIVATE void _sapp_x11_destroy_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.x11.window) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_destroy_window(void) {
+    if (_sapp.x11.window) {
         XUnmapWindow(_sapp.x11.display, _sapp.x11.window);
         XDestroyWindow(_sapp.x11.display, _sapp.x11.window);
         _sapp.x11.window = 0;
     }
-    if (_sapp.x11.colormap) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.x11.colormap) {
         XFreeColormap(_sapp.x11.display, _sapp.x11.colormap);
         _sapp.x11.colormap = 0;
     }
     XFlush(_sapp.x11.display);
 }
 
-_SOKOL_PRIVATE bool _sapp_x11_window_visible(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE bool _sapp_x11_window_visible(void) {
     XWindowAttributes wa;
     XGetWindowAttributes(_sapp.x11.display, _sapp.x11.window, &wa);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return wa.map_state == IsViewable;
+    return wa.map_state == IsViewable;
 }
 
-_SOKOL_PRIVATE void _sapp_x11_show_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_show_window(void) {
     if (!_sapp_x11_window_visible()) {
         XMapWindow(_sapp.x11.display, _sapp.x11.window);
         XRaiseWindow(_sapp.x11.display, _sapp.x11.window);
@@ -8816,12 +8797,12 @@ _SOKOL_PRIVATE void _sapp_x11_show_window(void) {printf("\n --: %s:: %s:%d ", __
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_hide_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_hide_window(void) {
     XUnmapWindow(_sapp.x11.display, _sapp.x11.window);
     XFlush(_sapp.x11.display);
 }
 
-_SOKOL_PRIVATE unsigned long _sapp_x11_get_window_property(Atom property, Atom type, unsigned char** value) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE unsigned long _sapp_x11_get_window_property(Atom property, Atom type, unsigned char** value) {
     Atom actualType;
     int actualFormat;
     unsigned long itemCount, bytesAfter;
@@ -8837,59 +8818,59 @@ _SOKOL_PRIVATE unsigned long _sapp_x11_get_window_property(Atom property, Atom t
                        &itemCount,
                        &bytesAfter,
                        value);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return itemCount;
+    return itemCount;
 }
 
-_SOKOL_PRIVATE int _sapp_x11_get_window_state(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int _sapp_x11_get_window_state(void) {
     int result = WithdrawnState;
     struct {
         CARD32 state;
         Window icon;
     } *state = NULL;
 
-    if (_sapp_x11_get_window_property(_sapp.x11.WM_STATE, _sapp.x11.WM_STATE, (unsigned char**)&state) >= 2) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp_x11_get_window_property(_sapp.x11.WM_STATE, _sapp.x11.WM_STATE, (unsigned char**)&state) >= 2) {
         result = state->state;
     }
-    if (state) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (state) {
         XFree(state);
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return result;
+    return result;
 }
 
-_SOKOL_PRIVATE uint32_t _sapp_x11_mod(int x11_mods) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE uint32_t _sapp_x11_mod(int x11_mods) {
     uint32_t mods = 0;
-    if (x11_mods & ShiftMask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (x11_mods & ShiftMask) {
         mods |= SAPP_MODIFIER_SHIFT;
     }
-    if (x11_mods & ControlMask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (x11_mods & ControlMask) {
         mods |= SAPP_MODIFIER_CTRL;
     }
-    if (x11_mods & Mod1Mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (x11_mods & Mod1Mask) {
         mods |= SAPP_MODIFIER_ALT;
     }
-    if (x11_mods & Mod4Mask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (x11_mods & Mod4Mask) {
         mods |= SAPP_MODIFIER_SUPER;
     }
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return mods;
+    return mods;
 }
 
-_SOKOL_PRIVATE void _sapp_x11_app_event(sapp_event_type type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_app_event(sapp_event_type type) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp_call_event(&_sapp.event);
     }
 }
 
-_SOKOL_PRIVATE sapp_mousebutton _sapp_x11_translate_button(const XEvent* event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    switch (event->xbutton.button) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        case Button1: printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_MOUSEBUTTON_LEFT;
-        case Button2: printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_MOUSEBUTTON_MIDDLE;
-        case Button3: printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_MOUSEBUTTON_RIGHT;
-        default:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_MOUSEBUTTON_INVALID;
+_SOKOL_PRIVATE sapp_mousebutton _sapp_x11_translate_button(const XEvent* event) {
+    switch (event->xbutton.button) {
+        case Button1: return SAPP_MOUSEBUTTON_LEFT;
+        case Button2: return SAPP_MOUSEBUTTON_MIDDLE;
+        case Button3: return SAPP_MOUSEBUTTON_RIGHT;
+        default:      return SAPP_MOUSEBUTTON_INVALID;
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_mouse_event(sapp_event_type type, sapp_mousebutton btn, uint32_t mods) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_mouse_event(sapp_event_type type, sapp_mousebutton btn, uint32_t mods) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.mouse_button = btn;
@@ -8898,7 +8879,7 @@ _SOKOL_PRIVATE void _sapp_x11_mouse_event(sapp_event_type type, sapp_mousebutton
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_scroll_event(float x, float y, uint32_t mods) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_scroll_event(float x, float y, uint32_t mods) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(SAPP_EVENTTYPE_MOUSE_SCROLL);
         _sapp.event.modifiers = mods;
@@ -8908,7 +8889,7 @@ _SOKOL_PRIVATE void _sapp_x11_scroll_event(float x, float y, uint32_t mods) {pri
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_key_event(sapp_event_type type, sapp_keycode key, bool repeat, uint32_t mods) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_key_event(sapp_event_type type, sapp_keycode key, bool repeat, uint32_t mods) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(type);
         _sapp.event.key_code = key;
@@ -8927,7 +8908,7 @@ _SOKOL_PRIVATE void _sapp_x11_key_event(sapp_event_type type, sapp_keycode key, 
     }
 }
 
-_SOKOL_PRIVATE void _sapp_x11_char_event(uint32_t chr, bool repeat, uint32_t mods) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_char_event(uint32_t chr, bool repeat, uint32_t mods) {
     if (_sapp_events_enabled()) {
         _sapp_init_event(SAPP_EVENTTYPE_CHAR);
         _sapp.event.char_code = chr;
@@ -8937,144 +8918,144 @@ _SOKOL_PRIVATE void _sapp_x11_char_event(uint32_t chr, bool repeat, uint32_t mod
     }
 }
 
-_SOKOL_PRIVATE sapp_keycode _sapp_x11_translate_key(int scancode) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE sapp_keycode _sapp_x11_translate_key(int scancode) {
     int dummy;
     KeySym* keysyms = XGetKeyboardMapping(_sapp.x11.display, scancode, 1, &dummy);
     SOKOL_ASSERT(keysyms);
     KeySym keysym = keysyms[0];
     XFree(keysyms);
-    switch (keysym) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        case XK_Escape:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_ESCAPE;
-        case XK_Tab:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_TAB;
-        case XK_Shift_L:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT_SHIFT;
-        case XK_Shift_R:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT_SHIFT;
-        case XK_Control_L:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT_CONTROL;
-        case XK_Control_R:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT_CONTROL;
+    switch (keysym) {
+        case XK_Escape:         return SAPP_KEYCODE_ESCAPE;
+        case XK_Tab:            return SAPP_KEYCODE_TAB;
+        case XK_Shift_L:        return SAPP_KEYCODE_LEFT_SHIFT;
+        case XK_Shift_R:        return SAPP_KEYCODE_RIGHT_SHIFT;
+        case XK_Control_L:      return SAPP_KEYCODE_LEFT_CONTROL;
+        case XK_Control_R:      return SAPP_KEYCODE_RIGHT_CONTROL;
         case XK_Meta_L:
-        case XK_Alt_L:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT_ALT;
+        case XK_Alt_L:          return SAPP_KEYCODE_LEFT_ALT;
         case XK_Mode_switch:    /* Mapped to Alt_R on many keyboards */
         case XK_ISO_Level3_Shift: /* AltGr on at least some machines */
         case XK_Meta_R:
-        case XK_Alt_R:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT_ALT;
-        case XK_Super_L:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT_SUPER;
-        case XK_Super_R:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT_SUPER;
-        case XK_Menu:           printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_MENU;
-        case XK_Num_Lock:       printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_NUM_LOCK;
-        case XK_Caps_Lock:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_CAPS_LOCK;
-        case XK_Print:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_PRINT_SCREEN;
-        case XK_Scroll_Lock:    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_SCROLL_LOCK;
-        case XK_Pause:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_PAUSE;
-        case XK_Delete:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_DELETE;
-        case XK_BackSpace:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_BACKSPACE;
-        case XK_Return:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_ENTER;
-        case XK_Home:           printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_HOME;
-        case XK_End:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_END;
-        case XK_Page_Up:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_PAGE_UP;
-        case XK_Page_Down:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_PAGE_DOWN;
-        case XK_Insert:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_INSERT;
-        case XK_Left:           printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT;
-        case XK_Right:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT;
-        case XK_Down:           printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_DOWN;
-        case XK_Up:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_UP;
-        case XK_F1:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F1;
-        case XK_F2:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F2;
-        case XK_F3:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F3;
-        case XK_F4:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F4;
-        case XK_F5:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F5;
-        case XK_F6:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F6;
-        case XK_F7:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F7;
-        case XK_F8:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F8;
-        case XK_F9:             printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F9;
-        case XK_F10:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F10;
-        case XK_F11:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F11;
-        case XK_F12:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F12;
-        case XK_F13:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F13;
-        case XK_F14:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F14;
-        case XK_F15:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F15;
-        case XK_F16:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F16;
-        case XK_F17:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F17;
-        case XK_F18:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F18;
-        case XK_F19:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F19;
-        case XK_F20:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F20;
-        case XK_F21:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F21;
-        case XK_F22:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F22;
-        case XK_F23:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F23;
-        case XK_F24:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F24;
-        case XK_F25:            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F25;
+        case XK_Alt_R:          return SAPP_KEYCODE_RIGHT_ALT;
+        case XK_Super_L:        return SAPP_KEYCODE_LEFT_SUPER;
+        case XK_Super_R:        return SAPP_KEYCODE_RIGHT_SUPER;
+        case XK_Menu:           return SAPP_KEYCODE_MENU;
+        case XK_Num_Lock:       return SAPP_KEYCODE_NUM_LOCK;
+        case XK_Caps_Lock:      return SAPP_KEYCODE_CAPS_LOCK;
+        case XK_Print:          return SAPP_KEYCODE_PRINT_SCREEN;
+        case XK_Scroll_Lock:    return SAPP_KEYCODE_SCROLL_LOCK;
+        case XK_Pause:          return SAPP_KEYCODE_PAUSE;
+        case XK_Delete:         return SAPP_KEYCODE_DELETE;
+        case XK_BackSpace:      return SAPP_KEYCODE_BACKSPACE;
+        case XK_Return:         return SAPP_KEYCODE_ENTER;
+        case XK_Home:           return SAPP_KEYCODE_HOME;
+        case XK_End:            return SAPP_KEYCODE_END;
+        case XK_Page_Up:        return SAPP_KEYCODE_PAGE_UP;
+        case XK_Page_Down:      return SAPP_KEYCODE_PAGE_DOWN;
+        case XK_Insert:         return SAPP_KEYCODE_INSERT;
+        case XK_Left:           return SAPP_KEYCODE_LEFT;
+        case XK_Right:          return SAPP_KEYCODE_RIGHT;
+        case XK_Down:           return SAPP_KEYCODE_DOWN;
+        case XK_Up:             return SAPP_KEYCODE_UP;
+        case XK_F1:             return SAPP_KEYCODE_F1;
+        case XK_F2:             return SAPP_KEYCODE_F2;
+        case XK_F3:             return SAPP_KEYCODE_F3;
+        case XK_F4:             return SAPP_KEYCODE_F4;
+        case XK_F5:             return SAPP_KEYCODE_F5;
+        case XK_F6:             return SAPP_KEYCODE_F6;
+        case XK_F7:             return SAPP_KEYCODE_F7;
+        case XK_F8:             return SAPP_KEYCODE_F8;
+        case XK_F9:             return SAPP_KEYCODE_F9;
+        case XK_F10:            return SAPP_KEYCODE_F10;
+        case XK_F11:            return SAPP_KEYCODE_F11;
+        case XK_F12:            return SAPP_KEYCODE_F12;
+        case XK_F13:            return SAPP_KEYCODE_F13;
+        case XK_F14:            return SAPP_KEYCODE_F14;
+        case XK_F15:            return SAPP_KEYCODE_F15;
+        case XK_F16:            return SAPP_KEYCODE_F16;
+        case XK_F17:            return SAPP_KEYCODE_F17;
+        case XK_F18:            return SAPP_KEYCODE_F18;
+        case XK_F19:            return SAPP_KEYCODE_F19;
+        case XK_F20:            return SAPP_KEYCODE_F20;
+        case XK_F21:            return SAPP_KEYCODE_F21;
+        case XK_F22:            return SAPP_KEYCODE_F22;
+        case XK_F23:            return SAPP_KEYCODE_F23;
+        case XK_F24:            return SAPP_KEYCODE_F24;
+        case XK_F25:            return SAPP_KEYCODE_F25;
 
-        case XK_KP_Divide:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_DIVIDE;
-        case XK_KP_Multiply:    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_MULTIPLY;
-        case XK_KP_Subtract:    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_SUBTRACT;
-        case XK_KP_Add:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_ADD;
+        case XK_KP_Divide:      return SAPP_KEYCODE_KP_DIVIDE;
+        case XK_KP_Multiply:    return SAPP_KEYCODE_KP_MULTIPLY;
+        case XK_KP_Subtract:    return SAPP_KEYCODE_KP_SUBTRACT;
+        case XK_KP_Add:         return SAPP_KEYCODE_KP_ADD;
 
-        case XK_KP_Insert:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_0;
-        case XK_KP_End:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_1;
-        case XK_KP_Down:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_2;
-        case XK_KP_Page_Down:   printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_3;
-        case XK_KP_Left:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_4;
-        case XK_KP_Begin:       printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_5;
-        case XK_KP_Right:       printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_6;
-        case XK_KP_Home:        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_7;
-        case XK_KP_Up:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_8;
-        case XK_KP_Page_Up:     printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_9;
-        case XK_KP_Delete:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_DECIMAL;
-        case XK_KP_Equal:       printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_EQUAL;
-        case XK_KP_Enter:       printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_KP_ENTER;
+        case XK_KP_Insert:      return SAPP_KEYCODE_KP_0;
+        case XK_KP_End:         return SAPP_KEYCODE_KP_1;
+        case XK_KP_Down:        return SAPP_KEYCODE_KP_2;
+        case XK_KP_Page_Down:   return SAPP_KEYCODE_KP_3;
+        case XK_KP_Left:        return SAPP_KEYCODE_KP_4;
+        case XK_KP_Begin:       return SAPP_KEYCODE_KP_5;
+        case XK_KP_Right:       return SAPP_KEYCODE_KP_6;
+        case XK_KP_Home:        return SAPP_KEYCODE_KP_7;
+        case XK_KP_Up:          return SAPP_KEYCODE_KP_8;
+        case XK_KP_Page_Up:     return SAPP_KEYCODE_KP_9;
+        case XK_KP_Delete:      return SAPP_KEYCODE_KP_DECIMAL;
+        case XK_KP_Equal:       return SAPP_KEYCODE_KP_EQUAL;
+        case XK_KP_Enter:       return SAPP_KEYCODE_KP_ENTER;
 
-        case XK_a:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_A;
-        case XK_b:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_B;
-        case XK_c:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_C;
-        case XK_d:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_D;
-        case XK_e:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_E;
-        case XK_f:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_F;
-        case XK_g:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_G;
-        case XK_h:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_H;
-        case XK_i:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_I;
-        case XK_j:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_J;
-        case XK_k:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_K;
-        case XK_l:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_L;
-        case XK_m:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_M;
-        case XK_n:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_N;
-        case XK_o:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_O;
-        case XK_p:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_P;
-        case XK_q:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_Q;
-        case XK_r:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_R;
-        case XK_s:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_S;
-        case XK_t:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_T;
-        case XK_u:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_U;
-        case XK_v:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_V;
-        case XK_w:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_W;
-        case XK_x:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_X;
-        case XK_y:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_Y;
-        case XK_z:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_Z;
-        case XK_1:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_1;
-        case XK_2:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_2;
-        case XK_3:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_3;
-        case XK_4:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_4;
-        case XK_5:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_5;
-        case XK_6:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_6;
-        case XK_7:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_7;
-        case XK_8:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_8;
-        case XK_9:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_9;
-        case XK_0:              printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_0;
-        case XK_space:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_SPACE;
-        case XK_minus:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_MINUS;
-        case XK_equal:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_EQUAL;
-        case XK_bracketleft:    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_LEFT_BRACKET;
-        case XK_bracketright:   printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_RIGHT_BRACKET;
-        case XK_backslash:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_BACKSLASH;
-        case XK_semicolon:      printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_SEMICOLON;
-        case XK_apostrophe:     printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_APOSTROPHE;
-        case XK_grave:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_GRAVE_ACCENT;
-        case XK_comma:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_COMMA;
-        case XK_period:         printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_PERIOD;
-        case XK_slash:          printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_SLASH;
-        case XK_less:           printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_WORLD_1; /* At least in some layouts... */
-        default:                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return SAPP_KEYCODE_INVALID;
+        case XK_a:              return SAPP_KEYCODE_A;
+        case XK_b:              return SAPP_KEYCODE_B;
+        case XK_c:              return SAPP_KEYCODE_C;
+        case XK_d:              return SAPP_KEYCODE_D;
+        case XK_e:              return SAPP_KEYCODE_E;
+        case XK_f:              return SAPP_KEYCODE_F;
+        case XK_g:              return SAPP_KEYCODE_G;
+        case XK_h:              return SAPP_KEYCODE_H;
+        case XK_i:              return SAPP_KEYCODE_I;
+        case XK_j:              return SAPP_KEYCODE_J;
+        case XK_k:              return SAPP_KEYCODE_K;
+        case XK_l:              return SAPP_KEYCODE_L;
+        case XK_m:              return SAPP_KEYCODE_M;
+        case XK_n:              return SAPP_KEYCODE_N;
+        case XK_o:              return SAPP_KEYCODE_O;
+        case XK_p:              return SAPP_KEYCODE_P;
+        case XK_q:              return SAPP_KEYCODE_Q;
+        case XK_r:              return SAPP_KEYCODE_R;
+        case XK_s:              return SAPP_KEYCODE_S;
+        case XK_t:              return SAPP_KEYCODE_T;
+        case XK_u:              return SAPP_KEYCODE_U;
+        case XK_v:              return SAPP_KEYCODE_V;
+        case XK_w:              return SAPP_KEYCODE_W;
+        case XK_x:              return SAPP_KEYCODE_X;
+        case XK_y:              return SAPP_KEYCODE_Y;
+        case XK_z:              return SAPP_KEYCODE_Z;
+        case XK_1:              return SAPP_KEYCODE_1;
+        case XK_2:              return SAPP_KEYCODE_2;
+        case XK_3:              return SAPP_KEYCODE_3;
+        case XK_4:              return SAPP_KEYCODE_4;
+        case XK_5:              return SAPP_KEYCODE_5;
+        case XK_6:              return SAPP_KEYCODE_6;
+        case XK_7:              return SAPP_KEYCODE_7;
+        case XK_8:              return SAPP_KEYCODE_8;
+        case XK_9:              return SAPP_KEYCODE_9;
+        case XK_0:              return SAPP_KEYCODE_0;
+        case XK_space:          return SAPP_KEYCODE_SPACE;
+        case XK_minus:          return SAPP_KEYCODE_MINUS;
+        case XK_equal:          return SAPP_KEYCODE_EQUAL;
+        case XK_bracketleft:    return SAPP_KEYCODE_LEFT_BRACKET;
+        case XK_bracketright:   return SAPP_KEYCODE_RIGHT_BRACKET;
+        case XK_backslash:      return SAPP_KEYCODE_BACKSLASH;
+        case XK_semicolon:      return SAPP_KEYCODE_SEMICOLON;
+        case XK_apostrophe:     return SAPP_KEYCODE_APOSTROPHE;
+        case XK_grave:          return SAPP_KEYCODE_GRAVE_ACCENT;
+        case XK_comma:          return SAPP_KEYCODE_COMMA;
+        case XK_period:         return SAPP_KEYCODE_PERIOD;
+        case XK_slash:          return SAPP_KEYCODE_SLASH;
+        case XK_less:           return SAPP_KEYCODE_WORLD_1; /* At least in some layouts... */
+        default:                return SAPP_KEYCODE_INVALID;
     }
 }
 
-_SOKOL_PRIVATE int32_t _sapp_x11_keysym_to_unicode(KeySym keysym) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE int32_t _sapp_x11_keysym_to_unicode(KeySym keysym) {
     int min = 0;
     int max = sizeof(_sapp_x11_keysymtab) / sizeof(struct _sapp_x11_codepair) - 1;
     int mid;
@@ -9083,45 +9064,45 @@ _SOKOL_PRIVATE int32_t _sapp_x11_keysym_to_unicode(KeySym keysym) {printf("\n --
     if ((keysym >= 0x0020 && keysym <= 0x007e) ||
         (keysym >= 0x00a0 && keysym <= 0x00ff))
     {
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return keysym;
+        return keysym;
     }
 
     /* Also check for directly encoded 24-bit UCS characters */
-    if ((keysym & 0xff000000) == 0x01000000) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return keysym & 0x00ffffff;
+    if ((keysym & 0xff000000) == 0x01000000) {
+        return keysym & 0x00ffffff;
     }
 
     /* Binary search in table */
-    while (max >= min) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (max >= min) {
         mid = (min + max) / 2;
-        if (_sapp_x11_keysymtab[mid].keysym < keysym) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp_x11_keysymtab[mid].keysym < keysym) {
             min = mid + 1;
         }
-        else if (_sapp_x11_keysymtab[mid].keysym > keysym) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        else if (_sapp_x11_keysymtab[mid].keysym > keysym) {
             max = mid - 1;
         }
         else {
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp_x11_keysymtab[mid].ucs;
+            return _sapp_x11_keysymtab[mid].ucs;
         }
     }
 
     /* No matching Unicode value found */
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return -1;
+    return -1;
 }
 
 // XLib manual says keycodes are in the range [8, 255] inclusive.
 // https://tronche.com/gui/x/xlib/input/keyboard-encoding.html
 static bool _sapp_x11_keycodes[256];
 
-_SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    switch (event->type) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {
+    switch (event->type) {
         case GenericEvent:
-            if (_sapp.mouse.locked && _sapp.x11.xi.available) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                if (event->xcookie.extension == _sapp.x11.xi.major_opcode) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.mouse.locked && _sapp.x11.xi.available) {
+                if (event->xcookie.extension == _sapp.x11.xi.major_opcode) {
                     if (XGetEventData(_sapp.x11.display, &event->xcookie)) {
-                        if (event->xcookie.evtype == XI_RawMotion) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        if (event->xcookie.evtype == XI_RawMotion) {
                             XIRawEvent* re = (XIRawEvent*) event->xcookie.data;
-                            if (re->valuators.mask_len) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                            if (re->valuators.mask_len) {
                                 const double* values = re->raw_values;
                                 if (XIMaskIsSet(re->valuators.mask, 0)) {
                                     _sapp.mouse.dx = (float) *values;
@@ -9140,7 +9121,7 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
             break;
         case FocusOut:
             /* if focus is lost for any reason, and we're in mouse locked mode, disable mouse lock */
-            if (_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.mouse.locked) {
                 _sapp_x11_lock_mouse(false);
             }
             break;
@@ -9151,13 +9132,13 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
                 bool repeat = _sapp_x11_keycodes[keycode & 0xFF];
                 _sapp_x11_keycodes[keycode & 0xFF] = true;
                 const uint32_t mods = _sapp_x11_mod(event->xkey.state);
-                if (key != SAPP_KEYCODE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (key != SAPP_KEYCODE_INVALID) {
                     _sapp_x11_key_event(SAPP_EVENTTYPE_KEY_DOWN, key, repeat, mods);
                 }
                 KeySym keysym;
                 XLookupString(&event->xkey, NULL, 0, &keysym, NULL);
                 int32_t chr = _sapp_x11_keysym_to_unicode(keysym);
-                if (chr > 0) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (chr > 0) {
                     _sapp_x11_char_event((uint32_t)chr, repeat, mods);
                 }
             }
@@ -9167,7 +9148,7 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
                 int keycode = event->xkey.keycode;
                 const sapp_keycode key = _sapp_x11_translate_key(keycode);
                 _sapp_x11_keycodes[keycode & 0xFF] = false;
-                if (key != SAPP_KEYCODE_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (key != SAPP_KEYCODE_INVALID) {
                     const uint32_t mods = _sapp_x11_mod(event->xkey.state);
                     _sapp_x11_key_event(SAPP_EVENTTYPE_KEY_UP, key, false, mods);
                 }
@@ -9177,13 +9158,13 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
             {
                 const sapp_mousebutton btn = _sapp_x11_translate_button(event);
                 const uint32_t mods = _sapp_x11_mod(event->xbutton.state);
-                if (btn != SAPP_MOUSEBUTTON_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (btn != SAPP_MOUSEBUTTON_INVALID) {
                     _sapp_x11_mouse_event(SAPP_EVENTTYPE_MOUSE_DOWN, btn, mods);
                     _sapp.x11.mouse_buttons |= (1 << btn);
                 }
                 else {
                     /* might be a scroll event */
-                    switch (event->xbutton.button) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    switch (event->xbutton.button) {
                         case 4: _sapp_x11_scroll_event(0.0f, 1.0f, mods); break;
                         case 5: _sapp_x11_scroll_event(0.0f, -1.0f, mods); break;
                         case 6: _sapp_x11_scroll_event(1.0f, 0.0f, mods); break;
@@ -9195,7 +9176,7 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
         case ButtonRelease:
             {
                 const sapp_mousebutton btn = _sapp_x11_translate_button(event);
-                if (btn != SAPP_MOUSEBUTTON_INVALID) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (btn != SAPP_MOUSEBUTTON_INVALID) {
                     _sapp_x11_mouse_event(SAPP_EVENTTYPE_MOUSE_UP, btn, _sapp_x11_mod(event->xbutton.state));
                     _sapp.x11.mouse_buttons &= ~(1 << btn);
                 }
@@ -9203,20 +9184,20 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
             break;
         case EnterNotify:
             /* don't send enter/leave events while mouse button held down */
-            if (0 == _sapp.x11.mouse_buttons) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (0 == _sapp.x11.mouse_buttons) {
                 _sapp_x11_mouse_event(SAPP_EVENTTYPE_MOUSE_ENTER, SAPP_MOUSEBUTTON_INVALID, _sapp_x11_mod(event->xcrossing.state));
             }
             break;
         case LeaveNotify:
-            if (0 == _sapp.x11.mouse_buttons) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (0 == _sapp.x11.mouse_buttons) {
                 _sapp_x11_mouse_event(SAPP_EVENTTYPE_MOUSE_LEAVE, SAPP_MOUSEBUTTON_INVALID, _sapp_x11_mod(event->xcrossing.state));
             }
             break;
         case MotionNotify:
-            if (!_sapp.mouse.locked) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (!_sapp.mouse.locked) {
                 const float new_x = (float) event->xmotion.x;
                 const float new_y = (float) event->xmotion.y;
-                if (_sapp.mouse.pos_valid) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (_sapp.mouse.pos_valid) {
                     _sapp.mouse.dx = new_x - _sapp.mouse.x;
                     _sapp.mouse.dy = new_y - _sapp.mouse.y;
                 }
@@ -9236,15 +9217,15 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
             }
             break;
         case PropertyNotify:
-            if (event->xproperty.state == PropertyNewValue) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-                if (event->xproperty.atom == _sapp.x11.WM_STATE) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (event->xproperty.state == PropertyNewValue) {
+                if (event->xproperty.atom == _sapp.x11.WM_STATE) {
                     const int state = _sapp_x11_get_window_state();
-                    if (state != _sapp.x11.window_state) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                    if (state != _sapp.x11.window_state) {
                         _sapp.x11.window_state = state;
-                        if (state == IconicState) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        if (state == IconicState) {
                             _sapp_x11_app_event(SAPP_EVENTTYPE_ICONIFIED);
                         }
-                        else if (state == NormalState) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                        else if (state == NormalState) {
                             _sapp_x11_app_event(SAPP_EVENTTYPE_RESTORED);
                         }
                     }
@@ -9252,9 +9233,9 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
             }
             break;
         case ClientMessage:
-            if (event->xclient.message_type == _sapp.x11.WM_PROTOCOLS) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (event->xclient.message_type == _sapp.x11.WM_PROTOCOLS) {
                 const Atom protocol = event->xclient.data.l[0];
-                if (protocol == _sapp.x11.WM_DELETE_WINDOW) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+                if (protocol == _sapp.x11.WM_DELETE_WINDOW) {
                     _sapp.quit_requested = true;
                 }
             }
@@ -9264,14 +9245,14 @@ _SOKOL_PRIVATE void _sapp_x11_process_event(XEvent* event) {printf("\n --: %s:: 
     }
 }
 
-_SOKOL_PRIVATE void _sapp_linux_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+_SOKOL_PRIVATE void _sapp_linux_run(const sapp_desc* desc) {
     _sapp_init_state(desc);
     _sapp.x11.window_state = NormalState;
 
     XInitThreads();
     XrmInitialize();
     _sapp.x11.display = XOpenDisplay(NULL);
-    if (!_sapp.x11.display) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (!_sapp.x11.display) {
         _sapp_fail("XOpenDisplay() failed!\n");
     }
     _sapp.x11.screen = DefaultScreen(_sapp.x11.display);
@@ -9289,13 +9270,13 @@ _SOKOL_PRIVATE void _sapp_linux_run(const sapp_desc* desc) {printf("\n --: %s:: 
     _sapp_glx_create_context();
     _sapp.valid = true;
     _sapp_x11_show_window();
-    if (_sapp.fullscreen) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    if (_sapp.fullscreen) {
         _sapp_x11_set_fullscreen(true);
     }
     _sapp_x11_query_window_size();
     _sapp_glx_swapinterval(_sapp.swap_interval);
     XFlush(_sapp.x11.display);
-    while (!_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+    while (!_sapp.quit_ordered) {
         _sapp_glx_make_current();
         int count = XPending(_sapp.x11.display);
         while (count--) {
@@ -9307,11 +9288,11 @@ _SOKOL_PRIVATE void _sapp_linux_run(const sapp_desc* desc) {printf("\n --: %s:: 
         _sapp_glx_swap_buffers();
         XFlush(_sapp.x11.display);
         /* handle quit-requested, either from window or from sapp_request_quit() */
-        if (_sapp.quit_requested && !_sapp.quit_ordered) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        if (_sapp.quit_requested && !_sapp.quit_ordered) {
             /* give user code a chance to intervene */
             _sapp_x11_app_event(SAPP_EVENTTYPE_QUIT_REQUESTED);
             /* if user code hasn't intervened, quit the app */
-            if (_sapp.quit_requested) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+            if (_sapp.quit_requested) {
                 _sapp.quit_ordered = true;
             }
         }
@@ -9327,14 +9308,14 @@ _SOKOL_PRIVATE void _sapp_linux_run(const sapp_desc* desc) {printf("\n --: %s:: 
 int main(int argc, char* argv[]) {
     sapp_desc desc = sokol_main(argc, argv);
     _sapp_linux_run(&desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif /* SOKOL_NO_ENTRY */
 #endif /* _SAPP_LINUX */
 
 /*== PUBLIC API FUNCTIONS ====================================================*/
 #if defined(SOKOL_NO_ENTRY)
-SOKOL_API_IMPL int sapp_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL int sapp_run(const sapp_desc* desc) {
     SOKOL_ASSERT(desc);
     #if defined(_SAPP_MACOS)
         _sapp_macos_run(desc);
@@ -9352,7 +9333,7 @@ SOKOL_API_IMPL int sapp_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ",
         // calling sapp_run() directly is not supported on Android)
         _sapp_fail("sapp_run() not supported on this platform!");
     #endif
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 
 /* this is just a stub so the linker doesn't complain */
@@ -9361,79 +9342,79 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     _SOKOL_UNUSED(argv);
     sapp_desc desc;
     memset(&desc, 0, sizeof(desc));
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return desc;
+    return desc;
 }
 #else
 /* likewise, in normal mode, sapp_run() is just an empty stub */
-SOKOL_API_IMPL int sapp_run(const sapp_desc* desc) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL int sapp_run(const sapp_desc* desc) {
     _SOKOL_UNUSED(desc);
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+    return 0;
 }
 #endif
 
-SOKOL_API_IMPL bool sapp_isvalid(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.valid;
+SOKOL_API_IMPL bool sapp_isvalid(void) {
+    return _sapp.valid;
 }
 
-SOKOL_API_IMPL void* sapp_userdata(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.desc.user_data;
+SOKOL_API_IMPL void* sapp_userdata(void) {
+    return _sapp.desc.user_data;
 }
 
-SOKOL_API_IMPL sapp_desc sapp_query_desc(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.desc;
+SOKOL_API_IMPL sapp_desc sapp_query_desc(void) {
+    return _sapp.desc;
 }
 
-SOKOL_API_IMPL uint64_t sapp_frame_count(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.frame_count;
+SOKOL_API_IMPL uint64_t sapp_frame_count(void) {
+    return _sapp.frame_count;
 }
 
-SOKOL_API_IMPL int sapp_width(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (_sapp.framebuffer_width > 0) ? _sapp.framebuffer_width : 1;
+SOKOL_API_IMPL int sapp_width(void) {
+    return (_sapp.framebuffer_width > 0) ? _sapp.framebuffer_width : 1;
 }
 
-SOKOL_API_IMPL int sapp_color_format(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL int sapp_color_format(void) {
     #if defined(_SAPP_EMSCRIPTEN) && defined(SOKOL_WGPU)
-        switch (_sapp.emsc.wgpu.render_format) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+        switch (_sapp.emsc.wgpu.render_format) {
             case WGPUTextureFormat_RGBA8Unorm:
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _SAPP_PIXELFORMAT_RGBA8;
+                return _SAPP_PIXELFORMAT_RGBA8;
             case WGPUTextureFormat_BGRA8Unorm:
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _SAPP_PIXELFORMAT_BGRA8;
+                return _SAPP_PIXELFORMAT_BGRA8;
             default:
                 SOKOL_UNREACHABLE;
-                printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+                return 0;
         }
     #elif defined(SOKOL_METAL) || defined(SOKOL_D3D11)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _SAPP_PIXELFORMAT_BGRA8;
+        return _SAPP_PIXELFORMAT_BGRA8;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _SAPP_PIXELFORMAT_RGBA8;
+        return _SAPP_PIXELFORMAT_RGBA8;
     #endif
 }
 
-SOKOL_API_IMPL int sapp_depth_format(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _SAPP_PIXELFORMAT_DEPTH_STENCIL;
+SOKOL_API_IMPL int sapp_depth_format(void) {
+    return _SAPP_PIXELFORMAT_DEPTH_STENCIL;
 }
 
-SOKOL_API_IMPL int sapp_sample_count(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.sample_count;
+SOKOL_API_IMPL int sapp_sample_count(void) {
+    return _sapp.sample_count;
 }
 
-SOKOL_API_IMPL int sapp_height(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (_sapp.framebuffer_height > 0) ? _sapp.framebuffer_height : 1;
+SOKOL_API_IMPL int sapp_height(void) {
+    return (_sapp.framebuffer_height > 0) ? _sapp.framebuffer_height : 1;
 }
 
-SOKOL_API_IMPL bool sapp_high_dpi(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.desc.high_dpi && (_sapp.dpi_scale >= 1.5f);
+SOKOL_API_IMPL bool sapp_high_dpi(void) {
+    return _sapp.desc.high_dpi && (_sapp.dpi_scale >= 1.5f);
 }
 
-SOKOL_API_IMPL float sapp_dpi_scale(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.dpi_scale;
+SOKOL_API_IMPL float sapp_dpi_scale(void) {
+    return _sapp.dpi_scale;
 }
 
-SOKOL_API_IMPL bool sapp_gles2(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.gles2_fallback;
+SOKOL_API_IMPL bool sapp_gles2(void) {
+    return _sapp.gles2_fallback;
 }
 
-SOKOL_API_IMPL void sapp_show_keyboard(bool show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_show_keyboard(bool show) {
     #if defined(_SAPP_IOS)
     _sapp_ios_show_keyboard(show);
     #elif defined(_SAPP_EMSCRIPTEN)
@@ -9445,15 +9426,15 @@ SOKOL_API_IMPL void sapp_show_keyboard(bool show) {printf("\n --: %s:: %s:%d ", 
     #endif
 }
 
-SOKOL_API_IMPL bool sapp_keyboard_shown(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.onscreen_keyboard_shown;
+SOKOL_API_IMPL bool sapp_keyboard_shown(void) {
+    return _sapp.onscreen_keyboard_shown;
 }
 
-SOKOL_API_DECL bool sapp_is_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.fullscreen;
+SOKOL_API_DECL bool sapp_is_fullscreen(void) {
+    return _sapp.fullscreen;
 }
 
-SOKOL_API_DECL void sapp_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_DECL void sapp_toggle_fullscreen(void) {
     #if defined(_SAPP_MACOS)
     _sapp_macos_toggle_fullscreen();
     #elif defined(_SAPP_WIN32)
@@ -9466,8 +9447,8 @@ SOKOL_API_DECL void sapp_toggle_fullscreen(void) {printf("\n --: %s:: %s:%d ", _
 }
 
 /* NOTE that sapp_show_mouse() does not "stack" like the Win32 or macOS API functions! */
-SOKOL_API_IMPL void sapp_show_mouse(bool show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (_sapp.mouse.shown != show) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_show_mouse(bool show) {
+    if (_sapp.mouse.shown != show) {
         #if defined(_SAPP_MACOS)
         _sapp_macos_show_mouse(show);
         #elif defined(_SAPP_WIN32)
@@ -9481,11 +9462,11 @@ SOKOL_API_IMPL void sapp_show_mouse(bool show) {printf("\n --: %s:: %s:%d ", __f
     }
 }
 
-SOKOL_API_IMPL bool sapp_mouse_shown(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.mouse.shown;
+SOKOL_API_IMPL bool sapp_mouse_shown(void) {
+    return _sapp.mouse.shown;
 }
 
-SOKOL_API_IMPL void sapp_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_lock_mouse(bool lock) {
     #if defined(_SAPP_MACOS)
     _sapp_macos_lock_mouse(lock);
     #elif defined(_SAPP_EMSCRIPTEN)
@@ -9499,30 +9480,30 @@ SOKOL_API_IMPL void sapp_lock_mouse(bool lock) {printf("\n --: %s:: %s:%d ", __f
     #endif
 }
 
-SOKOL_API_IMPL bool sapp_mouse_locked(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.mouse.locked;
+SOKOL_API_IMPL bool sapp_mouse_locked(void) {
+    return _sapp.mouse.locked;
 }
 
-SOKOL_API_IMPL void sapp_request_quit(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_request_quit(void) {
     _sapp.quit_requested = true;
 }
 
-SOKOL_API_IMPL void sapp_cancel_quit(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_cancel_quit(void) {
     _sapp.quit_requested = false;
 }
 
-SOKOL_API_IMPL void sapp_quit(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_quit(void) {
     _sapp.quit_ordered = true;
 }
 
-SOKOL_API_IMPL void sapp_consume_event(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_consume_event(void) {
     _sapp.event_consumed = true;
 }
 
 /* NOTE: on HTML5, sapp_set_clipboard_string() must be called from within event handler! */
-SOKOL_API_IMPL void sapp_set_clipboard_string(const char* str) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (!_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return;
+SOKOL_API_IMPL void sapp_set_clipboard_string(const char* str) {
+    if (!_sapp.clipboard.enabled) {
+        return;
     }
     SOKOL_ASSERT(str);
     #if defined(_SAPP_MACOS)
@@ -9537,23 +9518,23 @@ SOKOL_API_IMPL void sapp_set_clipboard_string(const char* str) {printf("\n --: %
     _sapp_strcpy(str, _sapp.clipboard.buffer, _sapp.clipboard.buf_size);
 }
 
-SOKOL_API_IMPL const char* sapp_get_clipboard_string(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-    if (!_sapp.clipboard.enabled) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return "";
+SOKOL_API_IMPL const char* sapp_get_clipboard_string(void) {
+    if (!_sapp.clipboard.enabled) {
+        return "";
     }
     #if defined(_SAPP_MACOS)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp_macos_get_clipboard_string();
+        return _sapp_macos_get_clipboard_string();
     #elif defined(_SAPP_EMSCRIPTEN)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        return _sapp.clipboard.buffer;
     #elif defined(_SAPP_WIN32)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp_win32_get_clipboard_string();
+        return _sapp_win32_get_clipboard_string();
     #else
         /* not implemented */
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.clipboard.buffer;
+        return _sapp.clipboard.buffer;
     #endif
 }
 
-SOKOL_API_IMPL void sapp_set_window_title(const char* title) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_set_window_title(const char* title) {
     SOKOL_ASSERT(title);
     _sapp_strcpy(title, _sapp.window_title, sizeof(_sapp.window_title));
     #if defined(_SAPP_MACOS)
@@ -9565,7 +9546,7 @@ SOKOL_API_IMPL void sapp_set_window_title(const char* title) {printf("\n --: %s:
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_metal_get_device(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_metal_get_device(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_METAL)
         #if defined(_SAPP_MACOS)
@@ -9574,13 +9555,13 @@ SOKOL_API_IMPL const void* sapp_metal_get_device(void) {printf("\n --: %s:: %s:%
             const void* obj = (__bridge const void*) _sapp.ios.mtl_device;
         #endif
         SOKOL_ASSERT(obj);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return obj;
+        return obj;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_metal_get_renderpass_descriptor(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_metal_get_renderpass_descriptor(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_METAL)
         #if defined(_SAPP_MACOS)
@@ -9589,13 +9570,13 @@ SOKOL_API_IMPL const void* sapp_metal_get_renderpass_descriptor(void) {printf("\
             const void* obj = (__bridge const void*) [_sapp.ios.view currentRenderPassDescriptor];
         #endif
         SOKOL_ASSERT(obj);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return obj;
+        return obj;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_metal_get_drawable(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_metal_get_drawable(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_METAL)
         #if defined(_SAPP_MACOS)
@@ -9604,134 +9585,134 @@ SOKOL_API_IMPL const void* sapp_metal_get_drawable(void) {printf("\n --: %s:: %s
             const void* obj = (__bridge const void*) [_sapp.ios.view currentDrawable];
         #endif
         SOKOL_ASSERT(obj);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return obj;
+        return obj;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_macos_get_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_macos_get_window(void) {
     #if defined(_SAPP_MACOS)
         const void* obj = (__bridge const void*) _sapp.macos.window;
         SOKOL_ASSERT(obj);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return obj;
+        return obj;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_ios_get_window(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_ios_get_window(void) {
     #if defined(_SAPP_IOS)
         const void* obj = (__bridge const void*) _sapp.ios.window;
         SOKOL_ASSERT(obj);
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return obj;
+        return obj;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 
 }
 
-SOKOL_API_IMPL const void* sapp_d3d11_get_device(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_d3d11_get_device(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_D3D11)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.d3d11.device;
+        return _sapp.d3d11.device;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_d3d11_get_device_context(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_d3d11_get_device_context(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_D3D11)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.d3d11.device_context;
+        return _sapp.d3d11.device_context;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_d3d11_get_render_target_view(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_d3d11_get_render_target_view(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_D3D11)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.d3d11.rtv;
+        return _sapp.d3d11.rtv;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_d3d11_get_depth_stencil_view(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_d3d11_get_depth_stencil_view(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(SOKOL_D3D11)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.d3d11.dsv;
+        return _sapp.d3d11.dsv;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_win32_get_hwnd(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_win32_get_hwnd(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_WIN32)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return _sapp.win32.hwnd;
+        return _sapp.win32.hwnd;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_wgpu_get_device(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_wgpu_get_device(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_EMSCRIPTEN) && defined(SOKOL_WGPU)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (const void*) _sapp.emsc.wgpu.device;
+        return (const void*) _sapp.emsc.wgpu.device;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_wgpu_get_render_view(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_wgpu_get_render_view(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_EMSCRIPTEN) && defined(SOKOL_WGPU)
-        if (_sapp.sample_count > 1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (const void*) _sapp.emsc.wgpu.msaa_view;
+        if (_sapp.sample_count > 1) {
+            return (const void*) _sapp.emsc.wgpu.msaa_view;
         }
         else {
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (const void*) _sapp.emsc.wgpu.swapchain_view;
+            return (const void*) _sapp.emsc.wgpu.swapchain_view;
         }
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_wgpu_get_resolve_view(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_wgpu_get_resolve_view(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_EMSCRIPTEN) && defined(SOKOL_WGPU)
-        if (_sapp.sample_count > 1) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (const void*) _sapp.emsc.wgpu.swapchain_view;
+        if (_sapp.sample_count > 1) {
+            return (const void*) _sapp.emsc.wgpu.swapchain_view;
         }
         else {
-            printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+            return 0;
         }
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_wgpu_get_depth_stencil_view(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_wgpu_get_depth_stencil_view(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_EMSCRIPTEN) && defined(SOKOL_WGPU)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (const void*) _sapp.emsc.wgpu.depth_stencil_view;
+        return (const void*) _sapp.emsc.wgpu.depth_stencil_view;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL const void* sapp_android_get_native_activity(void) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL const void* sapp_android_get_native_activity(void) {
     SOKOL_ASSERT(_sapp.valid);
     #if defined(_SAPP_ANDROID)
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return (void*)_sapp.android.activity;
+        return (void*)_sapp.android.activity;
     #else
-        printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return 0;
+        return 0;
     #endif
 }
 
-SOKOL_API_IMPL void sapp_html5_ask_leave_site(bool ask) {printf("\n --: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+SOKOL_API_IMPL void sapp_html5_ask_leave_site(bool ask) {
     _sapp.html5_ask_leave_site = ask;
 }
 

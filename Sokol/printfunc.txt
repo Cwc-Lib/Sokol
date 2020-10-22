@@ -1,0 +1,5 @@
+Find:) {
+Repl:) {printf("\n -->: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );
+
+Find:return
+Repl:printf("\n ret<: %s:: %s:%d ", __func__, __FILE__ , __LINE__ );return
