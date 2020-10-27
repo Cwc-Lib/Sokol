@@ -4,13 +4,15 @@
 >
 -{sSample}="Lib"
 >
+-{vLibDir}= Lib/Lib{sOpt}/
+>
 ;Build Static lib
 -c {pSamples}libs/sokol/sokol-noentry.c -o {pObj}Lib_Static/sokol-noentry.o
 -{vIncl}
 -{vFlag}
 -{vSokolFlag}
 >
--o  {pObj}Lib_Static/ -#To Lib/libsokol.a
+-o  {pObj}Lib_Static/ -#To {vLibDir}libsokol.a
 >
 ;Build Dynamic lib
 -c {pSamples}libs/sokol/sokol-dll.c -o {pObj}Lib_Dynamic/sokol-dll.o
@@ -18,7 +20,7 @@
 -{vFlag}
 -{vSokolFlag}
 >
--o  {pObj}Lib_Dynamic/ -#To Lib/sokol.dll 
--Wl,--out-implib,Lib/libsokol-dll.a
+-o  {pObj}Lib_Dynamic/ -#To {vLibDir}sokol.dll 
+-Wl,--out-implib,{vLibDir}libsokol-dll.a
 -lgdi32 -lOle32
 >

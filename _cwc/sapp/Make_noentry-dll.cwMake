@@ -1,5 +1,9 @@
 ;Register Cwc before using a .cwmake
 >
+-{vLibDir}= Lib/Lib{sOpt}/
+>
+;-#Run Gen_Sokol_Lib.cwMake ;TODO
+>
 -{sSample}=noentry-dll-sapp
 >
 -#Run cwc/Ini.cwc
@@ -16,10 +20,10 @@ shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:g
 -{vFlag}
 >
 -o {pObj} -#To {pOut}{sSample}.* -{vLink}
--L Lib/
+-L {vLibDir}
 -lsokol-dll
 >
--#Copy Lib/sokol.dll {pOut}
+-#Copy {vLibDir}sokol.dll {pOut}
 >
 -#Run
 >
