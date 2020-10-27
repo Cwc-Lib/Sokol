@@ -1,0 +1,26 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=noentry-dll-sapp
+>
+-#Run cwc/Ini.cwc
+>
+;Build Shader
+shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:glsl100:glsl300es
+>
+-{sFileExt}:=c
+>
+-c {pSamples}sapp/{sSample}.{sFileExt} -o {pObj}{sSample}.o
+-{vSokolFlag}
+-{vIncl}
+-{vExIncl}
+-{vFlag}
+>
+-o {pObj} -#To {pOut}{sSample}.* -{vLink}
+-L Lib/
+-lsokol-dll
+>
+-#Copy Lib/sokol.dll {pOut}
+>
+-#Run
+>
+

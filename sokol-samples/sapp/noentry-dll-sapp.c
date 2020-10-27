@@ -16,8 +16,9 @@
 #define HANDMADE_MATH_NO_SSE
 #include "HandmadeMath.h"
 #define SOKOL_DLL
-#include "sokol_gfx.h"
+#define SOKOL_NO_ENTRY
 #include "sokol_app.h"
+#include "sokol_gfx.h"
 #include "sokol_glue.h"
 #include <Windows.h>    /* WinMain */
 #include <stdlib.h>     /* calloc, free */

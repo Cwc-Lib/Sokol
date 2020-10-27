@@ -2,9 +2,23 @@
 >
 -#Run cwc/Ini.cwc
 >
--c {pSamples}libs/sokol/sokol-noentry.c -o {pObj}Lib/sokol-noentry.o
+-{sSample}="Lib"
 >
--o  {pObj}Lib/sokol-noentry.o -#To Lib/sokol-noentry.a
+;Build Static lib
+-c {pSamples}libs/sokol/sokol-noentry.c -o {pObj}Lib_Static/sokol-noentry.o
+-{vIncl}
+-{vFlag}
+-{vSokolFlag}
 >
-
+-o  {pObj}Lib_Static/ -#To Lib/libsokol.a
+>
+;Build Dynamic lib
+-c {pSamples}libs/sokol/sokol-dll.c -o {pObj}Lib_Dynamic/sokol-dll.o
+-{vIncl}
+-{vFlag}
+-{vSokolFlag}
+>
+-o  {pObj}Lib_Dynamic/ -#To Lib/sokol.dll 
+-Wl,--out-implib,Lib/libsokol-dll.a
+-lgdi32 -lOle32
 >
