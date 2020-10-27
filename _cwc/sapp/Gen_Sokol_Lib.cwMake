@@ -1,0 +1,10 @@
+;Register Cwc before using a .cwmake
+>
+-#Run cwc/Ini.cwc
+>
+-c {pSamples}libs/sokol/sokol-noentry.c -o {pObj}Lib/sokol-noentry.o
+>
+-o  {pObj}Lib/sokol-noentry.o -#To Lib/sokol-noentry.a
+>
+
+>

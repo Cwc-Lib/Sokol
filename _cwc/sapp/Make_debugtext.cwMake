@@ -1,0 +1,10 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=debugtext-sapp
+>
+-#Run cwc/Sample_NoShdc.cwc
+>
+-#Run cwc/Link.cwc
+>
+-#Run
+>

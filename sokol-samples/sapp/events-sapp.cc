@@ -2,8 +2,8 @@
 //  events-sapp.cc
 //  Inspect sokol_app.h events via Dear ImGui.
 //------------------------------------------------------------------------------
-#include "sokol_gfx.h"
 #include "sokol_app.h"
+#include "sokol_gfx.h"
 #include "sokol_glue.h"
 #include "imgui.h"
 #define SOKOL_IMGUI_IMPL
