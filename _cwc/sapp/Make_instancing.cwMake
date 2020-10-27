@@ -1,0 +1,11 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=instancing-sapp
+>
+-#Run cwc/Sample.cwc
+>
+-#Run cwc/Link.cwc
+>
+-#Run
+>
+

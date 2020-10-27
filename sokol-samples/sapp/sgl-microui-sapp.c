@@ -10,8 +10,8 @@
 #if defined(_MSC_VER)
 #define _CRT_SECURE_NO_WARNINGS (1)
 #endif
-#include "sokol_gfx.h"
 #include "sokol_app.h"
+#include "sokol_gfx.h"
 #include "sokol_glue.h"
 #include "microui/microui.h"
 #include "microui/atlas.inl"

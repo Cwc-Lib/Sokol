@@ -1,0 +1,17 @@
+;Register Cwc before using a .cwmake
+>
+-{sSample}=sgl-microui-sapp
+>
+-{vExIncl}=
+-I {pExtLib}imgui/
+>
+-#Run cwc/Sample_NoShdc.cwc
+>
+-c {pExtLib}microui/src/ -o {pObj}imgui/
+;-I {pExtLib}microui/src/
+;-I {pExtLib}Freetype/
+>
+-#Run cwc/Link.cwc
+>
+-#Run
+>
