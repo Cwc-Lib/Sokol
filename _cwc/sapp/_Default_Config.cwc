@@ -13,7 +13,7 @@
 >
 -{vLink_WebRT}= -s TOTAL_MEMORY=33554432 -s USE_WEBGL2=1
 >
--{vLink_LibRT}= -lgdi32 
+-{vLink_LibRT}= -lgdi32 -lOle32
 ;-lopengl32
 >
 -{vSokolFlag_LibRT}= 

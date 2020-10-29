@@ -9,8 +9,7 @@ shdc --input {p_sapp}/{sSample}.glsl --output {sSample}.glsl.h --slang glsl330:g
 >
 -c {pSamples}sapp/{sSample}.c -o {pObj}{sSample}.o
 -DSOKOL_IMPL
--DSOKOL_GLES3
--DSOKOL_GLES2
+-{vSokolFlag}
 -{vIncl}
 -{vFlag}
 >
