@@ -2,7 +2,8 @@
 ;Uncomment to select
 >
 ;-{sToolChainName}=WebRT
--{sToolChainName}=LibRT
+;-{sToolChainName}=LibRT
+-{sToolChainName}=CpcDosRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
@@ -15,6 +16,9 @@
 >
 -{vLink_LibRT}= -lgdi32 -lOle32
 ;-lopengl32
+>
+-{vSokolFlag_CpcDosRT}= 
+-DSOKOL_GLCORE33
 >
 -{vSokolFlag_LibRT}= 
 -DSOKOL_GLCORE33
