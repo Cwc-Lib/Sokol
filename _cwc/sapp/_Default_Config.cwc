@@ -31,5 +31,6 @@
 >
 -{vLink}= -{vLink_{sToolChainName}}
 >
--{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
+;-{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
+-{_wToolchain}:= VLianceTool/CpcDosRT[Mingw]
 >
