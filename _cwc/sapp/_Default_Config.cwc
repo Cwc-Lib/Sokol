@@ -2,8 +2,7 @@
 ;Uncomment to select
 >
 ;-{sToolChainName}=WebRT
-;-{sToolChainName}=LibRT
--{sToolChainName}=CpcDosRT
+-{sToolChainName}=LibRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
@@ -17,9 +16,6 @@
 -{vLink_LibRT}= -lgdi32 -lOle32
 ;-lopengl32
 >
--{vSokolFlag_CpcDosRT}= 
--DSOKOL_GLCORE33
->
 -{vSokolFlag_LibRT}= 
 -DSOKOL_GLCORE33
 >
@@ -28,9 +24,11 @@
 -DSOKOL_GLES2
 >
 -{vSokolFlag}= -{vSokolFlag_{sToolChainName}}
+-fno-exceptions
+-fno-rtti
 >
 -{vLink}= -{vLink_{sToolChainName}}
 >
-;-{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
--{_wToolchain}:= VLianceTool/CpcDosRT[Mingw]
+-{_wToolchain}:= VLianceTool/{sToolChainName}[{sToolChainType}]
+;-{_wToolchain}:= VLianceTool/CpcDosRT[Mingw]
 >
