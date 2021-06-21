@@ -1,0 +1,10 @@
+;Register Cwc before using a .cwmake
+>
+-#Lauch sapp/Make_blend.cwMake
+>
+-#Lauch sapp/Make_arraytex.cwMake
+>
+-#Lauch sapp/Make_instancing.cwMake
+>
+
+

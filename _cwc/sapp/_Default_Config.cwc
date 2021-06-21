@@ -3,6 +3,7 @@
 >
 ;-{sToolChainName}=WebRT
 -{sToolChainName}=LibRT
+;-{sToolChainName}=CpcDosRT
 >
 ;-{sToolChainType}:=Default
 -{sToolChainType}:=wasm
@@ -14,6 +15,7 @@
 -{vLink_WebRT}= -s TOTAL_MEMORY=33554432 -s USE_WEBGL2=1
 >
 -{vLink_LibRT}= -lgdi32 -lOle32
+-Wl,--export-all-symbols
 ;-lopengl32
 >
 -{vSokolFlag_LibRT}= 
