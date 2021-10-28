@@ -2,9 +2,12 @@
 >
 -{sSample}=events-sapp
 >
--#Run cwc/Sample_NoShdc.cwc
->
 -{sFileExt}=cc
+>
+-{vExIncl}=
+-I {pExtLib}imgui/
+>
+-#Run cwc/Sample_NoShdc.cwc
 >
 -{vExIncl}=
 -I {pExtLib}imgui/
