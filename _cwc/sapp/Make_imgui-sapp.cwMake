@@ -9,8 +9,8 @@
 >
 -#Run cwc/Sample_NoShdc.cwc
 >
--c {pExtLib}imgui_build/ -o {pObj}imgui/
--I {pExtLib}imgui_build/
+-c &{pExtLib}imgui/ -o {pObj}imgui/
+-I {pExtLib}imgui/
 -I {pExtLib}Freetype/
 >
 -#Run cwc/Link.cwc

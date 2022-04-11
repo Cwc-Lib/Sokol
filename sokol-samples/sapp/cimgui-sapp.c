@@ -6,7 +6,6 @@
 //------------------------------------------------------------------------------
 #include "sokol_app.h"
 #include "sokol_gfx.h"
-#include "sokol_time.h"
 #include "sokol_glue.h"
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui/cimgui.h"
@@ -26,7 +25,6 @@ void init(void) {
     sg_setup(&(sg_desc){
         .context = sapp_sgcontext()
     });
-    stm_setup();
 
     // use sokol-imgui with all default-options (we're not doing
     // multi-sampled rendering or using non-default pixel formats)
@@ -37,7 +35,7 @@ void init(void) {
         .show_test_window = true,
         .pass_action = {
             .colors[0] = {
-                .action = SG_ACTION_CLEAR, .val = { 0.7f, 0.5f, 0.0f, 1.0f }
+                .action = SG_ACTION_CLEAR, .value = { 0.7f, 0.5f, 0.0f, 1.0f }
             }
         }
     };
@@ -46,15 +44,19 @@ void init(void) {
 void frame(void) {
     const int width = sapp_width();
     const int height = sapp_height();
-    const double delta_time = stm_sec(stm_laptime(&state.last_time));
-    simgui_new_frame(width, height, delta_time);
+    simgui_new_frame(&(simgui_frame_desc_t){
+        .width = width,
+        .height = height,
+        .delta_time = sapp_frame_duration(),
+        .dpi_scale = sapp_dpi_scale()
+    });
 
     // 1. Show a simple window
     // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
     static float f = 0.0f;
     igText("Hello, world!");
-    igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", 1.0f);
-    igColorEdit3("clear color", &state.pass_action.colors[0].val[0], 0);
+    igSliderFloat("float", &f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_None);
+    igColorEdit3("clear color", &state.pass_action.colors[0].value.r, 0);
     if (igButton("Test Window", (ImVec2) { 0.0f, 0.0f})) state.show_test_window ^= 1;
     if (igButton("Another Window", (ImVec2) { 0.0f, 0.0f })) state.show_another_window ^= 1;
     igText("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / igGetIO()->Framerate, igGetIO()->Framerate);
@@ -101,6 +103,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .height = 768,
         .gl_force_gles2 = true,
         .window_title = "cimgui (sokol-app)",
-        .ios_keyboard_resizes_canvas = false
+        .ios_keyboard_resizes_canvas = false,
+        .icon.sokol_default = true,
     };
 }

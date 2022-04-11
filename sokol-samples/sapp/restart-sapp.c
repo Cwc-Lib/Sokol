@@ -11,17 +11,14 @@
 //------------------------------------------------------------------------------
 #include <string.h> // memset
 
-#include "sokol_memtrack.h"
 #include "sokol_app.h"
 #include "sokol_gfx.h"
 #include "sokol_audio.h"
 #include "sokol_fetch.h"
-#define SOKOL_GL_IMPL
 #include "sokol_gl.h"
-#define SOKOL_DEBUGTEXT_IMPL
 #include "sokol_debugtext.h"
+#include "sokol_memtrack.h"
 #include "sokol_glue.h"
-#define SOKOL_DEBUGTEXT_IMPL
 #include "stb/stb_image.h"
 
 #include "modplug.h"
@@ -35,6 +32,7 @@
 #define MOD_SRCBUF_SAMPLES (16*1024)
 
 static struct {
+    bool reset;
     struct {
         float rx, ry;
         sg_pass_action pass_action;
@@ -130,9 +128,9 @@ static void init(void) {
         .num_lanes = 1
     });
     sgl_setup(&(sgl_desc_t){
+        .pipeline_pool_size = 1,
         .max_vertices = 16,
         .max_commands = 16,
-        .pipeline_pool_size = 1,
     });
     sdtx_setup(&(sdtx_desc_t){
         .context_pool_size = 1,
@@ -150,20 +148,18 @@ static void init(void) {
     state.scene.bind.fs_images[0] = sg_alloc_image();
 
     state.scene.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(cube_vertices),
-        .content = cube_vertices,
+        .data = SG_RANGE(cube_vertices),
         .label = "cube-vertices"
     });
 
     state.scene.bind.index_buffer = sg_make_buffer(&(sg_buffer_desc){
         .type = SG_BUFFERTYPE_INDEXBUFFER,
-        .size = sizeof(cube_indices),
-        .content = cube_indices,
+        .data = SG_RANGE(cube_indices),
         .label = "cube-indices"
     });
 
     state.scene.pip = sg_make_pipeline(&(sg_pipeline_desc){
-        .shader = sg_make_shader(restart_shader_desc()),
+        .shader = sg_make_shader(restart_shader_desc(sg_query_backend())),
         .layout = {
             .attrs = {
                 [ATTR_vs_pos].format = SG_VERTEXFORMAT_FLOAT3,
@@ -171,12 +167,10 @@ static void init(void) {
             }
         },
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true
-        },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK,
+        .cull_mode = SG_CULLMODE_BACK,
+        .depth = {
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
+            .write_enabled = true
         },
         .label = "cube-pipeline"
     });
@@ -186,7 +180,7 @@ static void init(void) {
     float g = (float)((xorshift32() & 0x3F) << 2) / 255.0f;
     float b = (float)((xorshift32() & 0x3F) << 2) / 255.0f;
     state.scene.pass_action = (sg_pass_action) {
-        .colors[0] = { .action = SG_ACTION_CLEAR,.val = { r, g, b, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR,.value = { r, g, b, 1.0f } }
     };
 
     // initialize libmodplug
@@ -233,9 +227,9 @@ static void fetch_img_callback(const sfetch_response_t* response) {
                 .pixel_format = SG_PIXELFORMAT_RGBA8,
                 .min_filter = SG_FILTER_LINEAR,
                 .mag_filter = SG_FILTER_LINEAR,
-                .content.subimage[0][0] = {
+                .data.subimage[0][0] = {
                     .ptr = pixels,
-                    .size = png_width * png_height * 4,
+                    .size = (size_t)(png_width * png_height * 4),
                 }
             });
             stbi_image_free(pixels);
@@ -244,28 +238,48 @@ static void fetch_img_callback(const sfetch_response_t* response) {
     else if (response->failed) {
         // if loading the file failed, set clear color to red
         state.scene.pass_action = (sg_pass_action) {
-            .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 1.0f, 0.0f, 0.0f, 1.0f } }
+            .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 1.0f, 0.0f, 0.0f, 1.0f } }
         };
     }
 }
 
 static void fetch_mod_callback(const sfetch_response_t* response) {
     if (response->fetched) {
-        state.mod.mpf = ModPlug_Load(response->buffer_ptr, response->fetched_size);
+        state.mod.mpf = ModPlug_Load(response->buffer_ptr, (int)response->fetched_size);
     }
     else if (response->failed) {
         // if loading the file failed, set clear color to red
         state.scene.pass_action = (sg_pass_action) {
-            .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 1.0f, 0.0f, 0.0f, 1.0f } }
+            .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 1.0f, 0.0f, 0.0f, 1.0f } }
         };
     }
 }
 
+// the sokol-app cleanup callback is also called on restart
+static void shutdown(void) {
+    if (state.mod.mpf) {
+        ModPlug_Unload(state.mod.mpf);
+    }
+    saudio_shutdown();
+    sdtx_shutdown();
+    sgl_shutdown();
+    sfetch_shutdown();
+    sg_shutdown();
+    memset(&state, 0, sizeof(state));
+}
+
 // the sokol-app frame callback
 static void frame(void) {
+    if (state.reset) {
+        state.reset = false;
+        shutdown();
+        init();
+    }
+
     const int w = sapp_width();
     const int h = sapp_height();
     const float aspect = (float)w / (float)h;
+    const float t = (float)(sapp_frame_duration() * 60.0);
 
     // pump the sokol-fetch message queues, and invoke response callbacks
     sfetch_dowork();
@@ -292,8 +306,8 @@ static void frame(void) {
             /* NOTE: for multi-channel playback, the samples are interleaved
                (e.g. left/right/left/right/...)
             */
-            int res = ModPlug_Read(state.mod.mpf, (void*)state.mod.int_buf, sizeof(int)*num_samples);
-            int samples_in_buffer = res / sizeof(int);
+            int res = ModPlug_Read(state.mod.mpf, (void*)state.mod.int_buf, (int)sizeof(int)*num_samples);
+            int samples_in_buffer = res / (int)sizeof(int);
             int i;
             for (i = 0; i < samples_in_buffer; i++) {
                 state.mod.flt_buf[i] = state.mod.int_buf[i] / (float)0x7fffffff;
@@ -334,7 +348,7 @@ static void frame(void) {
     hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
     vs_params_t vs_params;
-    state.scene.rx += 1.0f; state.scene.ry += 2.0f;
+    state.scene.rx += 1.0f * t; state.scene.ry += 2.0f * t;
     hmm_mat4 rxm = HMM_Rotate(state.scene.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
     hmm_mat4 rym = HMM_Rotate(state.scene.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
@@ -344,7 +358,7 @@ static void frame(void) {
     sg_begin_default_pass(&state.scene.pass_action, sapp_width(), sapp_height());
     sg_apply_pipeline(state.scene.pip);
     sg_apply_bindings(&state.scene.bind);
-    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &vs_params, sizeof(vs_params));
+    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &SG_RANGE(vs_params));
     sg_draw(0, 36, 1);
     sgl_draw();
     sdtx_draw();
@@ -352,25 +366,11 @@ static void frame(void) {
     sg_commit();
 }
 
-// the sokol-app cleanup callback is also called on restart
-static void shutdown(void) {
-    if (state.mod.mpf) {
-        ModPlug_Unload(state.mod.mpf);
-    }
-    saudio_shutdown();
-    sdtx_shutdown();
-    sgl_shutdown();
-    sfetch_shutdown();
-    sg_shutdown();
-    memset(&state, 0, sizeof(state));
-}
-
 // the sokol-app event callback, performs a "restart" when the SPACE key is pressed
 static void input(const sapp_event* ev) {
     if (ev->type == SAPP_EVENTTYPE_KEY_DOWN) {
         if (ev->key_code == SAPP_KEYCODE_SPACE) {
-            shutdown();
-            init();
+            state.reset = true;
         }
     }
 }
@@ -387,5 +387,6 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .sample_count = 4,
         .gl_force_gles2 = true,
         .window_title = "Restart Sokol Libs (sokol-app)",
+        .icon.sokol_default = true,
     };
 }

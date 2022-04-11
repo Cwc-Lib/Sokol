@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 #include "sokol_app.h"
 #include "sokol_gfx.h"
-#include "sokol_time.h"
 #include "sokol_glue.h"
 #define SOKOL_DEBUGTEXT_IMPL
 #include "sokol_debugtext.h"
@@ -23,11 +22,10 @@ typedef struct {
 static struct {
     sg_pass_action pass_action;
     uint32_t frame_count;
-    uint64_t time_stamp;
     color_t palette[NUM_FONTS];
 } state = {
     .pass_action = {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.0f, 0.125f, 0.25f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.0f, 0.125f, 0.25f, 1.0f } }
     },
     .palette = {
         { 0xf4, 0x43, 0x36 },
@@ -38,7 +36,6 @@ static struct {
 
 
 static void init(void) {
-    stm_setup();
     sg_setup(&(sg_desc){
         .context = sapp_sgcontext()
     });
@@ -61,7 +58,7 @@ static void my_printf_wrapper(const char* fmt, ...) {
 
 static void frame(void) {
     state.frame_count++;
-    double frame_time = stm_ms(stm_laptime(&state.time_stamp));
+    double frame_time = sapp_frame_duration() * 1000.0;
 
     sdtx_canvas(sapp_width() * 0.5f, sapp_height() * 0.5f);
     sdtx_origin(3.0f, 3.0f);
@@ -102,5 +99,6 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .height = 480,
         .gl_force_gles2 = true,
         .window_title = "debugtext-printf-sapp",
+        .icon.sokol_default = true,
     };
 }

@@ -12,12 +12,13 @@
 #define HANDMADE_MATH_IMPLEMENTATION
 #define HANDMADE_MATH_NO_SSE
 #include "HandmadeMath.h"
-#include "sokol_app.h"
 #include "sokol_gfx.h"
+#include "sokol_app.h"
 #include "sokol_fetch.h"
 #include "sokol_glue.h"
 #include "stb/stb_image.h"
 #include "dbgui/dbgui.h"
+#include "util/fileutil.h"
 #include "loadpng-sapp.glsl.h"
 
 static struct {
@@ -51,7 +52,7 @@ static void init(void) {
 
     /* pass action for clearing the framebuffer to some color */
     state.pass_action = (sg_pass_action) {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.125f, 0.25f, 0.35f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.125f, 0.25f, 0.35f, 1.0f } }
     };
 
     /* Allocate an image handle, but don't actually initialize the image yet,
@@ -95,8 +96,7 @@ static void init(void) {
         {  1.0f,  1.0f, -1.0f,      0, 32767 },
     };
     state.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(vertices),
-        .content = vertices,
+        .data = SG_RANGE(vertices),
         .label = "cube-vertices"
     });
 
@@ -111,14 +111,13 @@ static void init(void) {
     };
     state.bind.index_buffer = sg_make_buffer(&(sg_buffer_desc){
         .type = SG_BUFFERTYPE_INDEXBUFFER,
-        .size = sizeof(indices),
-        .content = indices,
+        .data = SG_RANGE(indices),
         .label = "cube-indices"
     });
 
     /* a pipeline state object */
     state.pip = sg_make_pipeline(&(sg_pipeline_desc){
-        .shader = sg_make_shader(loadpng_shader_desc()),
+        .shader = sg_make_shader(loadpng_shader_desc(sg_query_backend())),
         .layout = {
             .attrs = {
                 [ATTR_vs_pos].format = SG_VERTEXFORMAT_FLOAT3,
@@ -126,12 +125,10 @@ static void init(void) {
             }
         },
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true
-        },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK,
+        .cull_mode = SG_CULLMODE_BACK,
+        .depth = {
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
+            .write_enabled = true
         },
         .label = "cube-pipeline"
     });
@@ -142,12 +139,14 @@ static void init(void) {
         - NOTE that we're not using the user_data member, since all required
           state is in a global variable anyway
     */
+    char path_buf[512];
     sfetch_send(&(sfetch_request_t){
-        .path = "baboon.png",
+        .path = fileutil_get_path("baboon.png", path_buf, sizeof(path_buf)),
         .callback = fetch_callback,
         .buffer_ptr = state.file_buffer,
         .buffer_size = sizeof(state.file_buffer)
     });
+    printf("%s\n", path_buf);
 }
 
 /* The fetch-callback is called by sokol_fetch.h when the data is loaded,
@@ -173,9 +172,9 @@ static void fetch_callback(const sfetch_response_t* response) {
                 .pixel_format = SG_PIXELFORMAT_RGBA8,
                 .min_filter = SG_FILTER_LINEAR,
                 .mag_filter = SG_FILTER_LINEAR,
-                .content.subimage[0][0] = {
+                .data.subimage[0][0] = {
                     .ptr = pixels,
-                    .size = png_width * png_height * 4,
+                    .size = (size_t)(png_width * png_height * 4),
                 }
             });
             stbi_image_free(pixels);
@@ -184,7 +183,7 @@ static void fetch_callback(const sfetch_response_t* response) {
     else if (response->failed) {
         // if loading the file failed, set clear color to red
         state.pass_action = (sg_pass_action) {
-            .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 1.0f, 0.0f, 0.0f, 1.0f } }
+            .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 1.0f, 0.0f, 0.0f, 1.0f } }
         };
     }
 }
@@ -199,11 +198,12 @@ static void frame(void) {
     sfetch_dowork();
 
     /* compute model-view-projection matrix for vertex shader */
-    hmm_mat4 proj = HMM_Perspective(60.0f, (float)sapp_width()/(float)sapp_height(), 0.01f, 10.0f);
+    const float t = (float)(sapp_frame_duration() * 60.0);
+    hmm_mat4 proj = HMM_Perspective(60.0f, sapp_widthf()/sapp_heightf(), 0.01f, 10.0f);
     hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
     vs_params_t vs_params;
-    state.rx += 1.0f; state.ry += 2.0f;
+    state.rx += 1.0f * t; state.ry += 2.0f * t;
     hmm_mat4 rxm = HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
     hmm_mat4 rym = HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
@@ -212,7 +212,7 @@ static void frame(void) {
     sg_begin_default_pass(&state.pass_action, sapp_width(), sapp_height());
     sg_apply_pipeline(state.pip);
     sg_apply_bindings(&state.bind);
-    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &vs_params, sizeof(vs_params));
+    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &SG_RANGE(vs_params));
     sg_draw(0, 36, 1);
     __dbgui_draw();
     sg_end_pass();
@@ -237,6 +237,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .sample_count = 4,
         .gl_force_gles2 = true,
         .window_title = "Async PNG Loading (sokol-app)",
+        .icon.sokol_default = true,
     };
 }
 

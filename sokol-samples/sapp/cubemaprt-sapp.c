@@ -5,8 +5,8 @@
 #define HANDMADE_MATH_IMPLEMENTATION
 #define HANDMADE_MATH_NO_SSE
 #include "HandmadeMath.h"
-#include "sokol_app.h"
 #include "sokol_gfx.h"
+#include "sokol_app.h"
 #include "sokol_glue.h"
 #include "dbgui/dbgui.h"
 #include <stddef.h> /* offsetof */
@@ -109,7 +109,7 @@ void init(void) {
         app.offscreen_pass[i] = sg_make_pass(&(sg_pass_desc){
             .color_attachments[0] = {
                 .image = app.cubemap,
-                .face = i
+                .slice = i
             },
             .depth_stencil_attachment.image = depth_img,
             .label = "offscreen-pass"
@@ -118,11 +118,11 @@ void init(void) {
 
     /* pass action for offscreen pass (clear to black) */
     app.offscreen_pass_action = (sg_pass_action) {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.5f, 0.5f, 0.5f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.5f, 0.5f, 0.5f, 1.0f } }
     };
     /* pass action for default pass (clear to grey) */
     app.display_pass_action = (sg_pass_action) {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.75f, 0.75f, 0.75f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.75f, 0.75f, 0.75f, 1.0f } }
     };
 
     /* vertex- and index-buffers for cube  */
@@ -138,41 +138,35 @@ void init(void) {
 
     /* shader and pipeline objects for offscreen-rendering */
     sg_pipeline_desc pip_desc = {
-        .shader = sg_make_shader(shapes_shader_desc()),
+        .shader = sg_make_shader(shapes_shader_desc(sg_query_backend())),
         .layout = layout,
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true,
-        },
-        .blend = {
-            .depth_format = SG_PIXELFORMAT_DEPTH,
-        },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK,
-            .sample_count = OFFSCREEN_SAMPLE_COUNT
+        .cull_mode = SG_CULLMODE_BACK,
+        .sample_count = OFFSCREEN_SAMPLE_COUNT,
+        .depth = {
+            .pixel_format = SG_PIXELFORMAT_DEPTH,
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
+            .write_enabled = true,
         },
         .label = "offscreen-shapes-pipeline"
     };
     app.offscreen_shapes_pip = sg_make_pipeline(&pip_desc);
-    pip_desc.rasterizer.sample_count = DISPLAY_SAMPLE_COUNT;
-    pip_desc.blend.depth_format = 0;
+    pip_desc.sample_count = DISPLAY_SAMPLE_COUNT;
+    pip_desc.depth.pixel_format = 0;
     pip_desc.label = "display-shapes-pipeline";
     app.display_shapes_pip = sg_make_pipeline(&pip_desc);
 
     /* shader and pipeline objects for display-rendering */
     app.display_cube_pip = sg_make_pipeline(&(sg_pipeline_desc){
-        .shader = sg_make_shader(cube_shader_desc()),
+        .shader = sg_make_shader(cube_shader_desc(sg_query_backend())),
         .layout = layout,
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true,
+        .cull_mode = SG_CULLMODE_BACK,
+        .sample_count = DISPLAY_SAMPLE_COUNT,
+        .depth = {
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
+            .write_enabled = true,
         },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK,
-            .sample_count = DISPLAY_SAMPLE_COUNT
-        }
     });
 
     /* 1:1 aspect ration projection matrix for offscreen rendering */
@@ -190,10 +184,12 @@ void init(void) {
 }
 
 void frame(void) {
+    /* compute a frame time multiplier */
+    const float t = (float)sapp_frame_duration();
 
     /* update the little cubes that are reflected in the big cube */
     for (int i = 0; i < NUM_SHAPES; i++) {
-        app.shapes[i].angle += app.shapes[i].angular_velocity * (1.0f/60.0f);
+        app.shapes[i].angle += app.shapes[i].angular_velocity * t;
         hmm_mat4 scale = HMM_Scale(HMM_Vec3(0.25f, 0.25f, 0.25f));
         hmm_mat4 rot = HMM_Rotate(app.shapes[i].angle, app.shapes[i].axis);
         hmm_mat4 trans = HMM_Translate(HMM_Vec3(0.0f, 0.0f, app.shapes[i].radius));
@@ -245,7 +241,7 @@ void frame(void) {
     draw_cubes(app.display_shapes_pip, eye_pos, view_proj);
 
     /* render a big cube in the middle with environment mapping */
-    app.rx += 0.1f; app.ry += 0.2f;
+    app.rx += 0.1f * 60.0f * t; app.ry += 0.2f * 60.0f * t;
     hmm_mat4 rxm = HMM_Rotate(app.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
     hmm_mat4 rym = HMM_Rotate(app.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 model = HMM_MultiplyMat4(HMM_MultiplyMat4(rxm, rym), HMM_Scale(HMM_Vec3(2.0f, 2.0f, 2.f)));
@@ -262,7 +258,7 @@ void frame(void) {
         .light_dir = app.light_dir,
         .eye_pos = HMM_Vec4v(eye_pos, 1.0f)
     };
-    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_shape_uniforms, &uniforms, sizeof(uniforms));
+    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_shape_uniforms, &SG_RANGE(uniforms));
     sg_draw(0, app.cube.num_elements, 1);
 
     __dbgui_draw();
@@ -287,6 +283,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .height = 600,
         .sample_count = DISPLAY_SAMPLE_COUNT,
         .window_title = "Cubemap Render Target (sokol-app)",
+        .icon.sokol_default = true,
     };
 }
 
@@ -305,7 +302,7 @@ static void draw_cubes(sg_pipeline pip, hmm_vec3 eye_pos, hmm_mat4 view_proj) {
             .light_dir = app.light_dir,
             .eye_pos = HMM_Vec4v(eye_pos, 1.0f)
         };
-        sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_shape_uniforms, &uniforms, sizeof(uniforms));
+        sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_shape_uniforms, &SG_RANGE(uniforms));
         sg_draw(0, app.cube.num_elements, 1);
     }
 }
@@ -352,14 +349,12 @@ static mesh_t make_cube_mesh(void) {
     };
     mesh_t mesh = {
         .vbuf = sg_make_buffer(&(sg_buffer_desc){
-            .size = sizeof(vertices),
-            .content = vertices,
+            .data = SG_RANGE(vertices),
             .label = "cube-vertices"
         }),
         .ibuf = sg_make_buffer(&(sg_buffer_desc){
             .type = SG_BUFFERTYPE_INDEXBUFFER,
-            .size = sizeof(indices),
-            .content = indices,
+            .data = SG_RANGE(indices),
             .label = "cube-indices"
         }),
         .num_elements = sizeof(indices) / sizeof(uint16_t)

@@ -6,7 +6,8 @@
 ;-{sToolChainName}=CpcDosRT
 >
 ;-{sToolChainType}:=Default
--{sToolChainType}:=wasm
+;-{sToolChainType}:=wasm
+-{sToolChainType}:=x64
 >
 -{sOpt}:=Debug
 ;-{sOpt}:=O2

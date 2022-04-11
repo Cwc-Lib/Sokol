@@ -2,17 +2,18 @@
 //  imgui-sapp.c
 //
 //  Demonstrates Dear ImGui UI rendering via sokol_gfx.h and
-//  the utility header sokol_imgui.h
+//  the utility header sokol_imgui.h.
+//
+//  Also tests default window size by keeping sapp_desc.width/height
+//  zero-initialized.
 //------------------------------------------------------------------------------
 #include "sokol_app.h"
 #include "sokol_gfx.h"
-#include "sokol_time.h"
 #include "sokol_glue.h"
 #include "imgui.h"
 #define SOKOL_IMGUI_IMPL
 #include "sokol_imgui.h"
 
-static uint64_t last_time = 0;
 static bool show_test_window = true;
 static bool show_another_window = false;
 
@@ -23,7 +24,6 @@ void init(void) {
     sg_desc desc = { };
     desc.context = sapp_sgcontext();
     sg_setup(&desc);
-    stm_setup();
 
     // use sokol-imgui with all default-options (we're not doing
     // multi-sampled rendering or using non-default pixel formats)
@@ -32,27 +32,27 @@ void init(void) {
 
     // initial clear color
     pass_action.colors[0].action = SG_ACTION_CLEAR;
-    pass_action.colors[0].val[0] = 0.0f;
-    pass_action.colors[0].val[1] = 0.5f;
-    pass_action.colors[0].val[2] = 0.7f;
-    pass_action.colors[0].val[3] = 1.0f;
+    pass_action.colors[0].value = { 0.0f, 0.5f, 0.7f, 1.0f };
 }
 
 void frame(void) {
     const int width = sapp_width();
     const int height = sapp_height();
-    const double delta_time = stm_sec(stm_laptime(&last_time));
-    simgui_new_frame(width, height, delta_time);
+    simgui_new_frame({ width, height, sapp_frame_duration(), sapp_dpi_scale() });
 
     // 1. Show a simple window
     // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
     static float f = 0.0f;
     ImGui::Text("Hello, world!");
     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-    ImGui::ColorEdit3("clear color", &pass_action.colors[0].val[0]);
+    ImGui::ColorEdit3("clear color", &pass_action.colors[0].value.r);
     if (ImGui::Button("Test Window")) show_test_window ^= 1;
     if (ImGui::Button("Another Window")) show_another_window ^= 1;
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("w: %d, h: %d, dpi_scale: %.1f", sapp_width(), sapp_height(), sapp_dpi_scale());
+    if (ImGui::Button(sapp_is_fullscreen() ? "Switch to windowed" : "Switch to fullscreen")) {
+        sapp_toggle_fullscreen();
+    }
 
     // 2. Show another simple window, this time using an explicit Begin/End pair
     if (show_another_window) {
@@ -91,10 +91,9 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     desc.frame_cb = frame;
     desc.cleanup_cb = cleanup;
     desc.event_cb = input;
-    desc.width = 1024;
-    desc.height = 768;
     desc.gl_force_gles2 = true;
     desc.window_title = "Dear ImGui (sokol-app)";
     desc.ios_keyboard_resizes_canvas = false;
+    desc.icon.sokol_default = true;
     return desc;
 }

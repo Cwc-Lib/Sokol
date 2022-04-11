@@ -2,7 +2,7 @@
 #if !defined(__EMSCRIPTEN__)
 #error "please compile this file in Emscripten!"
 #endif
-#include "sokol_gfx.h"
+
 #include <stdio.h>
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
@@ -27,7 +27,6 @@ static EM_BOOL emsc_size_changed(int event_type, const EmscriptenUiEvent* ui_eve
 }
 
 EMSCRIPTEN_KEEPALIVE void emsc_device_ready(int device_id, int swapchain_id, int swapchain_fmt) {
-printf("emsc_device_ready\n");
     wgpu_state.dev = (WGPUDevice) device_id;
     wgpu_state.swapchain = (WGPUSwapChain) swapchain_id;
     wgpu_state.render_format = (WGPUTextureFormat) swapchain_fmt;
@@ -35,14 +34,8 @@ printf("emsc_device_ready\n");
 
 /* Javascript function to wrap asynchronous device and swapchain setup */
 EM_JS(void, emsc_async_js_setup, (), {
- console.log("emsc_async_js_setup " );
     WebGPU.initManagers();
-	 console.log("initManagers " );
-	 //https://austineng.github.io/webgpu-samples/?wgsl=0#helloTriangle
-	 //https://toji.github.io/webgpu-test/
-	 //https://searchfox.org/mozilla-central/source/dom/webgpu/Instance.cpp
     navigator.gpu.requestAdapter().then(function(adapter) {
-	console.log("requestAdapter " );
         console.log("adapter extensions: " + adapter.extensions);
         adapter.requestDevice().then(function(device) {
             console.log("device extensions: " + device.extensions);
@@ -65,21 +58,17 @@ EM_JS(void, emsc_async_js_setup, (), {
 static EM_BOOL emsc_frame(double time, void* user_data) {
     switch (emsc.frame_state) {
         case 0:
-			printf("Zero\n");
             emsc_async_js_setup();
             emsc.frame_state = 1;
             break;
         case 1:
-		
             if (wgpu_state.dev) {
-			printf("One\n");
                 wgpu_swapchain_init();
                 wgpu_state.desc.init_cb();
                 emsc.frame_state = 2;
             }
             break;
         case 2:
-		printf("Two\n");
             wgpu_swapchain_next_frame();
             wgpu_state.desc.frame_cb();
             break;

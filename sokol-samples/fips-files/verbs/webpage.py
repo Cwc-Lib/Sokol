@@ -7,7 +7,13 @@ import subprocess
 import glob
 from string import Template
 
-from mod import log, util, project, emscripten, android
+from mod import log, util, project
+
+# webpage template arguments
+GitHubSamplesURL = 'https://github.com/floooh/sokol-samples/tree/master/sapp/'
+
+# build configuration
+BuildConfig = 'sapp-webgl2-wasm-ninja-release'
 
 # sample attributes
 samples = [
@@ -18,20 +24,29 @@ samples = [
     [ 'cube', 'cube-sapp.c', 'cube-sapp.glsl'],
     [ 'noninterleaved', 'noninterleaved-sapp.c', 'noninterleaved-sapp.glsl'],
     [ 'texcube', 'texcube-sapp.c', 'texcube-sapp.glsl' ],
+    [ 'shapes', 'shapes-sapp.c', 'shapes-sapp.glsl'],
+    [ 'shapes-transform', 'shapes-transform-sapp.c', 'shapes-transform-sapp.glsl'],
     [ 'offscreen', 'offscreen-sapp.c', 'offscreen-sapp.glsl' ],
     [ 'instancing', 'instancing-sapp.c', 'instancing-sapp.glsl' ],
     [ 'mrt', 'mrt-sapp.c', 'mrt-sapp.glsl' ],
+    [ 'mrt-pixelformats', 'mrt-pixelformats-sapp.c', 'mrt-pixelformats-sapp.glsl' ],
     [ 'arraytex', 'arraytex-sapp.c', 'arraytex-sapp.glsl' ],
+    [ 'tex3d', 'tex3d-sapp.c', 'tex3d-sapp.glsl' ],
     [ 'dyntex', 'dyntex-sapp.c', 'dyntex-sapp.glsl'],
+    [ 'basisu', 'basisu-sapp.c', None ],
+    [ 'primtypes', 'primtypes-sapp.c', 'primtypes-sapp.glsl'],
     [ 'uvwrap', 'uvwrap-sapp.c', 'uvwrap-sapp.glsl'],
     [ 'mipmap', 'mipmap-sapp.c', 'mipmap-sapp.glsl'],
+    [ 'uniformtypes', 'uniformtypes-sapp.c', 'uniformtypes-sapp.glsl' ],
     [ 'blend', 'blend-sapp.c', 'blend-sapp.glsl' ],
     [ 'sdf', 'sdf-sapp.c', 'sdf-sapp.glsl'],
     [ 'shadows', 'shadows-sapp.c', 'shadows-sapp.glsl'],
     [ 'imgui', 'imgui-sapp.cc', None ],
+    [ 'imgui-dock', 'imgui-dock-sapp.cc', None ],
     [ 'imgui-highdpi', 'imgui-highdpi-sapp.cc', None ],
     [ 'cimgui', 'cimgui-sapp.c', None ],
     [ 'imgui-usercallback', 'imgui-usercallback-sapp.c', 'imgui-usercallback-sapp.glsl'],
+    [ 'nuklear', 'nuklear-sapp.c', None ],
     [ 'sgl-microui', 'sgl-microui-sapp.c', None],
     [ 'fontstash', 'fontstash-sapp.c', None],
     [ 'debugtext', 'debugtext-sapp.c', None],
@@ -39,6 +54,8 @@ samples = [
     [ 'debugtext-userfont', 'debugtext-userfont-sapp.c', None],
     [ 'debugtext-context', 'debugtext-context-sapp.c', 'debugtext-context-sapp.glsl'],
     [ 'events', 'events-sapp.cc', None],
+    [ 'icon', 'icon-sapp.c', None ],
+    [ 'droptest', 'droptest-sapp.c', None],
     [ 'pixelformats', 'pixelformats-sapp.c', None],
     [ 'pixelformats-gles2', 'pixelformats-sapp.c', None],
     [ 'saudio', 'saudio-sapp.c', None],
@@ -47,9 +64,14 @@ samples = [
     [ 'restart', 'restart-sapp.c', 'restart-sapp.glsl' ],
     [ 'sgl', 'sgl-sapp.c', None ],
     [ 'sgl-lines', 'sgl-lines-sapp.c', None ],
+    [ 'sgl-points', 'sgl-points-sapp.c', None ],
+    [ 'sgl-context', 'sgl-context-sapp.c', None ],
     [ 'loadpng', 'loadpng-sapp.c', 'loadpng-sapp.glsl'],
     [ 'plmpeg', 'plmpeg-sapp.c', 'plmpeg-sapp.glsl'],
-    [ 'cgltf', 'cgltf-sapp.c', 'cgltf-sapp.glsl']
+    [ 'cgltf', 'cgltf-sapp.c', 'cgltf-sapp.glsl'],
+    [ 'ozz-anim', 'ozz-anim-sapp.cc', None ],
+    [ 'ozz-skin', 'ozz-skin-sapp.cc', 'ozz-skin-sapp.glsl'],
+    [ 'shdfeatures', 'shdfeatures-sapp.c', 'shdfeatures-sapp.glsl']
 ]
 
 # assets that must also be copied
@@ -67,24 +89,17 @@ assets = [
     "DroidSerif-Regular.ttf",
     "DroidSerif-Italic.ttf",
     "DroidSerif-Bold.ttf",
-    "DroidSansJapanese.ttf"
+    "DroidSansJapanese.ttf",
+    "ozz_anim_skeleton.ozz",
+    "ozz_anim_animation.ozz",
+    "ozz_skin_skeleton.ozz",
+    "ozz_skin_animation.ozz",
+    "ozz_skin_mesh.ozz"
 ]
-
-# webpage template arguments
-GitHubSamplesURL = 'https://github.com/floooh/sokol-samples/tree/master/sapp/'
-
-# build configuration
-BuildConfig = 'sapp-webgl2-wasm-ninja-release'
 
 #-------------------------------------------------------------------------------
 def deploy_webpage(fips_dir, proj_dir, webpage_dir) :
-    """builds the final webpage under under fips-deploy/sokol-webpage"""
-    ws_dir = util.get_workspace_dir(fips_dir)
-    wasm_deploy_dir = '{}/fips-deploy/sokol-samples/{}'.format(ws_dir, BuildConfig)
-
-    # create directories
-    if not os.path.exists(webpage_dir):
-        os.makedirs(webpage_dir)
+    wasm_deploy_dir = util.get_deploy_dir(fips_dir, 'sokol-samples', BuildConfig)
 
     # build the thumbnail gallery
     content = ''
@@ -118,29 +133,28 @@ def deploy_webpage(fips_dir, proj_dir, webpage_dir) :
         shutil.copy(proj_dir + '/webpage/' + name, webpage_dir + '/' + name)
 
     # generate WebAssembly HTML pages
-    if emscripten.check_exists(fips_dir):
-        for sample in samples :
-            name = sample[0]
-            source = sample[1]
-            glsl = sample[2]
-            log.info('> generate wasm HTML page: {}'.format(name))
-            for postfix in ['sapp', 'sapp-ui']:
-                for ext in ['wasm', 'js'] :
-                    src_path = '{}/{}-{}.{}'.format(wasm_deploy_dir, name, postfix, ext)
-                    if os.path.isfile(src_path) :
-                        shutil.copy(src_path, '{}/'.format(webpage_dir))
-                    with open(proj_dir + '/webpage/wasm.html', 'r') as f :
-                        templ = Template(f.read())
-                    src_url = GitHubSamplesURL + source
-                    if glsl is None:
-                        glsl_url = "."
-                        glsl_hidden = "hidden"
-                    else:
-                        glsl_url = GitHubSamplesURL + glsl
-                        glsl_hidden = ""
-                    html = templ.safe_substitute(name=name, prog=name+'-'+postfix, source=src_url, glsl=glsl_url, hidden=glsl_hidden)
-                    with open('{}/{}-{}.html'.format(webpage_dir, name, postfix), 'w') as f :
-                        f.write(html)
+    for sample in samples :
+        name = sample[0]
+        source = sample[1]
+        glsl = sample[2]
+        log.info('> generate wasm HTML page: {}'.format(name))
+        for postfix in ['sapp', 'sapp-ui']:
+            for ext in ['wasm', 'js'] :
+                src_path = '{}/{}-{}.{}'.format(wasm_deploy_dir, name, postfix, ext)
+                if os.path.isfile(src_path) :
+                    shutil.copy(src_path, '{}/'.format(webpage_dir))
+                with open(proj_dir + '/webpage/wasm.html', 'r') as f :
+                    templ = Template(f.read())
+                src_url = GitHubSamplesURL + source
+                if glsl is None:
+                    glsl_url = "."
+                    glsl_hidden = "hidden"
+                else:
+                    glsl_url = GitHubSamplesURL + glsl
+                    glsl_hidden = ""
+                html = templ.safe_substitute(name=name, prog=name+'-'+postfix, source=src_url, glsl=glsl_url, hidden=glsl_hidden)
+                with open('{}/{}-{}.html'.format(webpage_dir, name, postfix), 'w') as f :
+                    f.write(html)
 
     # copy assets from deploy directory
     for asset in assets:
@@ -148,6 +162,8 @@ def deploy_webpage(fips_dir, proj_dir, webpage_dir) :
         src_path = '{}/{}'.format(wasm_deploy_dir, asset)
         if os.path.isfile(src_path):
             shutil.copy(src_path, webpage_dir)
+        else:
+            log.warn('!!! file {} not found!'.format(src_path))
 
     # copy the screenshots
     for sample in samples :
@@ -160,8 +176,8 @@ def deploy_webpage(fips_dir, proj_dir, webpage_dir) :
 #-------------------------------------------------------------------------------
 def build_deploy_webpage(fips_dir, proj_dir, rebuild) :
     # if webpage dir exists, clear it first
-    ws_dir = util.get_workspace_dir(fips_dir)
-    webpage_dir = '{}/fips-deploy/sokol-webpage'.format(ws_dir)
+    proj_build_dir = util.get_deploy_root_dir(fips_dir, 'sokol-samples')
+    webpage_dir = '{}/sokol-webpage'.format(proj_build_dir)
     if rebuild :
         if os.path.isdir(webpage_dir) :
             shutil.rmtree(webpage_dir)
@@ -169,9 +185,8 @@ def build_deploy_webpage(fips_dir, proj_dir, rebuild) :
         os.makedirs(webpage_dir)
 
     # compile samples
-    if emscripten.check_exists(fips_dir) :
-        project.gen(fips_dir, proj_dir, BuildConfig)
-        project.build(fips_dir, proj_dir, BuildConfig)
+    project.gen(fips_dir, proj_dir, BuildConfig)
+    project.build(fips_dir, proj_dir, BuildConfig)
 
     # deploy the webpage
     deploy_webpage(fips_dir, proj_dir, webpage_dir)
@@ -180,8 +195,8 @@ def build_deploy_webpage(fips_dir, proj_dir, rebuild) :
 
 #-------------------------------------------------------------------------------
 def serve_webpage(fips_dir, proj_dir) :
-    ws_dir = util.get_workspace_dir(fips_dir)
-    webpage_dir = '{}/fips-deploy/sokol-webpage'.format(ws_dir)
+    proj_build_dir = util.get_deploy_root_dir(fips_dir, 'sokol-samples')
+    webpage_dir = '{}/sokol-webpage'.format(proj_build_dir)
     p = util.get_host_platform()
     if p == 'osx' :
         try :

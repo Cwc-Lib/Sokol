@@ -29,7 +29,6 @@ void init(void) {
     // setup sokol-imgui, but provide our own font
     simgui_desc_t simgui_desc = { };
     simgui_desc.no_default_font = true;
-    simgui_desc.dpi_scale = sapp_dpi_scale();
     simgui_setup(&simgui_desc);
 
     // configure Dear ImGui with our own embedded font
@@ -53,29 +52,27 @@ void init(void) {
     img_desc.wrap_v = SG_WRAP_CLAMP_TO_EDGE;
     img_desc.min_filter = SG_FILTER_LINEAR;
     img_desc.mag_filter = SG_FILTER_LINEAR;
-    img_desc.content.subimage[0][0].ptr = font_pixels;
-    img_desc.content.subimage[0][0].size = font_width * font_height * 4;
+    img_desc.data.subimage[0][0].ptr = font_pixels;
+    img_desc.data.subimage[0][0].size = font_width * font_height * 4;
     io.Fonts->TexID = (ImTextureID)(uintptr_t) sg_make_image(&img_desc).id;
 
     // initial clear color
     pass_action.colors[0].action = SG_ACTION_CLEAR;
-    pass_action.colors[0].val[0] = 0.3f;
-    pass_action.colors[0].val[1] = 0.7f;
-    pass_action.colors[0].val[2] = 0.0f;
-    pass_action.colors[0].val[3] = 1.0f;
+    pass_action.colors[0].value = { 0.3f, 0.7f, 0.0f, 1.0f };
 }
 
 void frame(void) {
     const int width = sapp_width();
     const int height = sapp_height();
-    simgui_new_frame(width, height, 1.0/60.0);
+    simgui_new_frame({ width, height, sapp_frame_duration(), sapp_dpi_scale() });
 
     // 1. Show a simple window
     // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
     static float f = 0.0f;
     ImGui::Text("Hello, world!");
     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-    ImGui::ColorEdit3("clear color", &pass_action.colors[0].val[0]);
+    ImGui::ColorEdit3("clear color", &pass_action.colors[0].value.r);
+    ImGui::Text("width: %d, height: %d, dpi_scale: %.1f\n", sapp_width(), sapp_height(), sapp_dpi_scale());
     if (ImGui::Button("Test Window")) show_test_window ^= 1;
     if (ImGui::Button("Another Window")) show_another_window ^= 1;
     ImGui::Text("NOTE: programmatic quit isn't supported on mobile");
@@ -165,5 +162,6 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     desc.ios_keyboard_resizes_canvas = false;
     desc.gl_force_gles2 = true;
     desc.window_title = "Dear ImGui HighDPI (sokol-app)";
+    desc.icon.sokol_default = true;
     return desc;
 }

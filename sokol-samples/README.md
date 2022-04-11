@@ -11,10 +11,90 @@ Minimal 8-bit emulators using the sokol headers: https://floooh.github.io/tiny8b
 |Platform|Build Status|
 |--------|------|
 |GH Actions (OSX/Linux/Win+VS2019/iOS/WASM/Android)|[![Build Status](https://github.com/floooh/sokol-samples/workflows/build_and_test/badge.svg)](https://github.com/floooh/sokol-samples/actions)|
-|Travis (OSX/Linux/Win,VS2017)|[![Build Status](https://travis-ci.org/floooh/sokol-samples.svg?branch=master)](https://travis-ci.org/floooh/sokol-samples)|
 |AppVeyor (Windows,VS2015)|[![Build status](https://ci.appveyor.com/api/projects/status/3jxh6gi272i5jd84/branch/master?svg=true)](https://ci.appveyor.com/project/floooh/sokol-samples/branch/master)|
 
+## How to Build on Windows, Linux and macOS
+
+First check that the following tools are in the path. Exact versions shouldn't matter
+(on Windows you can use [scoop.sh](https://scoop.sh/) to easily install the required tools from the 
+command line):
+
+```sh
+> git --version
+2.x.x (any version should do)
+> python --version
+Python 3.x or 2.x
+> cmake --version
+cmake version 3.8.x or later
+# on OSX (on Windows you just need a recent VS)
+> xcodebuild -version
+Xcode 10.x (or later)
+# make is only needed on Linux or when building the WASM samples
+> make --version
+GNU Make 3.81
+# ninja is only needed for VSCode support on macOS and Linux
+> ninja --version
+1.x.y
+```
+
+> NOTE: on Linux you'll also need to install the OpenGL, X11 and ALSA development packages (e.g. mesa-common-dev, libx11-dev and libasound2-dev).
+
+Create a scratch/workspace dir and clone the project:
+```sh
+> mkdir ~/scratch
+> cd ~/scratch
+> git clone https://github.com/floooh/sokol-samples
+> cd sokol-samples
+```
+
+Select a build config for your platform and 3D backend combination:
+```sh
+# macOS with Metal:
+> ./fips set config sapp-metal-osx-xcode-debug
+# macOS with OpenGL:
+> ./fips set config sapp-osx-xcode-debug
+# Windows with D3D11:
+> ./fips set config sapp-d3d11-win64-vstudio-debug
+# Windows with OpenGL:
+> ./fips set config sapp-win64-vstudio-debug
+# Linux:
+> ./fips set config sapp-linux-make-debug
+```
+
+Build the project (this will also fetch additional dependencies):
+```sh
+> ./fips build
+```
+
+List and run the build targets:
+```sh
+> ./fips list targets
+...
+> ./fips run triangle-sapp
+```
+
+...to open the project in Visual Studio or Xcode:
+```sh
+> ./fips gen
+> ./fips open
+```
+
+...you can also open the project in VSCode (with the MS C/C++ extension),
+for instance on Linux:
+```sh
+> ./fips set config linux-vsocde-debug
+> ./fips gen
+> ./fips open
+```
+
+For additional platforms (like iOS/Android/UWP), continue reading the README past the What's New section.
+
+For more information on the fips build system see here: https://floooh.github.io/fips/
+
 ## What's New:
+
+- **23-Sep-2020**: samples can now be built for UWP using the ```sapp-uwp-vstudio-debug``` and ```sapp-uwp-vstudio-release``` build configs
+  NOTE that fips support for UWP built apps is incomplete (e.g. ```fips run``` doesn't work, and UWP app bundle creation is also not supported)
 
 - **27-May-2020**: four new test and demonstration samples for the new sokol_debugtext.h header
 
@@ -75,25 +155,6 @@ steps to udpate:
     1. delete the fips-imgui directory
     2. in the sokol-samples directory, run **./fips fetch**
 
-## How to build
-
-(for examples of how to build without a specific build system, scroll to the end)
-
-Make sure that the following tools are in the path. Exact versions shouldn't
-matter:
-```
-> python --version
-Python 2.7.10 (3.x works too)
-> cmake --version
-cmake version 3.8.2 (or later)
-# make is only needed for building through emscripten
-> make --version
-GNU Make 3.81
-# on OSX (on Windows you just need a recent VS)
-> xcodebuild -version
-Xcode 9.0
-```
-
 ### Building the platform-specific samples
 
 There are two types of samples, platform-specific samples in the
@@ -106,7 +167,7 @@ header in the folder ```sapp```.
 ```
 > mkdir ~/scratch
 > cd ~/scratch
-> git clone git@github.com:floooh/sokol-samples
+> git clone https://github.com/floooh/sokol-samples
 > cd sokol-samples
 > ./fips build
 ...
@@ -200,7 +261,7 @@ To debug Android applications I recommend using Android Studio with
 "Profile or debug APK". You can find the compiled APK files under
 ```../fips-deploy/[project]/[config]```.
 
-## To build the platform-agnostic sokol_app.h samples:
+## Building the platform-agnostic samples for additional platforms:
 
 Building the sokol_app.h samples is currently supported for MacOS, Windows,
 Linux, iOS, HTML5 and Android (RaspberryPi is planned).
@@ -221,6 +282,8 @@ which matches your platform and build system:
   ...
   sapp-win64-vstudio-debug
   sapp-win64-vstudio-release
+  sapp-uwp-vstudio-debug
+  sapp-uwp-vstudio-release
 > ./fips set config sapp-...
 > ./fips build
 > ./fips list targets
@@ -229,11 +292,14 @@ which matches your platform and build system:
 
 Note the following caveats:
 - for HTML5, first install the emscripten SDK as described above in the
-native HTML5 sample section
+  native HTML5 sample section
 - for iOS, set the developer team id, as described above in the iOS section
-- OpenGL is currently not supported on MacOS because NSOpenGLView and
-friends are broken on the MacOS Mojave beta, instead use the
-```sapp-metal-*``` build configs (GLES on iOS is supported though)
+- for UWP you need a bleeding edge Visual Studio and Windows SDK version
+  (at least VS2019 and SDK 10.0.19041.0)
+- fips build support for UWP is incomplete, you only get "raw" UWP
+  executables out of the build process, but not packaged and signed application
+  bundles. This is enough for running and debugging the samples inside
+  Visual Studio, but not for much else.
 
 ## How to build without a build system
 
@@ -331,6 +397,43 @@ To build one of the sokol-app samples for GL on Windows:
 > cl cube-sapp.c ..\libs\sokol\sokol.c /DSOKOL_GLCORE33 /I..\..\sokol /I..\libs kernel32.lib user32.lib gdi32.lib
 ```
 
+### Building manually on Windows with MSYS2/mingw gcc:
+
+> NOTE: compile with '-mwin32' (this defines _WIN32 for proper platform detection)
+
+From the MSYS2 shell:
+
+```sh
+> cd sokol-samples/sapp
+# compile shaders for HLSL and GLSL:
+> ../../sokol-tools-bin/bin/win32/sokol-shdc -i cube-sapp.glsl -o cube-sapp.glsl.h -l hlsl5:glsl330
+# build and run with D3D11 backend:
+> gcc cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp-d3d11 -mwin32 -O2 -DSOKOL_D3D11 -I../../sokol -I ../libs -lkernel32 -luser32 -lshell32 -ldxgi -ld3d11 -lole32 -lgdi32
+> ./cube-sapp-d3d11
+# build and run with GL backend:
+> gcc cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp-gl -mwin32 -O2 -DSOKOL_GLCORE33 -I../../sokol -I ../libs -lkernel32 -luser32 -lshell32 -lgdi32 -lole32
+> ./cube-sapp-gl
+```
+
+### Building manually on Windows with Clang:
+
+> NOTE: AFAIK Clang for Windows needs a working MSVC toolchain and Windows SDK installed, I haven't tested without.
+
+Clang recognizes the ```#pragma comment(lib,...)``` statements in the Sokol headers, so you don't
+need to specify the link libraries manually.
+
+```sh
+> cd sokol-samples/sapp
+# compile shaders for HLSL and GLSL:
+> ..\..\sokol-tools-bin\bin\win32\sokol-shdc -i cube-sapp.glsl -o cube-sapp.glsl.h -l hlsl5:glsl330
+# build and run with D3D11 backend:
+> clang cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp-d3d11.exe -O2 -DSOKOL_D3D11 -I ../../sokol -I ../libs
+> cube-sapp-d3d11
+# build and run with GL backend:
+> clang cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp-gl.exe -O2 -DSOKOL_GLCORE33 -I ../../sokol -I ../libs
+> cube-sapp-gl
+```
+
 ### Building manually on Linux with gcc
 
 On Linux you need the "usual" development-packages for OpenGL development, and
@@ -349,7 +452,7 @@ To build one of the sokol-app samples on Linux:
 ```sh
 > cd sokol-samples/sapp
 > ../../sokol-tools-bin/bin/linux/sokol-shdc -i cube-sapp.glsl -o cube-sapp.glsl.h -l glsl330
-> cc cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp -DSOKOL_GLCORE33 -I../../sokol -I../libs -lGL -ldl -lm -lpthread -lX11 -lasound
+> cc cube-sapp.c ../libs/sokol/sokol.c -o cube-sapp -DSOKOL_GLCORE33 -pthread -I../../sokol -I../libs -lGL -ldl -lm -lX11 -lasound -lXi -lXcursor
 ```
 
 ## Many Thanks to:
@@ -360,5 +463,6 @@ To build one of the sokol-app samples on Linux:
 - Dear Imgui: https://github.com/ocornut/imgui
 - cimgui: https://github.com/cimgui/cimgui
 - utest.h: https://github.com/sheredom/utest.h
+- Ozz Animation: https://github.com/guillaumeblanc/ozz-animation
 
 Enjoy!

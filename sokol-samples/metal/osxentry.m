@@ -81,6 +81,7 @@ static id mtk_view_controller;
     #if TARGET_OS_IPHONE
         CGRect mainScreenBounds = [[UIScreen mainScreen] bounds];
         window = [[UIWindow alloc] initWithFrame:mainScreenBounds];
+        (void)window_delegate;
     #else
         window_delegate = [[SokolWindowDelegate alloc] init];
         const NSUInteger style =
@@ -109,7 +110,7 @@ static id mtk_view_controller;
     [mtk_view setDevice: mtl_device];
     [mtk_view setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [mtk_view setDepthStencilPixelFormat:MTLPixelFormatDepth32Float_Stencil8];
-    [mtk_view setSampleCount:sample_count];
+    [mtk_view setSampleCount:(NSUInteger)sample_count];
     #if !TARGET_OS_IPHONE
         [window setContentView:mtk_view];
         CGSize drawable_size = { (CGFloat) width, (CGFloat) height };
@@ -208,7 +209,7 @@ static id mtk_view_controller;
 }
 
 #if !TARGET_OS_IPHONE
-- (BOOL)canBecomeKey {
+- (BOOL)canBecomeKeyView {
     return YES;
 }
 
@@ -335,11 +336,13 @@ void osx_start(int w, int h, int smp_count, const char* title, osx_init_func ifu
 
 static const void* osx_mtk_get_render_pass_descriptor(void* user_data) {
     assert(user_data == (void*)0xABCDABCD);
+    (void)user_data;
     return (__bridge const void*) [mtk_view currentRenderPassDescriptor];
 }
 
 static const void* osx_mtk_get_drawable(void* user_data) {
     assert(user_data == (void*)0xABCDABCD);
+    (void)user_data;
     return (__bridge const void*) [mtk_view currentDrawable];
 }
 
@@ -350,7 +353,7 @@ sg_context_desc osx_get_context(void) {
             .device = (__bridge const void*) mtl_device,
             .renderpass_descriptor_userdata_cb = osx_mtk_get_render_pass_descriptor,
             .drawable_userdata_cb = osx_mtk_get_drawable,
-            .user_data = 0xABCDABCD
+            .user_data = (void*)0xABCDABCD
         }
     };
 }

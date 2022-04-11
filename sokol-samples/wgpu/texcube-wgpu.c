@@ -43,7 +43,7 @@ static void init(void) {
         and WebGL2 / GLES2 don't support integer vertex shader inputs.
     */
     vertex_t vertices[] = {
-        /* pos                  	color       		uvs 		*/
+        /* pos                  color       uvs */
         { -1.0f, -1.0f, -1.0f,  0xFF0000FF,     0,     0 },
         {  1.0f, -1.0f, -1.0f,  0xFF0000FF, 32767,     0 },
         {  1.0f,  1.0f, -1.0f,  0xFF0000FF, 32767, 32767 },
@@ -75,8 +75,7 @@ static void init(void) {
         {  1.0f,  1.0f, -1.0f,  0xFF007FFF,     0, 32767 },
     };
     state.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(vertices),
-        .content = vertices,
+        .data = SG_RANGE(vertices),
         .label = "cube-vertices"
     });
 
@@ -91,8 +90,7 @@ static void init(void) {
     };
     state.bind.index_buffer = sg_make_buffer(&(sg_buffer_desc){
         .type = SG_BUFFERTYPE_INDEXBUFFER,
-        .size = sizeof(indices),
-        .content = indices,
+        .data = SG_RANGE(indices),
         .label = "cube-indices"
     });
 
@@ -107,15 +105,12 @@ static void init(void) {
     state.bind.fs_images[SLOT_tex] = sg_make_image(&(sg_image_desc){
         .width = 4,
         .height = 4,
-        .content.subimage[0][0] = {
-            .ptr = pixels,
-            .size = sizeof(pixels)
-        },
+        .data.subimage[0][0] = SG_RANGE(pixels),
         .label = "cube-texture"
     });
 
     /* a shader */
-    sg_shader shd = sg_make_shader(texcube_shader_desc());
+    sg_shader shd = sg_make_shader(texcube_shader_desc(sg_query_backend()));
 
     /* a pipeline state object */
     state.pip = sg_make_pipeline(&(sg_pipeline_desc){
@@ -128,38 +123,36 @@ static void init(void) {
         },
         .shader = shd,
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true
+        .depth = {
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
+            .write_enabled = true
         },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK,
-        },
+        .cull_mode = SG_CULLMODE_BACK,
         .label = "cube-pipeline"
     });
 
     /* default pass action */
     state.pass_action = (sg_pass_action) {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.25f, 0.5f, 0.75f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.25f, 0.5f, 0.75f, 1.0f } }
     };
 }
 
 static void frame(void) {
     /* compute model-view-projection matrix for vertex shader */
-    hmm_mat4 proj 		= HMM_Perspective(60.0f, (float)wgpu_width()/(float)wgpu_height(), 0.01f, 10.0f);
-    hmm_mat4 view 		= HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
-    hmm_mat4 view_proj 	= HMM_MultiplyMat4(proj, view);
+    hmm_mat4 proj = HMM_Perspective(60.0f, (float)wgpu_width()/(float)wgpu_height(), 0.01f, 10.0f);
+    hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
+    hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
     vs_params_t vs_params;
     state.rx += 1.0f; state.ry += 2.0f;
-    hmm_mat4 rxm 	= HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
-    hmm_mat4 rym 	= HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
-    hmm_mat4 model 	= HMM_MultiplyMat4(rxm, rym);
-    vs_params.mvp 	= HMM_MultiplyMat4(view_proj, model);
+    hmm_mat4 rxm = HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
+    hmm_mat4 rym = HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
+    hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
+    vs_params.mvp = HMM_MultiplyMat4(view_proj, model);
 
     sg_begin_default_pass(&state.pass_action, wgpu_width(), wgpu_height());
     sg_apply_pipeline(state.pip);
     sg_apply_bindings(&state.bind);
-    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &vs_params, sizeof(vs_params));
+    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &SG_RANGE(vs_params));
     sg_draw(0, 36, 1);
     sg_end_pass();
     sg_commit();
@@ -175,9 +168,9 @@ int main() {
         .frame_cb = frame,
         .shutdown_cb = shutdown,
         .sample_count = SAMPLE_COUNT,
-        .width 	= 640,
+        .width = 640,
         .height = 480,
-        .title 	= "texcube-wgpu"
+        .title = "texcube-wgpu"
     });
     return 0;
 }

@@ -7,12 +7,11 @@
 #define HANDMADE_MATH_IMPLEMENTATION
 #define HANDMADE_MATH_NO_SSE
 #include "HandmadeMath.h"
-#define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
-#include "flextgl/flextGL.h"
 #define SOKOL_IMPL
 #define SOKOL_GLCORE33
 #include "sokol_gfx.h"
+#define GLFW_INCLUDE_NONE
+#include "GLFW/glfw3.h"
 
 typedef struct {
     hmm_mat4 mvp;
@@ -58,11 +57,10 @@ int main() {
     GLFWwindow* w = glfwCreateWindow(WIDTH, HEIGHT, "Sokol Mipmapping GLFW", 0, 0);
     glfwMakeContextCurrent(w);
     glfwSwapInterval(1);
-    flextInit();
 
     /* setup sokol_gfx */
     sg_setup(&(sg_desc){0});
-    
+
     /* a plane vertex buffer */
     float vertices[] = {
         -1.0, -1.0, 0.0,  0.0, 0.0,
@@ -71,18 +69,17 @@ int main() {
         +1.0, +1.0, 0.0,  1.0, 1.0,
     };
     sg_buffer vbuf = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(vertices),
-        .content = vertices
+        .data = SG_RANGE(vertices)
     });
 
     /* initialize mipmap content, different colors and checkboard pattern */
-    sg_image_content img_content;
+    sg_image_data img_data;
     uint32_t* ptr = pixels.mip0;
     bool even_odd = false;
     for (int mip_index = 0; mip_index <= 8; mip_index++) {
         const int dim = 1<<(8-mip_index);
-        img_content.subimage[0][mip_index].ptr = ptr;
-        img_content.subimage[0][mip_index].size = dim * dim * 4;
+        img_data.subimage[0][mip_index].ptr = ptr;
+        img_data.subimage[0][mip_index].size = (size_t) (dim * dim * 4);
         for (int y = 0; y < dim; y++) {
             for (int x = 0; x < dim; x++) {
                 *ptr++ = even_odd ? mip_colors[mip_index] : 0xFF000000;
@@ -100,7 +97,7 @@ int main() {
         .num_mipmaps = 9,
         .pixel_format = SG_PIXELFORMAT_RGBA8,
         .mag_filter = SG_FILTER_LINEAR,
-        .content = img_content
+        .data = img_data
     };
     sg_filter min_filter[] = {
         SG_FILTER_NEAREST_MIPMAP_NEAREST,
@@ -121,7 +118,7 @@ int main() {
     img_desc.min_lod = 0.0f;
     img_desc.max_lod = 0.0f;    /* for max_lod, zero-initialized means "FLT_MAX" */
     for (int i = 8; i < 12; i++) {
-        img_desc.max_anisotropy = 1<<(i-7);
+        img_desc.max_anisotropy = (uint32_t) 1<<(i-7);
         img[i] = sg_make_image(&img_desc);
     }
 
@@ -146,7 +143,7 @@ int main() {
                 "}\n"
         },
         .fs = {
-            .images[0] = { .name="tex", .type = SG_IMAGETYPE_2D },
+            .images[0] = { .name="tex", .image_type = SG_IMAGETYPE_2D },
             .source =
                 "#version 330\n"
                 "uniform sampler2D tex;"
@@ -164,18 +161,17 @@ int main() {
             .attrs = {
                 [0].format=SG_VERTEXFORMAT_FLOAT3,
                 [1].format=SG_VERTEXFORMAT_FLOAT2
-            } 
+            }
         },
         .shader = shd,
         .primitive_type = SG_PRIMITIVETYPE_TRIANGLE_STRIP,
-        .rasterizer.sample_count = MSAA_SAMPLES
     });
 
     /* view-projection matrix */
     hmm_mat4 proj = HMM_Perspective(90.0f, (float)WIDTH/(float)HEIGHT, 0.01f, 10.0f);
     hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 0.0f, 5.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
-    
+
     sg_bindings bind = {
         .vertex_buffers[0] = vbuf
     };
@@ -194,10 +190,10 @@ int main() {
             const float y = ((float)(i / 4) - 1.0f) * -2.0f;
             hmm_mat4 model = HMM_MultiplyMat4(HMM_Translate(HMM_Vec3(x, y, 0.0f)), rm);
             vs_params.mvp = HMM_MultiplyMat4(view_proj, model);
-            
+
             bind.fs_images[0] = img[i];
             sg_apply_bindings(&bind);
-            sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, &vs_params, sizeof(vs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, &SG_RANGE(vs_params));
             sg_draw(0, 4, 1);
         }
         sg_end_pass();

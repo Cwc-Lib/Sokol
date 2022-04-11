@@ -19,24 +19,24 @@ static const int max_windows = 128;
 static struct {
     uint64_t last_time;
     int num_windows;
-    uint64_t min_raw_frame_time;
-    uint64_t max_raw_frame_time;
-    uint64_t min_rounded_frame_time;
-    uint64_t max_rounded_frame_time;
+    double min_raw_frame_time;
+    double max_raw_frame_time;
+    double min_rounded_frame_time;
+    double max_rounded_frame_time;
     float counter;
     sg_pass_action pass_action;
 } state = {
     .num_windows = 16,
     .pass_action = {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.0f, 0.5f, 0.7f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.0f, 0.5f, 0.7f, 1.0f } }
     }
 };
 
 static void reset_minmax_frametimes(void) {
     state.max_raw_frame_time = 0;
-    state.min_raw_frame_time = 0xFFFFFFFFFFFFFFFF;
+    state.min_raw_frame_time = 1000.0;
     state.max_rounded_frame_time = 0;
-    state.min_rounded_frame_time = 0xFFFFFFFFFFFFFFFF;
+    state.min_rounded_frame_time = 1000.0;
 }
 
 static void init(void) {
@@ -54,8 +54,8 @@ static void frame(void) {
     const int height = sapp_height();
     const float fwidth = (float)width;
     const float fheight = (float)height;
-    uint64_t raw_frame_time = stm_laptime(&state.last_time);
-    uint64_t rounded_frame_time = stm_round_to_common_refresh_rate(raw_frame_time);
+    double raw_frame_time = stm_sec(stm_laptime(&state.last_time));
+    double rounded_frame_time = sapp_frame_duration();
     if (raw_frame_time > 0) {
         if (raw_frame_time < state.min_raw_frame_time) {
             state.min_raw_frame_time = raw_frame_time;
@@ -73,21 +73,26 @@ static void frame(void) {
         }
     }
 
-    simgui_new_frame(width, height, stm_sec(rounded_frame_time));
+    simgui_new_frame(&(simgui_frame_desc_t){
+        .width = width,
+        .height = height,
+        .delta_time = rounded_frame_time,
+        .dpi_scale = sapp_dpi_scale()
+    });
 
     // controls window
     igSetNextWindowPos((ImVec2){ 10, 10 }, ImGuiCond_Once, (ImVec2){0,0});
     igSetNextWindowSize((ImVec2){ 500, 0 }, ImGuiCond_Once);
     igBegin("Controls", 0, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoScrollbar);
-    igSliderInt("Num Windows", &state.num_windows, 1, max_windows, "%d");
+    igSliderInt("Num Windows", &state.num_windows, 1, max_windows, "%d", ImGuiSliderFlags_None);
     igText("raw frame time:     %.3fms (min: %.3f, max: %.3f)",
-        stm_ms(raw_frame_time),
-        stm_ms(state.min_raw_frame_time),
-        stm_ms(state.max_raw_frame_time));
+        raw_frame_time * 1000.0,
+        state.min_raw_frame_time * 1000.0,
+        state.max_raw_frame_time * 1000.0);
     igText("rounded frame time: %.3fms (min: %.3f, max: %.3f)",
-        stm_ms(rounded_frame_time),
-        stm_ms(state.min_rounded_frame_time),
-        stm_ms(state.max_rounded_frame_time));
+        rounded_frame_time * 1000.0,
+        state.min_rounded_frame_time * 1000.0,
+        state.max_rounded_frame_time * 1000.0);
     if (igButton("Reset min/max times", (ImVec2){0,0})) {
         reset_minmax_frametimes();
     }
@@ -134,6 +139,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .width = 800,
         .height = 600,
         .gl_force_gles2 = true,
-        .window_title = "imgui perftest"
+        .window_title = "imgui perftest",
+        .icon.sokol_default = true,
     };
 }

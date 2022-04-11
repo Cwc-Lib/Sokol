@@ -90,22 +90,20 @@ void init(void) {
     state.default_pass_action = (sg_pass_action) {
         .colors[0] = {
             .action = SG_ACTION_CLEAR,
-            .val = { 0.0f, 0.5f, 0.7f, 1.0f }
+            .value = { 0.0f, 0.5f, 0.7f, 1.0f }
         }
     };
 
     // setup the sokol-gfx resources needed for the first user draw callback
     {
         state.scene1.bind.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-            .size = sizeof(cube_vertices),
-            .content = cube_vertices,
+            .data = SG_RANGE(cube_vertices),
             .label = "cube-vertices"
         });
 
         state.scene1.bind.index_buffer = sg_make_buffer(&(sg_buffer_desc){
             .type = SG_BUFFERTYPE_INDEXBUFFER,
-            .size = sizeof(cube_indices),
-            .content = cube_indices,
+            .data = SG_RANGE(cube_indices),
             .label = "cube-indices"
         });
 
@@ -116,13 +114,13 @@ void init(void) {
                     [ATTR_vs_color0].format   = SG_VERTEXFORMAT_FLOAT4
                 }
             },
-            .shader = sg_make_shader(scene_shader_desc()),
+            .shader = sg_make_shader(scene_shader_desc(sg_query_backend())),
             .index_type = SG_INDEXTYPE_UINT16,
-            .depth_stencil = {
-                .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-                .depth_write_enabled = true,
+            .depth = {
+                .compare = SG_COMPAREFUNC_LESS_EQUAL,
+                .write_enabled = true,
             },
-            .rasterizer.cull_mode = SG_CULLMODE_BACK,
+            .cull_mode = SG_CULLMODE_BACK,
             .label = "cube-pipeline"
         });
     }
@@ -130,13 +128,11 @@ void init(void) {
     // setup a sokol-gl pipeline needed for the second user draw callback
     {
         state.scene2.pip = sgl_make_pipeline(&(sg_pipeline_desc){
-            .depth_stencil = {
-                .depth_write_enabled = true,
-                .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
+            .depth = {
+                .write_enabled = true,
+                .compare = SG_COMPAREFUNC_LESS_EQUAL,
             },
-            .rasterizer = {
-                .cull_mode = SG_CULLMODE_BACK
-            }
+            .cull_mode = SG_CULLMODE_BACK
         });
     }
 }
@@ -155,11 +151,12 @@ void draw_scene_1(const ImDrawList* dl, const ImDrawCmd* cmd) {
     sg_apply_viewport(cx, cy, 360, 360, true);
 
     // a model-view-proj matrix for the vertex shader
+    const float t = (float)(sapp_frame_duration() * 60.0);
     vs_params_t vs_params;
     hmm_mat4 proj = HMM_Perspective(60.0f, 1.0f, 0.01f, 10.0f);
     hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
-    state.scene1.rx += 1.0f; state.scene1.ry += 2.0f;
+    state.scene1.rx += 1.0f * t; state.scene1.ry += 2.0f * t;
     hmm_mat4 rxm = HMM_Rotate(state.scene1.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
     hmm_mat4 rym = HMM_Rotate(state.scene1.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
@@ -177,7 +174,7 @@ void draw_scene_1(const ImDrawList* dl, const ImDrawCmd* cmd) {
     */
     sg_apply_pipeline(state.scene1.pip);
     sg_apply_bindings(&state.scene1.bind);
-    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &vs_params, sizeof(vs_params));
+    sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_vs_params, &SG_RANGE(vs_params));
     sg_draw(0, 36, 1);
 }
 
@@ -220,6 +217,7 @@ static void cube_sgl(void) {
 // another ImGui draw callback to render via sokol-gl
 void draw_scene_2(const ImDrawList* dl, const ImDrawCmd* cmd) {
     (void)dl;
+    const float t = (float)(sapp_frame_duration() * 60.0);
 
     const int cx = (int) cmd->ClipRect.x;
     const int cy = (int) cmd->ClipRect.y;
@@ -228,8 +226,8 @@ void draw_scene_2(const ImDrawList* dl, const ImDrawCmd* cmd) {
     sgl_scissor_rect(cx, cy, cw, ch, true);
     sgl_viewport(cx, cy, 360, 360, true);
 
-    state.scene2.r0 += 1.0f;
-    state.scene2.r1 += 2.0f;
+    state.scene2.r0 += 1.0f * t;
+    state.scene2.r1 += 2.0f * t;
 
     sgl_defaults();
     sgl_load_pipeline(state.scene2.pip);
@@ -272,18 +270,23 @@ void frame(void) {
     // rendering its own custom 3D scene via a user draw callback
     const int w = sapp_width();
     const int h = sapp_height();
-    simgui_new_frame(w, h, 1.0f / 60.0f);
+    simgui_new_frame(&(simgui_frame_desc_t){
+        .width = w,
+        .height = h,
+        .delta_time = sapp_frame_duration(),
+        .dpi_scale = sapp_dpi_scale()
+    });
 
     igSetNextWindowPos((ImVec2){20, 20}, ImGuiCond_Once, (ImVec2){0,0});
     igSetNextWindowSize((ImVec2){800, 400}, ImGuiCond_Once);
     if (igBegin("Dear ImGui", 0, 0)) {
-        if (igBeginChildStr("sokol-gfx", (ImVec2){360, 360}, true, ImGuiWindowFlags_None)) {
+        if (igBeginChild_Str("sokol-gfx", (ImVec2){360, 360}, true, ImGuiWindowFlags_None)) {
             ImDrawList* dl = igGetWindowDrawList();
             ImDrawList_AddCallback(dl, draw_scene_1, 0);
         }
         igEndChild();
         igSameLine(0, 10);
-        if (igBeginChildStr("sokol-gl", (ImVec2){360, 360}, true, ImGuiWindowFlags_None)) {
+        if (igBeginChild_Str("sokol-gl", (ImVec2){360, 360}, true, ImGuiWindowFlags_None)) {
             ImDrawList* dl = igGetWindowDrawList();
             ImDrawList_AddCallback(dl, draw_scene_2, 0);
         }
@@ -319,5 +322,6 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .height = 440,
         .gl_force_gles2 = true,
         .window_title = "imgui-usercallback",
+        .icon.sokol_default = true,
     };
 }

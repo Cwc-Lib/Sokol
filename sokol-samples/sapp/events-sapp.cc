@@ -2,12 +2,16 @@
 //  events-sapp.cc
 //  Inspect sokol_app.h events via Dear ImGui.
 //------------------------------------------------------------------------------
-#include "sokol_app.h"
 #include "sokol_gfx.h"
+#include "sokol_app.h"
 #include "sokol_glue.h"
 #include "imgui.h"
 #define SOKOL_IMGUI_IMPL
 #include "sokol_imgui.h"
+
+#include <stdio.h> // snprintf
+
+static const int max_dropped_files = 4;
 
 static const char* eventtype_to_str(sapp_event_type t) {
     switch (t) {
@@ -28,11 +32,14 @@ static const char* eventtype_to_str(sapp_event_type t) {
         case SAPP_EVENTTYPE_RESIZED: return "RESIZED";
         case SAPP_EVENTTYPE_ICONIFIED: return "ICONIFIED";
         case SAPP_EVENTTYPE_RESTORED: return "RESTORED";
+        case SAPP_EVENTTYPE_FOCUSED: return "FOCUSED";
+        case SAPP_EVENTTYPE_UNFOCUSED: return "UNFOCUSED";
         case SAPP_EVENTTYPE_SUSPENDED: return "SUSPENDED";
         case SAPP_EVENTTYPE_RESUMED: return "RESUMED";
         case SAPP_EVENTTYPE_UPDATE_CURSOR: return "UPDATE_CURSOR";
         case SAPP_EVENTTYPE_QUIT_REQUESTED: return "QUIT_REQUESTED";
         case SAPP_EVENTTYPE_CLIPBOARD_PASTED: return "CLIPBOARD_PASTED";
+        case SAPP_EVENTTYPE_FILES_DROPPED: return "FILES_DROPPED";
         default: return "???";
     }
 }
@@ -175,12 +182,10 @@ static const char* button_to_str(sapp_mousebutton btn) {
 }
 
 struct item_t {
-    int frame_count = 0;
     sapp_event event = { };
 };
 
 struct state_t {
-    int frame_count = 0;
     item_t items[_SAPP_EVENTTYPE_NUM];
     sg_pass_action pass_action;
 };
@@ -195,15 +200,11 @@ static void init(void) {
     simgui_setup(&simgui_desc);
 
     state.pass_action.colors[0].action = SG_ACTION_CLEAR;
-    state.pass_action.colors[0].val[0] = 0.0f;
-    state.pass_action.colors[0].val[1] = 0.5f;
-    state.pass_action.colors[0].val[2] = 0.7f;
-    state.pass_action.colors[0].val[3] = 1.0f;
+    state.pass_action.colors[0].value = { 0.0f, 0.5f, 0.7f, 1.0f };
 }
 
 static void event(const sapp_event* e) {
     assert((e->type >= 0) && (e->type < _SAPP_EVENTTYPE_NUM));
-    state.items[e->type].frame_count = state.frame_count;
     state.items[e->type].event = *e;
     simgui_handle_event(e);
 
@@ -245,7 +246,7 @@ static bool is_key_event(sapp_event_type t) {
     }
 }
 
-static bool is_mouse_event(sapp_event_type t) {
+static bool is_mouse_or_drop_event(sapp_event_type t) {
     switch (t) {
         case SAPP_EVENTTYPE_MOUSE_DOWN:
         case SAPP_EVENTTYPE_MOUSE_UP:
@@ -253,6 +254,7 @@ static bool is_mouse_event(sapp_event_type t) {
         case SAPP_EVENTTYPE_MOUSE_MOVE:
         case SAPP_EVENTTYPE_MOUSE_ENTER:
         case SAPP_EVENTTYPE_MOUSE_LEAVE:
+        case SAPP_EVENTTYPE_FILES_DROPPED:
             return true;
         default:
             return false;
@@ -282,30 +284,39 @@ static void draw_event_info_panel(sapp_event_type type, float width, float heigh
     ImGui::BeginChild("event_panel", ImVec2(width, height), true);
     ImGui::Text("type:         %s", eventtype_to_str(type));
     ImGui::Text("frame:        %d", (uint32_t)ev.frame_count);
+    ImGui::Text("modifiers:   ");
+    if (0 == ev.modifiers) {
+        ImGui::SameLine(); ImGui::Text("NONE");
+    }
+    else {
+        if (0 != (ev.modifiers & SAPP_MODIFIER_SHIFT)) {
+            ImGui::SameLine(); ImGui::Text("SHIFT");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_CTRL)) {
+            ImGui::SameLine(); ImGui::Text("CTRL");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_ALT)) {
+            ImGui::SameLine(); ImGui::Text("ALT");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_SUPER)) {
+            ImGui::SameLine(); ImGui::Text("SUPER");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_LMB)) {
+            ImGui::SameLine(); ImGui::Text("LMB");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_RMB)) {
+            ImGui::SameLine(); ImGui::Text("RMB");
+        }
+        if (0 != (ev.modifiers & SAPP_MODIFIER_MMB)) {
+            ImGui::SameLine(); ImGui::Text("MMB");
+        }
+    }
     if (is_key_event(type)) {
         ImGui::Text("key code:     %s", keycode_to_str(ev.key_code));
         ImGui::Text("char code:    0x%05X", ev.char_code);
         ImGui::Text("key repeat:   %s", ev.key_repeat ? "true":"false");
-        ImGui::Text("modifiers:   ");
-        if (0 == ev.modifiers) {
-            ImGui::SameLine(); ImGui::Text("NONE");
-        }
-        else {
-            if (0 != (ev.modifiers & SAPP_MODIFIER_SHIFT)) {
-                ImGui::SameLine(); ImGui::Text("SHIFT");
-            }
-            if (0 != (ev.modifiers & SAPP_MODIFIER_CTRL)) {
-                ImGui::SameLine(); ImGui::Text("CTRL");
-            }
-            if (0 != (ev.modifiers & SAPP_MODIFIER_ALT)) {
-                ImGui::SameLine(); ImGui::Text("ALT");
-            }
-            if (0 != (ev.modifiers & SAPP_MODIFIER_SUPER)) {
-                ImGui::SameLine(); ImGui::Text("SUPER");
-            }
-        }
     }
-    if (is_mouse_event(type)) {
+    if (is_mouse_or_drop_event(type)) {
         ImGui::Text("mouse btn:    %s", button_to_str(ev.mouse_button));
         ImGui::Text("mouse pos:    %4.2f %4.2f", ev.mouse_x, ev.mouse_y);
         ImGui::Text("mouse delta:  %4.2f %4.2f", ev.mouse_dx, ev.mouse_dy);
@@ -330,12 +341,18 @@ static void draw_event_info_panel(sapp_event_type type, float width, float heigh
 }
 
 static void frame(void) {
+
+    // test sapp_set_window_title()
+    char window_title[64];
+    snprintf(window_title, sizeof(window_title), "Events (frame_count=%d, dur=%.3fms)", (int) sapp_frame_count(), sapp_frame_duration()*1000.0);
+    sapp_set_window_title(window_title);
+
     const int w = sapp_width();
     const int h = sapp_height();
-    simgui_new_frame(w, h, 1.0f/60.0f);
+    simgui_new_frame({ w, h, sapp_frame_duration(), sapp_dpi_scale() });
 
     const float panel_width = 240.0f - ImGui::GetStyle().FramePadding.x;
-    const float panel_height = 160.0f;
+    const float panel_height = 170.0f;
     const float panel_width_with_padding = panel_width + ImGui::GetStyle().FramePadding.x;
     const float pad = 5.0f;
     float pos_x = ImGui::GetStyle().WindowPadding.x;
@@ -347,7 +364,15 @@ static void frame(void) {
     if (ImGui::Begin("Event Inspector", nullptr, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoCollapse)) {
         ImGui::Text("Press SPACE key to show/hide the mouse cursor (current status: %s)!", sapp_mouse_shown() ? "SHOWN":"HIDDEN");
         ImGui::Text("Press M key to lock/unlock the mouse cursor (current status: %s)!", sapp_mouse_locked() ? "LOCKED":"UNLOCKED");
-        for (int i = SAPP_EVENTTYPE_KEY_DOWN; i < _SAPP_EVENTTYPE_NUM; i++) {
+        ImGui::Text("dropped files (%d/%d):", sapp_get_num_dropped_files(), max_dropped_files);
+        for (int i = 0; i < sapp_get_num_dropped_files(); i++) {
+            #if defined(__EMSCRIPTEN__)
+            ImGui::Text("    %d: %s (bytes: %d)\n", i, sapp_get_dropped_file_path(i), sapp_html5_get_dropped_file_size(i));
+            #else
+            ImGui::Text("    %d: %s\n", i, sapp_get_dropped_file_path(i));
+            #endif
+        }
+        for (int i = SAPP_EVENTTYPE_INVALID+1; i < _SAPP_EVENTTYPE_NUM; i++) {
             draw_event_info_panel((sapp_event_type)i, panel_width, panel_height);
             pos_x += panel_width_with_padding;
             if ((pos_x + panel_width_with_padding) < ImGui::GetContentRegionAvail().x) {
@@ -380,9 +405,12 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     desc.cleanup_cb = cleanup;
     desc.width = 832;
     desc.height = 600;
-    desc.window_title = "Events (sokol app)";
+    desc.window_title = "Events";
     desc.user_cursor = true;
     desc.gl_force_gles2 = true;
     desc.enable_clipboard = true;
+    desc.enable_dragndrop = true;
+    desc.max_dropped_files = max_dropped_files;
+    desc.icon.sokol_default = true;
     return desc;
 }

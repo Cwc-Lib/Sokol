@@ -15,11 +15,10 @@ typedef struct {
 
 static struct {
     sg_pass_action pass_action;
-    uint32_t frame_count;
     rgb_t color_palette[16];
 } state = {
     .pass_action = {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.0f, 0.125f, 0.25f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.0f, 0.125f, 0.25f, 1.0f } }
     },
     .color_palette = {
         { 0xf4, 0x43, 0x36 },
@@ -60,8 +59,7 @@ static void init(void) {
     */
     sdtx_setup(&(sdtx_desc_t){
         .fonts[USER_FONT] = {
-            .ptr = user_font,
-            .size = sizeof(user_font),
+            .data = SDTX_RANGE(user_font),
             .first_char = 0x20,
             .last_char  = 0x9F
         }
@@ -69,21 +67,19 @@ static void init(void) {
 }
 
 static void frame(void) {
-    state.frame_count++;
-
     sdtx_canvas(sapp_width() * 0.25f, sapp_height() * 0.25f);
     sdtx_origin(1, 2);
     sdtx_font(USER_FONT);
     sdtx_color3b(0xff, 0x17, 0x44);
     sdtx_puts("Hello 8-bit ATARI font:\n\n");
-    uint32_t line = 0;
+    int line = 0;
     for (int c = 0x20; c < 0xA0; c++) {
         if ((c & 15) == 0) {
             sdtx_puts("\n\t");
             line++;
         }
         // color scrolling effect:
-        const rgb_t rgb = state.color_palette[(c + line + (state.frame_count / 2)) & 15];
+        const rgb_t rgb = state.color_palette[(c + line + ((int)sapp_frame_count() / 2)) & 15];
         sdtx_color3b(rgb.r, rgb.g, rgb.b);
         sdtx_putc(c);
     }
@@ -113,6 +109,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .height = 600,
         .gl_force_gles2 = true,
         .window_title = "debugtext-userfont-sapp",
+        .icon.sokol_default = true,
     };
 }
 

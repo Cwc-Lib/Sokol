@@ -38,13 +38,8 @@ static struct {
     bg_fs_params_t bg_fs_params;
 } state;
 
-typedef struct {
-    void* ptr;
-    int size;
-} ptr_size_t;
-
 static const char* pixelformat_string(sg_pixel_format fmt);
-static ptr_size_t gen_pixels(sg_pixel_format fmt);
+static sg_range gen_pixels(sg_pixel_format fmt);
 static sg_image setup_invalid_texture(void);
 
 static void init(void) {
@@ -89,40 +84,36 @@ static void init(void) {
                 [ATTR_vs_cube_color0].format = SG_VERTEXFORMAT_FLOAT4
             }
         },
-        .shader = sg_make_shader(cube_shader_desc()),
+        .shader = sg_make_shader(cube_shader_desc(sg_query_backend())),
         .index_type = SG_INDEXTYPE_UINT16,
-        .depth_stencil = {
-            .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-            .depth_write_enabled = true,
+        .cull_mode = SG_CULLMODE_BACK,
+        .depth = {
+            .write_enabled = true,
+            .pixel_format = SG_PIXELFORMAT_DEPTH,
+            .compare = SG_COMPAREFUNC_LESS_EQUAL,
         },
-        .blend = {
-            .depth_format = SG_PIXELFORMAT_DEPTH
-        },
-        .rasterizer = {
-            .cull_mode = SG_CULLMODE_BACK
-        }
     };
     sg_pipeline_desc bg_render_pip_desc = {
         .layout.attrs[ATTR_vs_bg_position].format = SG_VERTEXFORMAT_FLOAT2,
-        .shader = sg_make_shader(bg_shader_desc()),
+        .shader = sg_make_shader(bg_shader_desc(sg_query_backend())),
         .primitive_type = SG_PRIMITIVETYPE_TRIANGLE_STRIP,
-        .blend = {
-            .depth_format = SG_PIXELFORMAT_DEPTH
-        }
+        .depth.pixel_format = SG_PIXELFORMAT_DEPTH,
     };
     sg_pipeline_desc cube_blend_pip_desc = cube_render_pip_desc;
-    cube_blend_pip_desc.blend.enabled = true;
-    cube_blend_pip_desc.blend.src_factor_rgb = SG_BLENDFACTOR_ONE;
-    cube_blend_pip_desc.blend.dst_factor_rgb = SG_BLENDFACTOR_ONE;
+    cube_blend_pip_desc.colors[0].blend = (sg_blend_state) {
+        .enabled = true,
+        .src_factor_rgb = SG_BLENDFACTOR_ONE,
+        .dst_factor_rgb = SG_BLENDFACTOR_ONE,
+    };
     sg_pipeline_desc cube_msaa_pip_desc = cube_render_pip_desc;
     sg_pipeline_desc bg_msaa_pip_desc = bg_render_pip_desc;
-    cube_msaa_pip_desc.rasterizer.sample_count = 4;
-    bg_msaa_pip_desc.rasterizer.sample_count = 4;
+    cube_msaa_pip_desc.sample_count = 4;
+    bg_msaa_pip_desc.sample_count = 4;
 
     for (int i = SG_PIXELFORMAT_NONE+1; i < SG_PIXELFORMAT_DEPTH; i++) {
         sg_pixel_format fmt = (sg_pixel_format)i;
-        ptr_size_t pair = gen_pixels(fmt);
-        if (pair.ptr) {
+        sg_range img_data = gen_pixels(fmt);
+        if (img_data.ptr) {
             state.fmt[i].valid = true;
             // create unfiltered texture
             if (sg_query_pixelformat(fmt).sample) {
@@ -130,10 +121,7 @@ static void init(void) {
                     .width = 8,
                     .height = 8,
                     .pixel_format = fmt,
-                    .content.subimage[0][0] = {
-                        .ptr = pair.ptr,
-                        .size = pair.size
-                    }
+                    .data.subimage[0][0] = img_data,
                 });
             }
             // create filtered texture
@@ -144,10 +132,7 @@ static void init(void) {
                     .pixel_format = fmt,
                     .min_filter = SG_FILTER_LINEAR,
                     .mag_filter = SG_FILTER_LINEAR,
-                    .content.subimage[0][0] = {
-                        .ptr = pair.ptr,
-                        .size = pair.size
-                    }
+                    .data.subimage[0][0] = img_data,
                 });
             }
             // create non-MSAA render target, pipeline state and pass
@@ -158,8 +143,8 @@ static void init(void) {
                     .height = 64,
                     .pixel_format = fmt,
                 });
-                cube_render_pip_desc.blend.color_format = fmt;
-                bg_render_pip_desc.blend.color_format = fmt;
+                cube_render_pip_desc.colors[0].pixel_format = fmt;
+                bg_render_pip_desc.colors[0].pixel_format = fmt;
                 state.fmt[i].cube_render_pip = sg_make_pipeline(&cube_render_pip_desc);
                 state.fmt[i].bg_render_pip = sg_make_pipeline(&bg_render_pip_desc);
                 state.fmt[i].render_pass = sg_make_pass(&(sg_pass_desc){
@@ -175,7 +160,7 @@ static void init(void) {
                     .height = 64,
                     .pixel_format = fmt,
                 });
-                cube_blend_pip_desc.blend.color_format = fmt;
+                cube_blend_pip_desc.colors[0].pixel_format = fmt;
                 state.fmt[i].cube_blend_pip = sg_make_pipeline(&cube_blend_pip_desc);
                 state.fmt[i].blend_pass = sg_make_pass(&(sg_pass_desc){
                     .color_attachments[0].image = state.fmt[i].blend,
@@ -191,8 +176,8 @@ static void init(void) {
                     .pixel_format = fmt,
                     .sample_count = 4,
                 });
-                cube_msaa_pip_desc.blend.color_format = fmt;
-                bg_msaa_pip_desc.blend.color_format = fmt;
+                cube_msaa_pip_desc.colors[0].pixel_format = fmt;
+                bg_msaa_pip_desc.colors[0].pixel_format = fmt;
                 state.fmt[i].cube_msaa_pip = sg_make_pipeline(&cube_msaa_pip_desc);
                 state.fmt[i].bg_msaa_pip = sg_make_pipeline(&bg_msaa_pip_desc);
                 state.fmt[i].msaa_pass = sg_make_pass(&(sg_pass_desc){
@@ -236,8 +221,7 @@ static void init(void) {
          1.0f,  1.0f, -1.0f,   0.7f, 0.3f, 0.5f, 1.0f
     };
     state.cube_bindings.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(cube_vertices),
-        .content = cube_vertices,
+        .data = SG_RANGE(cube_vertices)
     });
 
     uint16_t cube_indices[] = {
@@ -250,15 +234,13 @@ static void init(void) {
     };
     state.cube_bindings.index_buffer = sg_make_buffer(&(sg_buffer_desc){
         .type = SG_BUFFERTYPE_INDEXBUFFER,
-        .size = sizeof(cube_indices),
-        .content = cube_indices,
+        .data = SG_RANGE(cube_indices)
     });
 
     // background quad vertices
     float vertices[] = { -1.0f, -1.0f, +1.0f, -1.0f, -1.0f, +1.0f, +1.0f, +1.0f, };
     state.bg_bindings.vertex_buffers[0] = sg_make_buffer(&(sg_buffer_desc){
-        .size = sizeof(vertices),
-        .content = vertices
+        .data = SG_RANGE(vertices)
     });
 }
 
@@ -266,17 +248,18 @@ static void frame(void) {
 
     const int w = sapp_width();
     const int h = sapp_height();
+    const float t = (float)(sapp_frame_duration() * 60.0);
 
     // compute the model-view-proj matrix for rendering to render targets
     hmm_mat4 proj = HMM_Perspective(60.0f, 1.0f, 0.01f, 10.0f);
     hmm_mat4 view = HMM_LookAt(HMM_Vec3(0.0f, 1.5f, 6.0f), HMM_Vec3(0.0f, 0.0f, 0.0f), HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 view_proj = HMM_MultiplyMat4(proj, view);
-    state.rx += 1.0f; state.ry += 2.0f;
+    state.rx += 1.0f * t; state.ry += 2.0f * t;
     hmm_mat4 rxm = HMM_Rotate(state.rx, HMM_Vec3(1.0f, 0.0f, 0.0f));
     hmm_mat4 rym = HMM_Rotate(state.ry, HMM_Vec3(0.0f, 1.0f, 0.0f));
     hmm_mat4 model = HMM_MultiplyMat4(rxm, rym);
     state.cube_vs_params.mvp = HMM_MultiplyMat4(view_proj, model);
-    state.bg_fs_params.tick += 1.0f;
+    state.bg_fs_params.tick += 1.0f * t;
 
     // render into all the offscreen render targets
     for (int i = SG_PIXELFORMAT_NONE+1; i < SG_PIXELFORMAT_DEPTH; i++) {
@@ -289,11 +272,11 @@ static void frame(void) {
             sg_begin_pass(state.fmt[i].render_pass, &(sg_pass_action){0});
             sg_apply_pipeline(state.fmt[i].bg_render_pip);
             sg_apply_bindings(&state.bg_bindings);
-            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &state.bg_fs_params, sizeof(state.bg_fs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &SG_RANGE(state.bg_fs_params));
             sg_draw(0, 4, 1);
             sg_apply_pipeline(state.fmt[i].cube_render_pip);
             sg_apply_bindings(&state.cube_bindings);
-            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &state.cube_vs_params, sizeof(state.cube_vs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &SG_RANGE(state.cube_vs_params));
             sg_draw(0, 36, 1);
             sg_end_pass();
         }
@@ -301,11 +284,11 @@ static void frame(void) {
             sg_begin_pass(state.fmt[i].blend_pass, &(sg_pass_action){0});
             sg_apply_pipeline(state.fmt[i].bg_render_pip);  // not a bug
             sg_apply_bindings(&state.bg_bindings); // not a bug
-            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &state.bg_fs_params, sizeof(state.bg_fs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &SG_RANGE(state.bg_fs_params));
             sg_draw(0, 4, 1);
             sg_apply_pipeline(state.fmt[i].cube_blend_pip);
             sg_apply_bindings(&state.cube_bindings);
-            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &state.cube_vs_params, sizeof(state.cube_vs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &SG_RANGE(state.cube_vs_params));
             sg_draw(0, 36, 1);
             sg_end_pass();
         }
@@ -313,18 +296,23 @@ static void frame(void) {
             sg_begin_pass(state.fmt[i].msaa_pass, &(sg_pass_action){0});
             sg_apply_pipeline(state.fmt[i].bg_msaa_pip);
             sg_apply_bindings(&state.bg_bindings);
-            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &state.bg_fs_params, sizeof(state.bg_fs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_FS, SLOT_bg_fs_params, &SG_RANGE(state.bg_fs_params));
             sg_draw(0, 4, 1);
             sg_apply_pipeline(state.fmt[i].cube_msaa_pip);
             sg_apply_bindings(&state.cube_bindings);
-            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &state.cube_vs_params, sizeof(state.cube_vs_params));
+            sg_apply_uniforms(SG_SHADERSTAGE_VS, SLOT_cube_vs_params, &SG_RANGE(state.cube_vs_params));
             sg_draw(0, 36, 1);
             sg_end_pass();
         }
     }
 
     // ImGui rendering...
-    simgui_new_frame(w, h, 1.0f/60.0f);
+    simgui_new_frame(&(simgui_frame_desc_t){
+        .width = w,
+        .height = h,
+        .delta_time = sapp_frame_duration(),
+        .dpi_scale = sapp_dpi_scale()
+    });
     igSetNextWindowSize((ImVec2){640, 480}, ImGuiCond_Once);
     if (igBegin("Pixel Formats (without UINT and SINT formats)", 0, 0)) {
         igText("format"); igSameLine(264, 0);
@@ -334,13 +322,13 @@ static void frame(void) {
         igText("blend");  igSameLine(264 + 4*66, 0);
         igText("msaa");
         igSeparator();
-        igBeginChildStr("#scrollregion", (ImVec2){0,0}, false, ImGuiWindowFlags_None);
+        igBeginChild_Str("#scrollregion", (ImVec2){0,0}, false, ImGuiWindowFlags_None);
         for (int i = SG_PIXELFORMAT_NONE+1; i < SG_PIXELFORMAT_DEPTH; i++) {
             if (!state.fmt[i].valid) {
                 continue;
             }
             const char* fmt_string = pixelformat_string((sg_pixel_format)i);
-            if (igBeginChildStr(fmt_string, (ImVec2){0,80}, false, ImGuiWindowFlags_NoMouseInputs|ImGuiWindowFlags_NoScrollbar)) {
+            if (igBeginChild_Str(fmt_string, (ImVec2){0,80}, false, ImGuiWindowFlags_NoMouseInputs|ImGuiWindowFlags_NoScrollbar)) {
                 igText("%s", fmt_string);
                 igSameLine(256, 0);
                 igImage((ImTextureID)(uintptr_t)state.fmt[i].sample.id, (ImVec2){64,64}, (ImVec2){0,0}, (ImVec2){1,1}, (ImVec4){1,1,1,1}, (ImVec4){1,1,1,1});
@@ -361,7 +349,7 @@ static void frame(void) {
 
     // sokol-gfx rendering...
     sg_pass_action pass_action = {
-        .colors[0] = { .action = SG_ACTION_CLEAR, .val = { 0.0f, 0.5f, 0.7f, 1.0f } }
+        .colors[0] = { .action = SG_ACTION_CLEAR, .value = { 0.0f, 0.5f, 0.7f, 1.0f } }
     };
     sg_begin_default_pass(&pass_action, w, h);
     simgui_render();
@@ -390,6 +378,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .cleanup_cb = cleanup,
         .width = 800,
         .height = 600,
+        .icon.sokol_default = true,
         #if defined(USE_GLES2)
         .window_title = "Pixelformat Test (GLES2)",
         #endif
@@ -416,10 +405,7 @@ static sg_image setup_invalid_texture(void) {
     return sg_make_image(&(sg_image_desc){
         .width = 8,
         .height = 8,
-        .content.subimage[0][0] = {
-            .ptr = disabled_texture_pixels,
-            .size = sizeof(disabled_texture_pixels)
-        }
+        .data.subimage[0][0] = SG_RANGE(disabled_texture_pixels)
     });
 }
 
@@ -472,34 +458,34 @@ static void gen_pixels_128(uint64_t hi, uint64_t lo) {
     }
 }
 
-static ptr_size_t gen_pixels(sg_pixel_format fmt) {
+static sg_range gen_pixels(sg_pixel_format fmt) {
     /* NOTE the UI and SI (unsigned/signed) formats are not renderable
         with the ImGui shader, since that expects a texture which can be
         sampled into a float
     */
     switch (fmt) {
-        case SG_PIXELFORMAT_R8:     gen_pixels_8(0xFF);     return (ptr_size_t) {pixels, 8*8};
-        case SG_PIXELFORMAT_R8SN:   gen_pixels_8(0x7F);     return (ptr_size_t) {pixels, 8*8};
-        case SG_PIXELFORMAT_R16:    gen_pixels_16(0xFFFF);  return (ptr_size_t) {pixels, 8*8*2};
-        case SG_PIXELFORMAT_R16SN:  gen_pixels_16(0x7FFF);  return (ptr_size_t) {pixels, 8*8*2};
-        case SG_PIXELFORMAT_R16F:   gen_pixels_16(0x3C00);  return (ptr_size_t) {pixels, 8*8*2};
-        case SG_PIXELFORMAT_RG8:    gen_pixels_16(0xFFFF);  return (ptr_size_t) {pixels, 8*8*2};
-        case SG_PIXELFORMAT_RG8SN:  gen_pixels_16(0x7F7F);  return (ptr_size_t) {pixels, 8*8*2};
-        case SG_PIXELFORMAT_R32F:   gen_pixels_32(0x3F800000);  return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RG16:   gen_pixels_32(0xFFFFFFFF);  return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RG16SN: gen_pixels_32(0x7FFF7FFF);  return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RG16F:      gen_pixels_32(0x3C003C00);  return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RGBA8:      gen_pixels_32(0xFFFFFFFF);  return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RGBA8SN:    gen_pixels_32(0x7F7F7F7F); return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_BGRA8:      gen_pixels_32(0xFFFFFFFF); return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RGB10A2:    gen_pixels_32(0x3<<30 | 0x3FF<<20 | 0x3FF<<10 | 0x3FF); return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RG11B10F:   gen_pixels_32(0x1E0<<22 | 0x3C0<<11 | 0x3C0); return (ptr_size_t) {pixels, 8*8*4};
-        case SG_PIXELFORMAT_RG32F:      gen_pixels_64(0x3F8000003F800000); return (ptr_size_t) {pixels, 8*8*8};
-        case SG_PIXELFORMAT_RGBA16:     gen_pixels_64(0xFFFFFFFFFFFFFFFF); return (ptr_size_t) {pixels, 8*8*8};
-        case SG_PIXELFORMAT_RGBA16SN:   gen_pixels_64(0x7FFF7FFF7FFF7FFF); return (ptr_size_t) {pixels, 8*8*8};
-        case SG_PIXELFORMAT_RGBA16F:    gen_pixels_64(0x3C003C003C003C00); return (ptr_size_t) {pixels, 8*8*8};
-        case SG_PIXELFORMAT_RGBA32F:    gen_pixels_128(0x3F8000003F800000, 0x3F8000003F800000); return (ptr_size_t) {pixels, 8*8*16};
-        default: return (ptr_size_t){0,0};
+        case SG_PIXELFORMAT_R8:     gen_pixels_8(0xFF);     return (sg_range) {pixels, 8*8};
+        case SG_PIXELFORMAT_R8SN:   gen_pixels_8(0x7F);     return (sg_range) {pixels, 8*8};
+        case SG_PIXELFORMAT_R16:    gen_pixels_16(0xFFFF);  return (sg_range) {pixels, 8*8*2};
+        case SG_PIXELFORMAT_R16SN:  gen_pixels_16(0x7FFF);  return (sg_range) {pixels, 8*8*2};
+        case SG_PIXELFORMAT_R16F:   gen_pixels_16(0x3C00);  return (sg_range) {pixels, 8*8*2};
+        case SG_PIXELFORMAT_RG8:    gen_pixels_16(0xFFFF);  return (sg_range) {pixels, 8*8*2};
+        case SG_PIXELFORMAT_RG8SN:  gen_pixels_16(0x7F7F);  return (sg_range) {pixels, 8*8*2};
+        case SG_PIXELFORMAT_R32F:   gen_pixels_32(0x3F800000);  return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RG16:   gen_pixels_32(0xFFFFFFFF);  return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RG16SN: gen_pixels_32(0x7FFF7FFF);  return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RG16F:      gen_pixels_32(0x3C003C00);  return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RGBA8:      gen_pixels_32(0xFFFFFFFF);  return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RGBA8SN:    gen_pixels_32(0x7F7F7F7F); return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_BGRA8:      gen_pixels_32(0xFFFFFFFF); return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RGB10A2:    gen_pixels_32((uint32_t)(0x3<<30 | 0x3FF<<20 | 0x3FF<<10 | 0x3FF)); return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RG11B10F:   gen_pixels_32(0x1E0<<22 | 0x3C0<<11 | 0x3C0); return (sg_range) {pixels, 8*8*4};
+        case SG_PIXELFORMAT_RG32F:      gen_pixels_64(0x3F8000003F800000); return (sg_range) {pixels, 8*8*8};
+        case SG_PIXELFORMAT_RGBA16:     gen_pixels_64(0xFFFFFFFFFFFFFFFF); return (sg_range) {pixels, 8*8*8};
+        case SG_PIXELFORMAT_RGBA16SN:   gen_pixels_64(0x7FFF7FFF7FFF7FFF); return (sg_range) {pixels, 8*8*8};
+        case SG_PIXELFORMAT_RGBA16F:    gen_pixels_64(0x3C003C003C003C00); return (sg_range) {pixels, 8*8*8};
+        case SG_PIXELFORMAT_RGBA32F:    gen_pixels_128(0x3F8000003F800000, 0x3F8000003F800000); return (sg_range) {pixels, 8*8*16};
+        default: return (sg_range){0,0};
     }
 }
 
