@@ -6,6 +6,8 @@
 >
 -c {pSamples}libs/stb/ -o {pObj}{sSample}/stb/
 >
+-c {pSamples}libs/util/ -o {pObj}{sSample}/util/
+>
 -#Run cwc/Link.cwc
 >
 -#Copy {pData}baboon.png {pOut}baboon.png
